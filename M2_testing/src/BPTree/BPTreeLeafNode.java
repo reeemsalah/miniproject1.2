@@ -1,6 +1,7 @@
 package BPTree;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> implements Serializable{
 
@@ -101,6 +102,29 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 			this.insertAt(index, key, recordReference);
 			return null;
 		}
+	}
+	
+	public ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr)
+	{
+		ArrayList<String> pageOptions = new ArrayList<String>();
+//		if(this.isFull())
+//		{
+//			BPTreeNode<T> newNode = this.split(key, recordReference);
+//			Comparable<T> newKey = newNode.getFirstKey();
+//			return new PushUp<T>(newNode, newKey);
+//		}
+//		else
+//		{
+			int index = 0;
+			while (index < numberOfKeys
+//					&& getKey(index).compareTo(key) <= 0
+					) {
+				++index;
+//			this.insertAt(index, key, recordReference);
+			pageOptions.add(this.getRecord(index).getPage());}
+//			return null;
+			return pageOptions; 
+//		}
 	}
 	
 	/**

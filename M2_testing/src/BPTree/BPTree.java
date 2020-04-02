@@ -1,6 +1,7 @@
 package BPTree;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -43,6 +44,22 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 		}
 	}
 	
+	
+	public ArrayList<String> getInsertPage(T key) {
+//		
+//		PushUp<T> pushUp = root.getInsertPage(key, null, -1);
+//		if(pushUp != null)
+//		{
+//			BPTreeInnerNode<T> newRoot = new BPTreeInnerNode<T>(order);
+//			newRoot.insertLeftAt(0, pushUp.key, root);
+//			newRoot.setChild(1, pushUp.newNode);
+//			root.setRoot(false);
+//			root = newRoot;
+//			root.setRoot(true);
+//		}
+		return root.getInsertPage(key, null, -1);
+		
+	}
 	
 	/**
 	 * Looks up for the record that is associated with the specified key

@@ -1,6 +1,7 @@
 package BPTree;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  implements Serializable
 {
@@ -94,6 +95,34 @@ public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  imp
 			return null;
 		}
 	}
+	
+	public ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr)
+	{
+//		int index = findIndex(key);
+//		PushUp<T> pushUp = children[index].getInsertPage(key, this, index);
+//		
+//		if(pushUp == null)
+//			return null;
+		
+//		if(this.isFull())
+//		{
+//			BPTreeInnerNode<T> newNode = this.split(pushUp);
+//			Comparable<T> newKey = newNode.getFirstKey();
+//			newNode.deleteAt(0, 0);
+//			return new PushUp<T>(newNode, newKey);
+//		}
+//		else
+//		{
+			index = 0;
+			while (index < numberOfKeys && getKey(index).compareTo(key) < 0) 
+				++index;
+//			this.insertRightAt(index, pushUp.key, pushUp.newNode);
+				return this.children[index].getInsertPage(key, parent, ptr);
+			
+//			return null;
+//		}
+	}
+	
 	/**
 	 * split the inner node and adjust values and pointers.
 	 * @param pushup key to be pushed up to the parent in case of splitting.

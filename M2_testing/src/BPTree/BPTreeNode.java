@@ -1,6 +1,7 @@
 package BPTree;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class BPTreeNode<T extends Comparable<T>> implements Serializable{
 	
@@ -97,6 +98,8 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 	 * @return a key and a new node in case of a node splitting and null otherwise
 	 */
 	public abstract PushUp<T> insert(T key, Ref recordReference, BPTreeInnerNode<T> parent, int ptr);
+	public abstract ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr);
+
 	
 	public abstract Ref search(T key);
 

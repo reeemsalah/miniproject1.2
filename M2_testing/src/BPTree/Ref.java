@@ -8,9 +8,10 @@ public class Ref implements Serializable{
 	 * This class represents a pointer to the record. It is used at the leaves of the B+ tree 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int pageNo, indexInPage;
+	private int indexInPage;
+	private String pageNo;
 	
-	public Ref(int pageNo, int indexInPage)
+	public Ref(String pageNo, int indexInPage)
 	{
 		this.pageNo = pageNo;
 		this.indexInPage = indexInPage;
@@ -19,7 +20,7 @@ public class Ref implements Serializable{
 	/**
 	 * @return the page at which the record is saved on the hard disk
 	 */
-	public int getPage()
+	public String getPage()
 	{
 		return pageNo;
 	}
