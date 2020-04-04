@@ -17,6 +17,7 @@ public class TestRTree {
 		System.out.println(r1.getArea());
 
 		Scanner sc = new Scanner(System.in);
+		
 		while(true) 
 		{
 //			int x = sc.nextInt();
@@ -40,14 +41,16 @@ public class TestRTree {
 //		int entry= sc.nextInt();
 		System.out.println("r7" +" can go to pages "+tree.getInsertPage(r7));
 		
-//		while(true) 
-//		{
-//			int x = sc.nextInt();
-//			if(x == -1)
-//				break;
-//			tree.delete(x);
-//			System.out.println(tree.toString());
-//		}
+		while(true) 
+		{
+			int x = sc.nextInt();
+			if(x == -1)
+				break;
+			Region temp = new Region(new int[] { 0, x, 0, x }, new int[] { 0, 0, x , x}, 4);
+
+			tree.delete(temp);
+			System.out.println(tree.toString());
+		}
 		
 		
 		sc.close();
