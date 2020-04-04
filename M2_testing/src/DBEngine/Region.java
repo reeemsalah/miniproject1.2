@@ -1,3 +1,4 @@
+package DBEngine;
 import java.awt.Dimension;
 import java.awt.Polygon;
 import java.awt.Shape;
@@ -19,23 +20,17 @@ public class Region extends Polygon implements Comparable {
 		return area2 - area1;
 
 	}
-	public double getArea() {
-		Dimension dim1 = this.getBounds().getSize();
-		double area1 = dim1.height * dim1.width;
-		return area1;
-	}
 
 	@Override
 	public String toString() {
-//		String res = "";
-//
-//		for (int i = 0; i < this.xpoints.length; i++) {
-//			res += "(" + xpoints[i] + "," + ypoints[i] + ")";
-//			if (i != xpoints.length - 1)
-//				res += ",";
-//		}
-//		return res;
-		return "area " + this.getArea();
+		String res = "";
+
+		for (int i = 0; i < this.xpoints.length; i++) {
+			res += "(" + xpoints[i] + "," + ypoints[i] + ")";
+			if (i != xpoints.length - 1)
+				res += ",";
+		}
+		return res;
 	}
 
 	/**
