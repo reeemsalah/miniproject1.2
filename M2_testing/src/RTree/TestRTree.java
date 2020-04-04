@@ -13,8 +13,9 @@ public class TestRTree {
 		Region r4 = new Region(new int[] { 0, 18, 0 , 18}, new int[] { 0, 0, 18 , 18}, 4);
 		Region r5 = new Region(new int[] { 0, 18, 0 , 18}, new int[] { 0, 0, 18 , 18}, 4);
 		Region r6 = new Region(new int[] { 0, 20, 0 , 20}, new int[] { 0, 0, 20 , 20}, 4);
-		Region r7 = new Region(new int[] { 0, 23, 0, 23 }, new int[] { 0, 0, 23 , 23}, 4);
-		System.out.println(r1.toString());
+		Region r7 = new Region(new int[] { 0, 16, 0, 16 }, new int[] { 0, 0, 16 , 16}, 4);
+		System.out.println(r1.getArea());
+
 		Scanner sc = new Scanner(System.in);
 		while(true) 
 		{

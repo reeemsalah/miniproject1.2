@@ -17,10 +17,16 @@ public class Region extends Polygon implements Comparable {
 		Dimension dim2 = (Dimension) ((Region) o).getBounds().getSize();
 		int area1 = dim1.height * dim1.width;
 		int area2 = dim2.height * dim2.width;
-		return area2 - area1;
+		return area1 - area2;
 
 	}
 
+	public double getArea() {
+		Dimension dim1 = this.getBounds().getSize();
+		int area1 = dim1.height * dim1.width;
+		return area1;
+	}
+	
 	@Override
 	public String toString() {
 		String res = "";

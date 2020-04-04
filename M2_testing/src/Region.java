@@ -35,7 +35,8 @@ public class Region extends Polygon implements Comparable {
 //				res += ",";
 //		}
 //		return res;
-		return "area " + this.getArea();
+		double ar = this.getArea();
+		return "area " + ar;
 	}
 
 	/**
