@@ -119,9 +119,10 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 			while (index < numberOfKeys
 //					&& getKey(index).compareTo(key) <= 0
 					) {
-				++index;
 //			this.insertAt(index, key, recordReference);
-			pageOptions.add(this.getRecord(index).getPage());}
+			pageOptions.add(this.getRecord(index).getPage());
+			++index;
+}
 //			return null;
 			return pageOptions; 
 //		}
