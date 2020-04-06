@@ -141,6 +141,8 @@ Vector<Tuple> results = null;
 //actually search 
 return results.iterator();
 	}
+	
+	
 	/*
 	 * gets the table name from the query string
 	 * */
@@ -242,10 +244,10 @@ return results.iterator();
 			for(int j = 0;j<statement.length();j++) {
 				if(statement.charAt(j) == '=') {
 					if(statement.charAt(j+1) == '"') {
-						String value = statement.substring(j+2,statement.length()-1);
+						String value = statement.substring(j+2,statement.length());
 						result.add(value);
 					}else {
-						String value = statement.substring(j+1,statement.length()-1);
+						String value = statement.substring(j+1,statement.length());
 						result.add(value);
 					}
 				}
@@ -447,30 +449,32 @@ return results.iterator();
 	}
 
 	public static void main(String[] args) {
-		String strTableName = "Student";
-		DBApp dbApp = new DBApp();
-		Hashtable htblColNameType = new Hashtable();
-		htblColNameType.put("id", "java.lang.Integer");
-		htblColNameType.put("name", "java.lang.String");
-		htblColNameType.put("gpa", "java.lang.double");
-		try {
-			dbApp.createTable(strTableName, "id", htblColNameType);
-			Hashtable htblColNameValue = new Hashtable();
-			htblColNameValue.put("id", new Integer(1));
-			htblColNameValue.put("name", new String("Ahmed Noor"));
-			htblColNameValue.put("gpa", new Double(0.95));
-			dbApp.insertIntoTable(strTableName, htblColNameValue);
-			htblColNameValue.clear();
-			htblColNameValue.put("id", new Integer(2));
-			htblColNameValue.put("name", new String("Ahmed Noor"));
-			htblColNameValue.put("gpa", new Double(0.95));
-			dbApp.insertIntoTable(strTableName, htblColNameValue);
-			htblColNameValue.clear();
-			htblColNameValue.put("name", new String("Ahmed"));
-			dbApp.updateTable(strTableName, "1", htblColNameValue);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+//		String strTableName = "Student";
+//		DBApp dbApp = new DBApp();
+//		Hashtable htblColNameType = new Hashtable();
+//		htblColNameType.put("id", "java.lang.Integer");
+//		htblColNameType.put("name", "java.lang.String");
+//		htblColNameType.put("gpa", "java.lang.double");
+//		try {
+//			dbApp.createTable(strTableName, "id", htblColNameType);
+//			Hashtable htblColNameValue = new Hashtable();
+//			htblColNameValue.put("id", new Integer(1));
+//			htblColNameValue.put("name", new String("Ahmed Noor"));
+//			htblColNameValue.put("gpa", new Double(0.95));
+//			dbApp.insertIntoTable(strTableName, htblColNameValue);
+//			htblColNameValue.clear();
+//			htblColNameValue.put("id", new Integer(2));
+//			htblColNameValue.put("name", new String("Ahmed Noor"));
+//			htblColNameValue.put("gpa", new Double(0.95));
+//			dbApp.insertIntoTable(strTableName, htblColNameValue);
+//			htblColNameValue.clear();
+//			htblColNameValue.put("name", new String("Ahmed"));
+//			dbApp.updateTable(strTableName, "1", htblColNameValue);
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
 
+		DBApp d = new DBApp();
+		System.out.print(d.getObjValues("SELECT * FROM student WHERE id=123 AND name=ali"));
 	}
 }
