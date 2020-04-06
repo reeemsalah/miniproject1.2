@@ -69,6 +69,7 @@ public class DBAppTest {
 		
 		dbApp.createBTreeIndex("Student", "id");
 
+		
 	
 		htblColNameValue.put("id", new Integer( 12 ));
 		htblColNameValue.put("name", new String("salma Noor" ) );
