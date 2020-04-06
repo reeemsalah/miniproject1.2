@@ -600,13 +600,13 @@ public class Table implements Serializable {
 		if (colIndexedPages.isEmpty()) {
 
 			for (String file : pageInfo.keySet()) {
-				deleteFromPage(file, htblColNameValue,null,null);
+				deleteFromPage(file, htblColNameValue, null, null);
 			}
 
 		} else {
 			ArrayList<String> canPages = btrees.get(minCol).getDeletePage(htblColNameValue.get(minCol));
 			for (String file : canPages) {
-				deleteFromPage(file, htblColNameValue,btrees.get(minCol),minCol);
+				deleteFromPage(file, htblColNameValue, btrees.get(minCol), minCol);
 			}
 		}
 
@@ -618,7 +618,8 @@ public class Table implements Serializable {
 	 * @param htblColNameValue tuple to be deleted from fileName
 	 */
 
-	public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue, BPTree btree,String col) {
+	public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue, BPTree btree,
+			String col) {
 
 		System.out.println("deletepage!!!!!!!!!!1");
 
@@ -634,8 +635,7 @@ public class Table implements Serializable {
 
 				page.remove(i);
 				System.out.println("matched!!!!!!!!!!");
-				if(btree!=null)
-				{
+				if (btree != null) {
 					btrees.get(col).delete(htblColNameValue.get(col));
 				}
 			} else {
