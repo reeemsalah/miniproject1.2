@@ -99,22 +99,44 @@ public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  imp
 	public ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr)
 	{
 
-			index = 0;
-			while (index < numberOfKeys && getKey(index).compareTo(key) < 0) 
-				++index;
+			int i = 0;
+			while (i < numberOfKeys && getKey(i).compareTo(key) < 0) 
+				++i;
 
-				return this.children[index].getInsertPage(key, parent, ptr);
+				return this.children[i].getInsertPage(key, parent, ptr);
 			
 
 	}
 	@Override
 	public ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr)
 			{
-		index = 0;
-		while (index < numberOfKeys && getKey(index).compareTo(key) < 0) 
-			++index;
+		ArrayList<String> pageOptions = new ArrayList<String>(); 
+		System.out.println("level innerNode " + this.index);
 
-			return this.children[index].getInsertPage(key, parent, ptr);
+		ArrayList<String> pages = new ArrayList<String>(); 
+		int i = 0;
+		while (i < numberOfKeys) {
+			if(getKey(i).compareTo(key) <= 0 && getKey(i).compareTo(key) >= 0 ) {
+				System.out.println("between");
+
+				pageOptions.addAll(this.children[i].getDeletePage(key, parent, ptr));}
+
+			if(getKey(i).compareTo(key) <= 0 && i==numberOfKeys-1 ) {
+				System.out.println("last");
+
+			
+				pageOptions.addAll(this.children[numberOfKeys].getDeletePage(key, parent, ptr));}
+			if(getKey(i).compareTo(key) >= 0 && i==0 ) {
+				System.out.println("first");
+
+				pageOptions.addAll(this.children[0].getDeletePage(key, parent, ptr));}
+			++i;
+
+		}
+//		pageOptions.addAll(this.children[0].getDeletePage(key, parent, ptr));
+
+return pageOptions;
+			
 			}
 	
 	/**

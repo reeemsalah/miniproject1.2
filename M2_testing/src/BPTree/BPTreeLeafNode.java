@@ -107,11 +107,11 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	public ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr)
 	{
 		ArrayList<String> pageOptions = new ArrayList<String>();
-			int index = 0;
-			while (index < numberOfKeys) {
+			int i = 0;
+			while (i < numberOfKeys) {
 
-			pageOptions.add(this.getRecord(index).getPage());
-			++index;
+			pageOptions.add(this.getRecord(i).getPage());
+			++i;
 }
 
 			return pageOptions; 
@@ -119,19 +119,48 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	}
 	@Override 
 	public ArrayList<String> getDeletePage (T key, BPTreeInnerNode<T> parent, int ptr)
-	{
+	{		System.out.println("level leaf1  " + this.index);
+
+		boolean checkNext = false;
 		ArrayList<String> pageOptions = new ArrayList<String>();
-		int index = 0;
-		while (index < numberOfKeys && getKey(index).compareTo(key) == 0) {
+		System.out.println(numberOfKeys);
+		int i = 0;
+		while (i < numberOfKeys) {
+			System.out.println("loop "+ i + "   key  " + getKey(i));
+			
+			if(getKey(i).compareTo(key) == 0) {
+		pageOptions.add(this.getRecord(i).getPage());
+		System.out.println(this.getRecord(i).getPage());
+		}
 
-		pageOptions.add(this.getRecord(index).getPage());
-		++index;
+		if (i==numberOfKeys) checkNext=true;
+		++i;
 }
-
+		if (checkNext) {
+		pageOptions.addAll(getDeletePageHelper(key, next));}
 		return pageOptions; 
 
 	}
 	
+	
+	public ArrayList<String> getDeletePageHelper(T key, BPTreeLeafNode<T> followingNode ){
+				System.out.println("level leaf2");
+
+		boolean checkNext = false;
+		ArrayList<String> pageOptions = new ArrayList<String>();
+		int i = 0;
+		while (i < numberOfKeys) {
+			if(getKey(index).compareTo(key) == 0) {
+		pageOptions.add(this.getRecord(i).getPage());
+		System.out.println(this.getRecord(i).getPage());
+		if (i==numberOfKeys) checkNext=true;}
+		++i;
+}
+		if (checkNext) {
+			pageOptions.addAll(getDeletePageHelper(key, next));}
+		return pageOptions; 
+
+	}
 	/**
 	 * inserts the passed key associated with its record reference in the specified index
 	 * @param index the index at which the key will be inserted

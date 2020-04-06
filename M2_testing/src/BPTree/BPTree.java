@@ -42,6 +42,7 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 			root = newRoot;
 			root.setRoot(true);
 		}
+		System.out.println("curr root " + root.index);
 	}
 	
 	
@@ -52,6 +53,9 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 	}
 	public ArrayList<String> getDeletePage(T key)
 	{
+		//go down and find the new root in case the old root is deleted
+		
+		System.out.println("level BPTree" + root.index);
 		return root.getDeletePage(key, null,-1);
 	}
 	
