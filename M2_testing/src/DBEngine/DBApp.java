@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.*;
 
+import BPTree.BPTree;
+
 public class DBApp {
 	private static Hashtable<String, Table> tables;
 	private static int maxRows;
@@ -128,7 +130,7 @@ public class DBApp {
 			tables.get(strTableName).newBTree(strColName, nodeSize);
 		}
 		
-//		BTree b = new BTree( strTableName,  strColName, nodeSize, strColType );
+	BPTree b = new BPTree( nodeSize);
 	}
 	
 

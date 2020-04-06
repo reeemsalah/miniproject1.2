@@ -26,6 +26,9 @@ import java.util.Enumeration;
 
 import javax.naming.ldap.SortControl;
 
+import BPTree.BPTree;
+import BPTree.Ref;
+
 @SuppressWarnings("serial")
 public class Table implements Serializable {
 	private static int maxRows;
@@ -38,8 +41,8 @@ public class Table implements Serializable {
 	// Clustered key Column Name
 	private String clusteredKey;
 	private int numOfPages;
-	private ArrayList<BTree> btrees = new ArrayList<BTree>() ;
-	private ArrayList<RTree> rtrees = new ArrayList<RTree>();
+	private Hashtable <String ,BPTree > btrees = new Hashtable<String ,BPTree >() ;
+	private Hashtable<String ,RTree > rtrees = new Hashtable<String ,RTree >() ;
 	// awel string esm el file w el array of comparables at index 0 el current
 	// noOfRows
 	// array of comparables at index 1 hoe el minKey fel page
@@ -70,23 +73,12 @@ public class Table implements Serializable {
 	
 	public boolean  isBIndexedCol(String strColName){
 
-		for (int i=0;i<btrees.size();i++)   //returns a Boolean value  
-		{  
-		if(btrees.get(i).getColumnName().equals(strColName)) {
-			return true;// use comma as separator  		
-		}
-		}  
-		return false;
+		return(btrees.containsKey(strColName));
 	}
 	
-	public BTree  getBtreeCol(String strColName){
+	public BPTree  getBtreeCol(String strColName){
 
-		for (int i=0;i<btrees.size();i++)   //returns a Boolean value  
-		{  
-		if(btrees.get(i).getColumnName().equals(strColName)) {
-			return btrees.get(i);// use comma as separator  		
-		}
-		}  
+		
 		return null;
 	}
 
@@ -259,10 +251,12 @@ System.out.println("pagecount " + numOfPages);
 	public void insertBTrees(Tuple t, String page) {
 		Set<String> cols =t.getAttributes().keySet();
 		for(String col: cols) {
-			BTree bt = getBtreeCol(col);
+			BPTree bt = btrees.get(col);
 			if(bt !=null) {
-				Pointer p = new Pointer(t.getValueOfColumn(col), page);
-				bt.add(p);
+				//FIXME
+				//TODO get the index in page in BPTREE
+				Ref ref = new Ref(page,0);
+				bt.insert(t.getKeyValue(), ref);
 				System.out.println(col);
 			}
 		}
@@ -395,7 +389,7 @@ if(t.getKeyValue().compareTo(bounds[bounds.length-1])>=0) {
 		}
 		
 }else {
-	BTree clusBtree = getBtreeCol(clusteredKey);
+	BPTree clusBtree = getBtreeCol(clusteredKey);
 	options.addAll(clusBtree.getInsertPage(t.getKeyValue()));
 }
 //}
@@ -595,11 +589,51 @@ System.out.println("options are empty" + options);
 			if(!(htblColNameValue.get(col).getClass().getCanonicalName().toLowerCase()).equals(temp.get(col).toLowerCase()))
 				throw new DBAppException("Incompatible types");
 		}
+		Hashtable <String,Integer> colIndexedPages=new Hashtable<String,Integer>();
+		for(String key:htblColNameValue.keySet())
+		{
+			if(isBIndexedCol(key))
+			{
+				int l=getBtreeCol(key).getDeletePage(htblColNameValue.get(key)).size();
+				colIndexedPages.put(key, l);
+				
+			}
+		}
+		
+		int minSoFar=0;
+		String minCol="";
+		for(String key:colIndexedPages.keySet())
+		{
+			minSoFar=colIndexedPages.get(key);
+			minCol=key;
+			break;
+			
+		}
+		for(String key:colIndexedPages.keySet())
+		{
+			if(colIndexedPages.get(key)<=minSoFar) {
+			minSoFar=colIndexedPages.get(key);
+			minCol=key;
+			}
+			
+			
+		}
+		if(colIndexedPages.isEmpty()) {
+		
 		for(String file :pageInfo.keySet())
 		{
 			deleteFromPage(file, htblColNameValue);
 		}
 		
+		}
+		else
+		{
+			ArrayList<String> canPages=btrees.get(minCol).getDeletePage(htblColNameValue.get(minCol));
+			for(String file:canPages)
+			{
+				deleteFromPage(file, htblColNameValue);
+			}
+		}
 	
 
 
@@ -933,18 +967,20 @@ public void updatePageInfo(String fileName) {
 		
 		String strColType = tableMeta.get(strColName);
 		
-		BTree bt = new BTree(tableName, strColName, nodeSize,  strColType );
+		BPTree bt = new BPTree(nodeSize);
 		
 		// add to table's indices
-		btrees.add(bt);
+		btrees.put(strColName, bt);
 		
 		//add everything already in table
 		for (String block: pageInfo.keySet()) {
 			Read(block);
+			int i=1;
 			for(Tuple t : page) {
+				
 				Comparable value = t.getAttributes().get(strColName);
-				Pointer pt = new Pointer(value, block);
-				bt.add(pt);
+				Ref ref = new Ref(block,i);
+				bt.insert(t.getKeyValue(), ref);
 			}
 			page.clear();
 		}
