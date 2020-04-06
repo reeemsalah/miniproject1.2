@@ -80,6 +80,7 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 		//go down and find the new root in case the old root is deleted
 		while(root instanceof BPTreeInnerNode && !root.isRoot())
 			root = ((BPTreeInnerNode<T>) root).getFirstChild();
+		System.out.println(this.toString());
 		return done;
 	}
 	
