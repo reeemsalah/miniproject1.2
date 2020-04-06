@@ -6,15 +6,11 @@ public class TestBPTree {
 
 	public static void main(String[] args) 
 	{
+		
 		BPTree<Integer> tree = new BPTree<Integer>(2);
 		Scanner sc = new Scanner(System.in);
 		while(true) 
 		{
-//			int x = sc.nextInt();
-//			if(x == -1)
-//				break;
-//			int page = sc.nextInt();
-//			tree.insert(x, null);
 			tree.insert(5, new Ref("p1", 1));
 			tree.insert(7, new Ref("p1", 2));
 			tree.insert(15, new Ref("p2", 1));
@@ -41,6 +37,8 @@ public class TestBPTree {
 		
 		
 		sc.close();
+	
+		
 	}	
 	
 	

@@ -46,19 +46,13 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 	
 	
 	public ArrayList<String> getInsertPage(T key) {
-//		
-//		PushUp<T> pushUp = root.getInsertPage(key, null, -1);
-//		if(pushUp != null)
-//		{
-//			BPTreeInnerNode<T> newRoot = new BPTreeInnerNode<T>(order);
-//			newRoot.insertLeftAt(0, pushUp.key, root);
-//			newRoot.setChild(1, pushUp.newNode);
-//			root.setRoot(false);
-//			root = newRoot;
-//			root.setRoot(true);
-//		}
+
 		return root.getInsertPage(key, null, -1);
 		
+	}
+	public ArrayList<String> getDeletePage(T key)
+	{
+		return root.getDeletePage(key, null,-1);
 	}
 	
 	/**

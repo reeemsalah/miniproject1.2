@@ -107,25 +107,29 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	public ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr)
 	{
 		ArrayList<String> pageOptions = new ArrayList<String>();
-//		if(this.isFull())
-//		{
-//			BPTreeNode<T> newNode = this.split(key, recordReference);
-//			Comparable<T> newKey = newNode.getFirstKey();
-//			return new PushUp<T>(newNode, newKey);
-//		}
-//		else
-//		{
 			int index = 0;
-			while (index < numberOfKeys
-//					&& getKey(index).compareTo(key) <= 0
-					) {
-//			this.insertAt(index, key, recordReference);
+			while (index < numberOfKeys) {
+
 			pageOptions.add(this.getRecord(index).getPage());
 			++index;
 }
-//			return null;
+
 			return pageOptions; 
-//		}
+
+	}
+	@Override 
+	public ArrayList<String> getDeletePage (T key, BPTreeInnerNode<T> parent, int ptr)
+	{
+		ArrayList<String> pageOptions = new ArrayList<String>();
+		int index = 0;
+		while (index < numberOfKeys && getKey(index).compareTo(key) == 0) {
+
+		pageOptions.add(this.getRecord(index).getPage());
+		++index;
+}
+
+		return pageOptions; 
+
 	}
 	
 	/**

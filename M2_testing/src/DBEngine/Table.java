@@ -347,23 +347,7 @@ System.out.println("pagecount " + numOfPages);
 		Arrays.sort(allMax);
 		ArrayList<String> options= new ArrayList<String>() ;
 		
-//for(Comparable opt: allMin) {
-//	if(t.getKeyValue().compareTo(opt)>=0) {
-//		for(String fil:allFiles) {
-//			if(pageInfo.get(fil)[1].compareTo(opt)==0)
-//			options.add(fil);
-//		}
-//	}
-//		
-//}
-//for(Comparable opt: allMax) {
-//	if(t.getKeyValue().compareTo(opt)>=0) {
-//		for(String fil:allFiles) {
-//			if(pageInfo.get(fil)[2].compareTo(opt)==0)
-//			options.add(fil);
-//		}
-//	}
-//		
+
 		Arrays.sort(allFiles);
 	
 		Comparable [] bounds = new Comparable[allMin.length + allMax.length];
@@ -372,11 +356,7 @@ System.out.println("pagecount " + numOfPages);
 			bounds[l+1]=allMax[l/2];
 		}
 		
-//		if (bounds[0].compareTo(t.getKeyValue()) >= 0) {
-//			options.add();
-//			System.out.println("smol ");
-//		}
-		
+
 if (!isBIndexedCol(clusteredKey)) {
 		if(t.getKeyValue().compareTo(bounds[0])<=0) {
 			for(String e: allFiles) {
@@ -605,7 +585,6 @@ System.out.println("options are empty" + options);
 
 		insertBTrees(t, pageOfInsertion);
 	}
-//	public void delete(Tuple t) throws DBAppException {
 		public void delete(Hashtable<String, Comparable> htblColNameValue) throws DBAppException {
 		page.clear();
 		
@@ -631,7 +610,7 @@ System.out.println("options are empty" + options);
 	 * @param fileName name of the file to delete t tuple from
 	 * @param htblColNameValue        tuple to be deleted from fileName
 	 */
-//	public void deleteFromPage(String fileName, Tuple t) {
+
 		public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue) {
 
 			System.out.println("deletepage!!!!!!!!!!1");
@@ -639,12 +618,6 @@ System.out.println("options are empty" + options);
 		page.clear();
 		Read(fileName);
 		int i = 0;
-//		for (Tuple t1 : page) {
-//			if (t1.helperDelete(t.getAttributes())) {
-//				page.remove(i);
-//				i++;
-//			}
-//		}
 		while(i<page.size()) {//startoftrial
 			System.out.println("vector at" + i);
 			System.out.println(page.get(i));

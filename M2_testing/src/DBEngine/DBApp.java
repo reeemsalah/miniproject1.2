@@ -100,9 +100,11 @@ public class DBApp {
 	
 	public void createBTreeIndex(String strTableName, String strColName) throws DBAppException 
 	{													//same for RTree // any more exceptions to throw?
+		//TODO throw an exception on entering a invalid column name
+		
 		boolean flag = false;
 
-//creating an array of table names
+		//creating an array of table names
 		Object[] tableNamesObj = (tables.keySet().toArray());
 		String[] tableNames = new String[tableNamesObj.length];
 		int j = 0;
@@ -131,6 +133,8 @@ public class DBApp {
 	
 
 	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String strarrOperators) throws DBAppException {
+		//TODO exception on non-existing table names or invalid column names or incompatible types
+		
 Vector<Tuple> results = null;
 //actually search 
 return results.iterator();

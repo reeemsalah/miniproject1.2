@@ -98,30 +98,24 @@ public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  imp
 	
 	public ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr)
 	{
-//		int index = findIndex(key);
-//		PushUp<T> pushUp = children[index].getInsertPage(key, this, index);
-//		
-//		if(pushUp == null)
-//			return null;
-		
-//		if(this.isFull())
-//		{
-//			BPTreeInnerNode<T> newNode = this.split(pushUp);
-//			Comparable<T> newKey = newNode.getFirstKey();
-//			newNode.deleteAt(0, 0);
-//			return new PushUp<T>(newNode, newKey);
-//		}
-//		else
-//		{
+
 			index = 0;
 			while (index < numberOfKeys && getKey(index).compareTo(key) < 0) 
 				++index;
-//			this.insertRightAt(index, pushUp.key, pushUp.newNode);
+
 				return this.children[index].getInsertPage(key, parent, ptr);
 			
-//			return null;
-//		}
+
 	}
+	@Override
+	public ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr)
+			{
+		index = 0;
+		while (index < numberOfKeys && getKey(index).compareTo(key) < 0) 
+			++index;
+
+			return this.children[index].getInsertPage(key, parent, ptr);
+			}
 	
 	/**
 	 * split the inner node and adjust values and pointers.

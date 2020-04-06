@@ -32,4 +32,10 @@ public class Ref implements Serializable{
 	{
 		return indexInPage;
 	}
+	@Override
+	public String toString()
+	{
+		return "pageNo: "+this.pageNo;
+	}
+
 }
