@@ -105,6 +105,12 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 	 
 	public abstract ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr);
 
+//	public int getNextNewKeyIndex(int currIndex){
+//		Comparable currKey = keys[currIndex];
+//		Comparable nextNew
+//		return 
+//		
+//	}
 	/**
 	 * delete a key from the B+ tree recursively
 	 * @param key the key to be deleted from the B+ tree
