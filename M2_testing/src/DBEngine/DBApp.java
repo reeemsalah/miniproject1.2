@@ -141,6 +141,118 @@ Vector<Tuple> results = null;
 //actually search 
 return results.iterator();
 	}
+	/*
+	 * gets the table name from the query string
+	 * */
+	public String getTableName(String query) {
+		String[] temp = query.split("\\s");
+		return temp[3];
+	}
+
+	/*
+	 * gets the column names all in one string from the query string
+	 * */
+	public String getColumnNames(String query) {
+		String[] temp = query.split("\\s");
+		return temp[1];
+	}
+
+	/*
+	 * gets an arraylist of strings that has the operators {=,>,<,>=,<=}
+	 * */
+	public ArrayList<String> getOperators(String query) {
+		String[] temp = query.split("\\s");
+		int size = temp.length;
+		ArrayList<String> result = new ArrayList<String>();
+		for(int i = 5;i>0;i=i-2) {
+			String op = temp[size-i];
+			for(int j = 0;j<op.length();j++) {
+				char c = op.charAt(j);
+				if(c == '=') {
+					result.add(Character.toString(c));
+				}else {
+					if(c == '>') {
+						char c1 = op.charAt(j+1);
+						if(c1 == '=') {
+							String r = ""+c+c1;
+							result.add(r);
+						}else {
+							result.add(Character.toString(c));							
+						}
+					}else {
+						if(c == '<') {
+							char c1 = op.charAt(j+1);
+							if(c1 == '=') {
+								String r = ""+c+c1;
+								result.add(r);
+							}else {
+								result.add(Character.toString(c));							
+							}
+						}	
+					}
+				}
+			}
+		}
+		return result;
+
+	}
+
+	/*
+	 * returns all the logical operators in the query string
+	 * */
+	public ArrayList<String> getLogicalOperators(String query){
+		String[] temp = query.split("\\s");
+		int size = temp.length;
+		ArrayList<String> result = new ArrayList<String>();
+		for(int i = 4;i>0;i=i-2) {
+			String op = temp[size-i];
+			result.add(op);
+		}
+		return result;
+	}
+
+	/*
+	 * return the name of the columns that are concerned with the object value in the query string
+	 * */
+	public ArrayList<String> getNameOfObjects(String query){
+		String[] temp = query.split("\\s");
+		int size = temp.length;
+		ArrayList<String> result = new ArrayList<String>();
+		for(int i = 5;i>0;i=i-2) {
+			String statement = temp[size-i];
+			String ans = "";
+			int j = 0;
+			while(statement.charAt(j)!='=') {
+				ans += statement.charAt(j);
+			}
+			result.add(ans);
+		}
+		return result;
+	}
+
+	/*
+	 * return the values of the columns that we are looking for in the query string
+	 * */
+	public ArrayList<Object> getObjValues(String query) {
+		String[] temp = query.split("\\s");
+		int size = temp.length;
+		ArrayList<Object> result = new ArrayList<Object>();
+		for(int i = 5;i>0;i=i-2) {
+			String statement = temp[size-i];
+			for(int j = 0;j<statement.length();j++) {
+				if(statement.charAt(j) == '=') {
+					if(statement.charAt(j+1) == '"') {
+						String value = statement.substring(j+2,statement.length()-1);
+						result.add(value);
+					}else {
+						String value = statement.substring(j+1,statement.length()-1);
+						result.add(value);
+					}
+				}
+			}
+		}
+		return result;
+	}
 
 	public void insertIntoTable(String strTableName, Hashtable<String, Object> htblColNameValue) throws DBAppException {
 		boolean flag = false;
