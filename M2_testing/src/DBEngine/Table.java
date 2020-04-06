@@ -28,7 +28,7 @@ import javax.naming.ldap.SortControl;
 
 import BPTree.BPTree;
 import BPTree.Ref;
-
+import RTree.*;
 @SuppressWarnings("serial")
 public class Table implements Serializable {
 	private static int maxRows;
@@ -41,8 +41,8 @@ public class Table implements Serializable {
 	// Clustered key Column Name
 	private String clusteredKey;
 	private int numOfPages;
-	private Hashtable <String ,BPTree > btrees = new Hashtable<String ,BPTree >() ;
-	private Hashtable<String ,RTree > rtrees = new Hashtable<String ,RTree >() ;
+	 Hashtable <String ,BPTree > btrees = new Hashtable<String ,BPTree >() ;
+	 Hashtable<String ,RTree > rtrees = new Hashtable<String ,RTree >() ;
 	// awel string esm el file w el array of comparables at index 0 el current
 	// noOfRows
 	// array of comparables at index 1 hoe el minKey fel page
@@ -66,7 +66,7 @@ public class Table implements Serializable {
 //		pageInfo.put(firstFile, info);	
 		 Properties prop = new Properties();
 
-		 Table.maxRows=maxRows;
+		 this.maxRows=2;
 
 
 	}
@@ -78,8 +78,8 @@ public class Table implements Serializable {
 	
 	public BPTree  getBtreeCol(String strColName){
 
-		
-		return null;
+		BPTree tree = btrees.get(strColName);
+		return tree;
 	}
 
 	// to find the pages
@@ -257,7 +257,8 @@ System.out.println("pagecount " + numOfPages);
 				//TODO get the index in page in BPTREE
 				Ref ref = new Ref(page,0);
 				bt.insert(t.getKeyValue(), ref);
-				System.out.println(col);
+				System.out.println(col + " " + bt.toString());
+				
 			}
 		}
 		System.out.println("no more B indices");
@@ -294,7 +295,7 @@ System.out.println("pagecount " + numOfPages);
 	
 
 
-	public void insert(Tuple t) {
+	public void insert(Tuple t, boolean shift) {
 		if (page!=null)
 		page.clear();
 		try {
@@ -456,10 +457,10 @@ System.out.println("options are empty" + options);
 //		options = 
 ////				removeDuplicates(options);
 		
-		insertHelper(t, options);
+		insertHelper(t, options, shift);
 	}
 
-	public void insertHelper(Tuple t, ArrayList<String> pages) {
+	public void insertHelper(Tuple t, ArrayList<String> pages, boolean shift) {
 		System.out.println("options for id : " +t.getKeyValue() + "are  "+pages);
 		
 		boolean found = false;
@@ -469,7 +470,7 @@ System.out.println("options are empty" + options);
 				found = true;
 				System.out.println( "inserting to : " + pages.get(i)+ "!!!!!!!!!!!!!");
 				Read(pages.get(i));
-				insertPage(t, pages.get(i));
+				insertPage(t, pages.get(i), shift);
 //				updateMinKey(pages.get(i));
 //				updateMaxKey(pages.get(i));
 //				updatenoOfRows(pages.get(i));
@@ -483,7 +484,7 @@ System.out.println("options are empty" + options);
 			System.out.println(pages.get(pages.size() - 1));
 			Read(pages.get(pages.size() - 1));
 			System.out.println(page);
-			insertPage(t, pages.get(pages.size() - 1));
+			insertPage(t, pages.get(pages.size() - 1), shift);
 			System.out.println(page);
 			Tuple temp = page.lastElement();
 			page.remove(page.lastElement());
@@ -508,7 +509,7 @@ System.out.println("options are empty" + options);
 				if (!isPageFull(next)) { // shifting can be done
 					page.clear();
 					Read(next);
-					insertPage(temp, next);
+					insertPage(temp, next, true);
 					updateMinKey(next);
 					updateMaxKey(next);
 					updatenoOfRows(next);
@@ -518,7 +519,7 @@ System.out.println("options are empty" + options);
 				} else { // next is full
 					page.clear();
 					Read(next);
-					insertPage(temp, next);
+					insertPage(temp, next, true);
 					Tuple temp2 = page.lastElement();
 					page.remove(page.lastElement());
 //					updateMinKey(next);
@@ -527,7 +528,7 @@ System.out.println("options are empty" + options);
 					updatePageInfo(next);
 					Write(next);
 					System.out.println("RECURSIVE!!!!!!!!!!!" + temp.getKeyValue());
-					insert(temp2);
+					insert(temp2, true);
 				}
 
 			}
@@ -544,7 +545,7 @@ System.out.println("options are empty" + options);
 			return true;
 	}
 
-	public void insertPage(Tuple t, String pageOfInsertion) {
+	public void insertPage(Tuple t, String pageOfInsertion, boolean shift) {
 		System.out.println("inserting......");
 		if (this.page.size() > 0) {
 			Iterator it = this.page.iterator();
@@ -576,8 +577,8 @@ System.out.println("options are empty" + options);
 			this.page.add(t);
 
 		}
-
-		insertBTrees(t, pageOfInsertion);
+if(!shift) {
+		insertBTrees(t, pageOfInsertion);}
 	}
 		public void delete(Hashtable<String, Comparable> htblColNameValue) throws DBAppException {
 		page.clear();
@@ -967,7 +968,7 @@ public void updatePageInfo(String fileName) {
 		
 		String strColType = tableMeta.get(strColName);
 		
-		BPTree bt = new BPTree(nodeSize);
+		BPTree bt = new BPTree(2);
 		
 		// add to table's indices
 		btrees.put(strColName, bt);
@@ -975,15 +976,18 @@ public void updatePageInfo(String fileName) {
 		//add everything already in table
 		for (String block: pageInfo.keySet()) {
 			Read(block);
-			int i=1;
+//			int i=1;
 			for(Tuple t : page) {
 				
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(block,i);
-				bt.insert(t.getKeyValue(), ref);
+				Ref ref = new Ref(block,0);
+				bt.insert(value, ref);
 			}
 			page.clear();
 		}
+//		System.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
+
+		
 			System.out.println("Tree for " + strColName + ": " + bt.toString());		
 			//TODO write index into a file
 		//should each node be in a file? 

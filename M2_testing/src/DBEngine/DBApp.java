@@ -173,7 +173,7 @@ return results.iterator();
 				tempHash.put(key, (Comparable) htblColNameValue.get(key));
 			}
 			Tuple t = new Tuple(tempHash, tables.get(strTableName).returnClusteredKey());
-			tables.get(strTableName).insert(t);
+			tables.get(strTableName).insert(t, false);
 		}
 	}
 

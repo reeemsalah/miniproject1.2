@@ -12,7 +12,7 @@ public class DBAppTest {
 		htblColNameType.put("id", "java.lang.Integer");
 		htblColNameType.put("name", "java.lang.String");
 		htblColNameType.put("gpa", "java.lang.double");
-		dbApp.createTable( strTableName, "name", htblColNameType );
+		dbApp.createTable( strTableName, "id", htblColNameType );
 		
 		Hashtable htblColNameValue = new Hashtable( );
 		
@@ -69,6 +69,15 @@ public class DBAppTest {
 		
 		dbApp.createBTreeIndex("Student", "id");
 
+	
+		htblColNameValue.put("id", new Integer( 12 ));
+		htblColNameValue.put("name", new String("salma Noor" ) );
+		htblColNameValue.put("gpa", new Double( 0.88 ) );
+		dbApp.insertIntoTable( strTableName , htblColNameValue );
+		htblColNameValue.clear( );
+		
+		
+		
 		
 ////		htblColNameValue.put("id", new Integer( 23498 ));
 //		htblColNameValue.put("name", new String("ahmed Noor" ) );
@@ -146,8 +155,7 @@ public class DBAppTest {
 //		htblColNameValue2.put("place",  r2 );
 //		htblColNameValue2.put("name", new String("guc" ) );
 //		htblColNameValue2.put("rating", new Double( 0.88 ) );
-//		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );
-//		
+//		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );//		
 //		
 //
 //		htblColNameValue2.put("place", r1);
