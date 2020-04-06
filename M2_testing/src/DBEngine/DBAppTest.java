@@ -72,6 +72,7 @@ public class DBAppTest {
 		htblColNameValue.put("id", new Integer( 23498 ));
 //		htblColNameValue.put("name", new String("ahmed Noor" ) );
 //		htblColNameValue.put("gpa", new Double( 1.5 ) );
+		System.out.println("deleting..........................");
 		dbApp.deleteFromTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );//delete is case sensetive
 		

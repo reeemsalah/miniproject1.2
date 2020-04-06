@@ -613,6 +613,7 @@ public class Table implements Serializable {
 
 		}
 		Write(fileName);
+		//System.out.println(page);
 		page.clear();
 	}
 
