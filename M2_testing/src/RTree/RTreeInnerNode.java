@@ -3,6 +3,7 @@ package RTree;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import BPTree.BPTreeInnerNode;
 import DBEngine.Region;
 
 public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  implements Serializable
@@ -115,15 +116,49 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 //		}
 //		else
 //		{
-			index = 0;
-			while (index < numberOfKeys && getKey(index).compareTo(key) < 0) 
-				++index;
+			int i = 0;
+			while (i < numberOfKeys && getKey(i).compareTo(key) < 0) 
+				++i;
 //			this.insertRightAt(index, pushUp.key, pushUp.newNode);
-				return this.children[index].getInsertPage(key, parent, ptr);
+				return this.children[i].getInsertPage(key, parent, ptr);
 			
 //			return null;
 //		}
 	}
+	
+	@Override
+	//custom	
+		public ArrayList<String> getDeletePage(Region key, RTreeInnerNode<T> parent, int ptr)
+		{
+	ArrayList<String> pageOptions = new ArrayList<String>(); 
+	System.out.println("level innerNode " + this.index);
+
+	ArrayList<String> pages = new ArrayList<String>(); 
+	int i = 0;
+	while (i < numberOfKeys) {
+		if(getKey(i).compareTo(key) <= 0 && getKey(i).compareTo(key) >= 0 ) {
+			System.out.println("between");
+
+			pageOptions.addAll(this.children[i+1].getDeletePage(key, parent, ptr));}
+
+		if(getKey(i).compareTo(key) <= 0 && i==numberOfKeys-1 ) {
+			System.out.println("last");
+
+		
+			pageOptions.addAll(this.getLastChild().getDeletePage(key, parent, ptr));}
+		if(getKey(i).compareTo(key) >= 0 && i==0 ) {
+			System.out.println("first");
+
+			pageOptions.addAll(this.getFirstChild().getDeletePage(key, parent, ptr));}
+		++i;
+
+	}
+	//pageOptions.addAll(this.children[0].getDeletePage(key, parent, ptr));
+
+	return pageOptions;
+		
+		}
+		
 	
 	/**
 	 * split the inner node and adjust values and pointers.

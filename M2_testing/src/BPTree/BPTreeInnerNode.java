@@ -108,6 +108,7 @@ public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  imp
 
 	}
 	@Override
+//	custom
 	public ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr)
 			{
 		ArrayList<String> pageOptions = new ArrayList<String>(); 
@@ -125,11 +126,11 @@ public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  imp
 				System.out.println("last");
 
 			
-				pageOptions.addAll(this.children[numberOfKeys].getDeletePage(key, parent, ptr));}
+				pageOptions.addAll(this.getLastChild().getDeletePage(key, parent, ptr));}
 			if(getKey(i).compareTo(key) >= 0 && i==0 ) {
 				System.out.println("first");
 
-				pageOptions.addAll(this.children[0].getDeletePage(key, parent, ptr));}
+				pageOptions.addAll(this.getFirstChild().getDeletePage(key, parent, ptr));}
 			++i;
 
 		}

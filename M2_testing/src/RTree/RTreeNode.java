@@ -3,6 +3,7 @@ package RTree;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import BPTree.BPTreeInnerNode;
 import DBEngine.Region;
 
 public abstract class RTreeNode<T extends Comparable<T>> implements Serializable{
@@ -100,7 +101,11 @@ public abstract class RTreeNode<T extends Comparable<T>> implements Serializable
 	 * @return a key and a new node in case of a node splitting and null otherwise
 	 */
 	public abstract PushUp<T> insert(Region key, Ref recordReference, RTreeInnerNode<T> parent, int ptr);
+
+//	custom
 	public abstract ArrayList<String> getInsertPage(Region key, RTreeInnerNode<T> parent, int ptr);
+//	custom
+	public abstract ArrayList<String> getDeletePage(Region key, RTreeInnerNode<T> parent, int ptr);
 
 	
 	public abstract Ref search(Region key);

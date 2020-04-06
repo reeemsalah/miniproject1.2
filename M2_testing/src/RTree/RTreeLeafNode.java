@@ -3,6 +3,8 @@ package RTree;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import BPTree.BPTreeInnerNode;
+import BPTree.BPTreeLeafNode;
 import DBEngine.Region;
 
 public class RTreeLeafNode<T extends Comparable<T>> extends RTreeNode<T> implements Serializable{
@@ -117,13 +119,13 @@ public class RTreeLeafNode<T extends Comparable<T>> extends RTreeNode<T> impleme
 //		}
 //		else
 //		{
-			int index = 0;
-			while (index < numberOfKeys
+			int i = 0;
+			while (i < numberOfKeys
 //					&& getKey(index).compareTo(key) <= 0
 					) {
 //			this.insertAt(index, key, recordReference);
-			pageOptions.add(this.getRecord(index).getPage());
-			++index;
+			pageOptions.add(this.getRecord(i).getPage());
+			++i;
 }
 //			return null;
 			return pageOptions; 
@@ -148,6 +150,53 @@ public class RTreeLeafNode<T extends Comparable<T>> extends RTreeNode<T> impleme
 		this.setRecord(index, recordReference);
 		++numberOfKeys;
 	}
+	
+	
+	@Override 
+//	custom
+	public ArrayList<String> getDeletePage (Region key, RTreeInnerNode<T> parent, int ptr)
+	{		System.out.println("level leaf1  " + this.index);
+
+		boolean checkNext = false;
+		ArrayList<String> pageOptions = new ArrayList<String>();
+		System.out.println(numberOfKeys);
+		int i = 0;
+		while (i < numberOfKeys) {
+			System.out.println("loop "+ i + "   key  " + getKey(i));
+			
+			if(getKey(i).compareTo(key) == 0) {
+		pageOptions.add(this.getRecord(i).getPage());
+		System.out.println(this.getRecord(i).getPage());
+		}
+
+		if (i==numberOfKeys) checkNext=true;
+		++i;
+}
+		if (checkNext) {
+		pageOptions.addAll(getDeletePageHelper(key, next));}
+		return pageOptions; 
+
+	}
+	
+//	 custom
+	public ArrayList<String> getDeletePageHelper(Region key, RTreeLeafNode<T> followingNode ){
+		System.out.println("level leaf2");
+
+boolean checkNext = false;
+ArrayList<String> pageOptions = new ArrayList<String>();
+int i = 0;
+while (i < numberOfKeys) {
+	if(getKey(index).compareTo(key) == 0) {
+pageOptions.add(this.getRecord(i).getPage());
+System.out.println(this.getRecord(i).getPage());
+if (i==numberOfKeys) checkNext=true;}
+++i;
+}
+if (checkNext) {
+	pageOptions.addAll(getDeletePageHelper(key, next));}
+return pageOptions; 
+
+}
 	
 	/**
 	 * splits the current node

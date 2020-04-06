@@ -46,7 +46,7 @@ public class RTree<T extends Comparable<T>> implements Serializable{
 		}
 	}
 	
-	
+//	custom
 	public ArrayList<String> getInsertPage(Region key) {
 //		
 //		PushUp<T> pushUp = root.getInsertPage(key, null, -1);
@@ -61,6 +61,14 @@ public class RTree<T extends Comparable<T>> implements Serializable{
 //		}
 		return root.getInsertPage(key, null, -1);
 		
+	}
+//	custom
+	public ArrayList<String> getDeletePage(Region key)
+	{
+		//go down and find the new root in case the old root is deleted
+		
+		System.out.println("level RTree" + root.index);
+		return (root.getDeletePage(key, null,-1));
 	}
 	
 	/**
