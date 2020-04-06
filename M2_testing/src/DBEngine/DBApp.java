@@ -226,6 +226,7 @@ return results.iterator();
 			int j = 0;
 			while(statement.charAt(j)!='=') {
 				ans += statement.charAt(j);
+				j++;
 			}
 			result.add(ans);
 		}
