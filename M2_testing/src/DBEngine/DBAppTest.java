@@ -50,6 +50,7 @@ public class DBAppTest {
 
 		htblColNameValue.put("id", new Integer( 78452 ));
 		htblColNameValue.put("name", new String("alyaa Noor" ) );
+		//
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
@@ -60,6 +61,7 @@ public class DBAppTest {
 	
 		htblColNameValue.put("id", new Integer( 12 ));
 		htblColNameValue.put("name", new String("salma Noor" ) );
+		//
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
