@@ -43,7 +43,7 @@ public class DBApp {
 	public void createTable(String strTableName, String strClusteringKeyColumn,
 			Hashtable<String, String> htblColNameType) throws DBAppException {
 		boolean flag = false;
-		// System.out.println("here1");
+		// //.out.println("here1");
 		if (tables.size() != 0) {
 			Object[] tmp = tables.keySet().toArray();
 			String[] tableNames = new String[tmp.length];
@@ -51,10 +51,10 @@ public class DBApp {
 				tableNames[i] = (String) tmp[i];
 			}
 
-			// System.out.println("here2");
+			// //.out.println("here2");
 			for (int i = 0; i < tableNames.length; i++) {
 				if (tableNames[i].equals(strTableName)) {
-					// System.out.println(tableNames[i]);
+					// //.out.println(tableNames[i]);
 					flag = true;
 					break;
 				}
@@ -63,7 +63,7 @@ public class DBApp {
 		if (flag == true) {
 			throw new DBAppException("This table already exists");
 		} else {
-			// System.out.println("here3");
+			// //.out.println("here3");
 			ArrayList<String> columnNames = new ArrayList<String>();
 			ArrayList<String> columnTypes = new ArrayList<String>();
 			Set<String> names = htblColNameType.keySet();
@@ -91,7 +91,7 @@ public class DBApp {
 
 			Table t = new Table(strTableName, columnNames, columnTypes, clustered, indexed, strClusteringKeyColumn, maxRows);
 			// fix maxRows
-			// System.out.println("here4");
+			// //.out.println("here4");
 			tables.put(strTableName, t);
 			insertIntoMetaData(t, true);
 
@@ -261,7 +261,7 @@ return results.iterator();
 		boolean flag = false;
 
 		java.util.Date date = new java.util.Date();
-//		System.out.println(date);
+//		//.out.println(date);
 		htblColNameValue.put("TouchDate", date);
 
 		Object[] tableNamesObj = (tables.keySet().toArray());
@@ -312,7 +312,7 @@ return results.iterator();
 		if (!flag) {
 			throw new DBAppException("This table doens't exist");
 		} else {
-			System.out.println("AY 7AGA");
+			//.out.println("AY 7AGA");
 			Hashtable<String, Comparable> tempHash = new Hashtable<String, Comparable>();
 			Set<String> keys = htblColNameValue.keySet();
 			for (String key : keys) {
@@ -381,7 +381,7 @@ return results.iterator();
 						+ clusteredColumns.get(i) + "," + indexedColumns.get(i);
 				bw.write(toBeInserted);
 				// line for testing
-				// System.out.println("line " + (i) + " inserted");
+				// //.out.println("line " + (i) + " inserted");
 				bw.write("\n");
 			}
 			bw.flush();
@@ -413,7 +413,7 @@ return results.iterator();
 		while ((line = br.readLine()) != null)   //returns a Boolean value  
 		{  
 		String[] entry = line.split(splitBy);    // use comma as separator  
-		//System.out.println("Employee [First Name=" + employee[0] + ", Last Name=" + employee[1] + ", Designation=" + employee[2] + ", Contact=" + employee[3] + ", Salary= " + employee[4] + ", City= " + employee[5] +"]");  
+		////.out.println("Employee [First Name=" + employee[0] + ", Last Name=" + employee[1] + ", Designation=" + employee[2] + ", Contact=" + employee[3] + ", Salary= " + employee[4] + ", City= " + employee[5] +"]");  
 		if(entry[0].contentEquals(tableName) && entry[1].contentEquals(strColName) ) {
 		
 				entry[4] = "true";
@@ -438,7 +438,7 @@ return results.iterator();
 						+ meta.get(i)[3] + "," + meta.get(i)[4];
 				bw.write(toBeInserted);
 				// line for testing
-				// System.out.println("line " + (i) + " inserted");
+				// //.out.println("line " + (i) + " inserted");
 				bw.write("\n");
 			}
 			bw.flush();
@@ -472,10 +472,10 @@ return results.iterator();
 //			htblColNameValue.put("name", new String("Ahmed"));
 //			dbApp.updateTable(strTableName, "1", htblColNameValue);
 //		} catch (Exception e) {
-//			System.out.println(e.getMessage());
+//			//.out.println(e.getMessage());
 //		}
 
 		DBApp d = new DBApp();
-		System.out.print(d.getObjValues("SELECT * FROM student WHERE id=123 AND name=ali"));
+		//.out.print(d.getObjValues("SELECT * FROM student WHERE id=123 AND name=ali"));
 	}
 }

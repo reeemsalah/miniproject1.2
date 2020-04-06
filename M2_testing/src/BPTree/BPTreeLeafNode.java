@@ -120,18 +120,18 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	@Override 
 //	custom
 	public ArrayList<String> getDeletePage (T key, BPTreeInnerNode<T> parent, int ptr)
-	{		System.out.println("level leaf1  " + this.index);
+	{		//System.out.println("level leaf1  " + this.index);
 
 		boolean checkNext = false;
 		ArrayList<String> pageOptions = new ArrayList<String>();
-		System.out.println(numberOfKeys);
+		//System.out.println(numberOfKeys);
 		int i = 0;
 		while (i < numberOfKeys) {
 			System.out.println("loop "+ i + "   key  " + getKey(i));
 			
 			if(getKey(i).compareTo(key) == 0) {
 		pageOptions.add(this.getRecord(i).getPage());
-		System.out.println(this.getRecord(i).getPage());
+		//System.out.println(this.getRecord(i).getPage());
 		}
 
 		if (i==numberOfKeys) checkNext=true;

@@ -47,19 +47,6 @@ public class DBAppTest {
 		
 		
 
-//		htblColNameValue.put("id", new Integer( 5674567 ));
-//		htblColNameValue.put("name", new String("soaad Noor" ) );
-//		htblColNameValue.put("gpa", new Double( 1.25 ) );
-//		dbApp.updateTable( strTableName, "5674567" , htblColNameValue );
-//		htblColNameValue.clear( );
-		
-////		htblColNameValue.put("id", new Integer( 23498 ));
-//		htblColNameValue.put("name", new String("John Noor" ) );
-//		htblColNameValue.put("gpa", new Double( 1.5 ) );
-//		dbApp.deleteFromTable( strTableName , htblColNameValue );
-//		htblColNameValue.clear( );
-		
-		
 
 		htblColNameValue.put("id", new Integer( 78452 ));
 		htblColNameValue.put("name", new String("alyaa Noor" ) );
@@ -173,7 +160,7 @@ public class DBAppTest {
 //		htblColNameValue2.clear( );
 //		
 //		
-//
+
 
 		
 	}

@@ -42,7 +42,7 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 			root = newRoot;
 			root.setRoot(true);
 		}
-		System.out.println("curr root " + root.index);
+		//System.out.println("curr root " + root.index);
 	}
 	
 //custom
@@ -55,7 +55,7 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 	{
 		//go down and find the new root in case the old root is deleted
 		
-		System.out.println("level BPTree" + root.index);
+		//System.out.println("level BPTree" + root.index);
 		return root.getDeletePage(key, null,-1);
 	}
 	
@@ -80,7 +80,7 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 		//go down and find the new root in case the old root is deleted
 		while(root instanceof BPTreeInnerNode && !root.isRoot())
 			root = ((BPTreeInnerNode<T>) root).getFirstChild();
-		System.out.println(this.toString());
+		//System.out.println(this.toString());
 		return done;
 	}
 	
@@ -90,8 +90,7 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 	public String toString()
 	{	
 		
-		//	<For Testing>
-		// node :  (id)[k1|k2|k3|k4]{P1,P2,P3,}
+		
 		String s = "";
 		Queue<BPTreeNode<T>> cur = new LinkedList<BPTreeNode<T>>(), next;
 		cur.add(root);

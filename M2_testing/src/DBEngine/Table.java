@@ -90,7 +90,7 @@ public class Table implements Serializable {
 	 */
 	public String addPage() {
 		String filename = tableName + "_" + (++numOfPages);
-		System.out.println("pagecount " + numOfPages);
+		//.out.println("pagecount " + numOfPages);
 		File file = new File(filename + ".ser");
 		try {
 			file.createNewFile();
@@ -129,15 +129,6 @@ public class Table implements Serializable {
 			FileOutputStream file1 = new FileOutputStream(filename + ".ser"); // overwrites file?
 			ObjectOutputStream out = new ObjectOutputStream(file1);
 
-			// Method for serialization of object
-//			out.writeObject(tableName);
-//			out.writeObject(columnNames);
-//			out.writeObject(columnTypes);
-//			out.writeObject(clusteredCoulmns);
-//			out.writeObject(indexedCoulmns);
-//			out.writeObject(clusteredKey);
-//			out.writeObject(maxRows);
-
 			out.writeObject(page);
 
 			out.close();
@@ -148,48 +139,23 @@ public class Table implements Serializable {
 	}
 
 	public void Read(String filename) {
-//		System.out.println( " reading1!!!!!!!!!!"  );
 
 		try {
-			// ObjectInputStream o = new ObjectInputStream(new FileInputStream(filename ));
+
 			FileInputStream fi = new FileInputStream((filename + ".ser"));
-//			System.out.println( " reading2!!!!!!!!!!"  );
 
 			try {
 				ObjectInputStream o = new ObjectInputStream(fi);
 
-//			while(o.readObject()!=null) {
-//				System.out.println( " reading3!!!!!!!!!!"  );
-
 				o.read();
-//				System.out.println( " reading4!!!!!!!!!!"  );
-
-//				System.out.println(o.readObject() + " reading" +o.readObject().getClass().getCanonicalName() );
-//				System.out.println( " reading5!!!!!!!!!!"  );
-
-//				page.add((Tuple)o.readObject());
 				page = (Vector<Tuple>) o.readObject();
 
-//				System.out.println(tableName);
-//				System.out.println(columnNames);
-//				System.out.println(columnTypes);
-//				System.out.println(clusteredCoulmns);
-//				System.out.println(indexedCoulmns);
-//				System.out.println(clusteredKey);
-//				System.out.println(maxRows);
-//				System.out.println( " reading6!!!!!!!!!!"  );
-
-//				break;
-
-//			}
 				o.close();
 				fi.close();
 			} catch (EOFException e) {
 
-				System.out.println("end of file ");
-//				page = new Vector<Tuple>();
+				//.out.println("end of file ");
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("READ: " + page);
@@ -203,12 +169,8 @@ public class Table implements Serializable {
 	}
 
 	public String getNextPage(String currFile) {
-		// gets the next page(in terms of key) after current file
-
-		// String[] tmp = (String[]) pageInfo.entrySet()
 		Comparable currKey = pageInfo.get(currFile)[2];
 
-//		String[] tmp = (String[]) pageInfo.keySet().toArray();
 		Object[] tmpObj = (pageInfo.keySet().toArray());
 		String[] tmp = new String[tmpObj.length];
 		int j = 0;
@@ -220,7 +182,6 @@ public class Table implements Serializable {
 		int i;
 		for (i = 0; i < tmp.length; i++)
 			keyArr[i] = (String) tmp[i];
-		// copy file names into keyArr Arrays.sort(keyArr); // needless but can be kept
 		boolean found = false;
 		for (i = 0; i < keyArr.length; i++) {
 			Comparable maxIndex = pageInfo.get(keyArr[i])[2];
@@ -243,11 +204,11 @@ public class Table implements Serializable {
 			if (bt != null) {
 				Ref ref = new Ref(page, 0);
 				bt.insert(t.getKeyValue(), ref);
-				System.out.println(col + " " + bt.toString());
+				//.out.println(col + " " + bt.toString());
 
 			}
 		}
-		System.out.println("no more B indices");
+		//.out.println("no more B indices");
 	}
 
 	public boolean checkInsert(Tuple t) throws DBAppException {
@@ -297,7 +258,7 @@ public class Table implements Serializable {
 		}
 
 		Object[] allFilesObj = pageInfo.keySet().toArray();
-		System.out.println("allFiles length " + allFilesObj.length);
+		//.out.println("allFiles length " + allFilesObj.length);
 
 //		String [] allFiles = intoArray(allFilesObj);
 		String[] allFiles = new String[allFilesObj.length];
@@ -307,16 +268,16 @@ public class Table implements Serializable {
 			f++;
 		}
 
-		System.out.println("allFiles length " + allFiles.length);
+		//.out.println("allFiles length " + allFiles.length);
 
 		Comparable[] allMin = new Comparable[allFiles.length];
 		Comparable[] allMax = new Comparable[allFiles.length];
 		int i = 0;
 		for (String name : allFiles) {
 			allMin[i] = (Comparable) pageInfo.get(name)[1];
-			System.out.println(allMin[i] + ", ");
+			//.out.println(allMin[i] + ", ");
 			allMax[i] = (Comparable) pageInfo.get(name)[2];
-			System.out.println(allMax[i] + ", ");
+			//.out.println(allMax[i] + ", ");
 			i++;
 		}
 		Arrays.sort(allMin);
@@ -389,44 +350,44 @@ public class Table implements Serializable {
 //		options= sortPages(options);
 
 		if (options.size() == 0) {
-			System.out.println("options are empty" + options);
+			//.out.println("options are empty" + options);
 			if (pageInfo.isEmpty()) {
-				System.out.println("options are empty3" + options);
+				//.out.println("options are empty3" + options);
 
 				options.add(addPage());
-				System.out.println("options are empty2" + options);
+				//.out.println("options are empty2" + options);
 
-				System.out.println("table has no pages");
+				//.out.println("table has no pages");
 
 			} else {
 				if (t.getKeyValue().compareTo(allMin[0]) <= 0) // smaller than smallest key
 				{
-					System.out.println("small 1" + options);
+					//.out.println("small 1" + options);
 
 					for (int j = 0; j < allFiles.length; j++) {
 						if (pageInfo.get(allFiles[j])[1] == allMin[0]) {
 							options.add(allFiles[j]);
-							System.out.println("small 2" + options);
+							//.out.println("small 2" + options);
 
 						}
-						System.out.println("small 3" + options);
+						//.out.println("small 3" + options);
 
 					}
 				} else // larger than largest key
 				{
-					System.out.println("big 0" + options);
+					//.out.println("big 0" + options);
 
 					if (t.getKeyValue().compareTo(allMax[allMax.length - 1]) >= 0) {
-						System.out.println("big 1" + options);
+						//.out.println("big 1" + options);
 
 						for (int j = 0; j < allFiles.length; j++) {
 							if (pageInfo.get(allFiles[j])[2] == allMax[allMax.length - 1]) {
-								System.out.println("big 2" + allFiles[j]);
+								//.out.println("big 2" + allFiles[j]);
 								options.add(allFiles[j]);
-								System.out.println("big 3" + options);
+								//.out.println("big 3" + options);
 //fix me
 							}
-							System.out.println("big 4" + options);
+							//.out.println("big 4" + options);
 
 						}
 					}
@@ -442,14 +403,14 @@ public class Table implements Serializable {
 	}
 
 	public void insertHelper(Tuple t, ArrayList<String> pages, boolean shift) {
-		System.out.println("options for id : " + t.getKeyValue() + "are  " + pages);
+		//.out.println("options for id : " + t.getKeyValue() + "are  " + pages);
 
 		boolean found = false;
 		for (int i = 0; i < pages.size(); i++) {
 			if (!isPageFull(pages.get(i))) {
 
 				found = true;
-				System.out.println("inserting to : " + pages.get(i) + "!!!!!!!!!!!!!");
+				//.out.println("inserting to : " + pages.get(i) + "!!!!!!!!!!!!!");
 				Read(pages.get(i));
 				insertPage(t, pages.get(i), shift);
 //				updateMinKey(pages.get(i));
@@ -462,11 +423,11 @@ public class Table implements Serializable {
 		}
 		if (!found) {
 			// insert into last possible page and copy and remove one row
-			System.out.println(pages.get(pages.size() - 1));
+			//.out.println(pages.get(pages.size() - 1));
 			Read(pages.get(pages.size() - 1));
-			System.out.println(page);
+			//.out.println(page);
 			insertPage(t, pages.get(pages.size() - 1), shift);
-			System.out.println(page);
+			//.out.println(page);
 			Tuple temp = page.lastElement();
 			page.remove(page.lastElement());
 //			updateMinKey(pages.get(pages.size() - 1));
@@ -479,7 +440,7 @@ public class Table implements Serializable {
 
 			if (next == null) {// no next page
 				page.clear();
-				System.out.println("NO NEXT!!!!!!!!!!!!!!!");
+				//.out.println("NO NEXT!!!!!!!!!!!!!!!");
 				String file1 = addPage(); // adding the info in the hashtable
 				pageInfo.put(file1, new Comparable[] { 1, t.getKeyValue(), t.getKeyValue() });
 				page.add(temp);
@@ -508,7 +469,7 @@ public class Table implements Serializable {
 //					updatenoOfRows(next);
 					updatePageInfo(next);
 					Write(next);
-					System.out.println("RECURSIVE!!!!!!!!!!!" + temp.getKeyValue());
+					//.out.println("RECURSIVE!!!!!!!!!!!" + temp.getKeyValue());
 					insert(temp2, true);
 				}
 
@@ -519,7 +480,7 @@ public class Table implements Serializable {
 
 	public boolean isPageFull(String filename) {
 		int noOfRows = (int) pageInfo.get(filename)[0];
-		System.out.println("page rows: " + noOfRows + "maxRows: " + maxRows);
+		//.out.println("page rows: " + noOfRows + "maxRows: " + maxRows);
 		if (maxRows - noOfRows > 0) {
 			return false;
 		} else
@@ -527,7 +488,7 @@ public class Table implements Serializable {
 	}
 
 	public void insertPage(Tuple t, String pageOfInsertion, boolean shift) {
-		System.out.println("inserting......");
+		//.out.println("inserting......");
 		if (this.page.size() > 0) {
 			Iterator it = this.page.iterator();
 			int i = 0;
@@ -535,12 +496,12 @@ public class Table implements Serializable {
 			while (it.hasNext() && inserted == false) {
 				Tuple tmp = (Tuple) it.next();
 				i++;
-				System.out.println(i + "   comp:" + t.compareTo(tmp) + "val: " + tmp.getKeyValue());
+				//.out.println(i + "   comp:" + t.compareTo(tmp) + "val: " + tmp.getKeyValue());
 
 				if (t.compareTo(tmp) <= 0) {
 					this.page.insertElementAt(t, i - 1);
 					inserted = true;
-					System.out.println("   found:" + inserted);
+					//.out.println("   found:" + inserted);
 
 //				 this.rows.add(t);
 
@@ -549,7 +510,7 @@ public class Table implements Serializable {
 			}
 			if (!inserted) {
 				page.add(t);
-				System.out.println("   found:" + inserted);
+				//.out.println("   found:" + inserted);
 
 			}
 		} else {
@@ -621,20 +582,20 @@ public class Table implements Serializable {
 	public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue, BPTree btree,
 			String col) {
 
-		System.out.println("deletepage!!!!!!!!!!1");
+		//.out.println("deletepage!!!!!!!!!!1");
 
 		page.clear();
 		Read(fileName);
 		int i = 0;
 		while (i < page.size()) {// startoftrial
-			System.out.println("vector at" + i);
-			System.out.println(page.get(i));
-			System.out.println(htblColNameValue);
+			//.out.println("vector at" + i);
+			//.out.println(page.get(i));
+			//.out.println(htblColNameValue);
 
 			if (page.get(i).helperDelete(htblColNameValue)) {
 
 				page.remove(i);
-				System.out.println("matched!!!!!!!!!!");
+				//.out.println("matched!!!!!!!!!!");
 				if (btree != null) {
 					btrees.get(col).delete(htblColNameValue.get(col));
 				}
@@ -695,7 +656,7 @@ public class Table implements Serializable {
 			while ((line = br.readLine()) != null) // returns a Boolean value
 			{
 				String[] entry = line.split(splitBy); // use comma as separator
-				// System.out.println("Employee [First Name=" + employee[0] + ", Last Name=" +
+				// //.out.println("Employee [First Name=" + employee[0] + ", Last Name=" +
 				// employee[1] + ", Designation=" + employee[2] + ", Contact=" + employee[3] +
 				// ", Salary= " + employee[4] + ", City= " + employee[5] +"]");
 				if (entry[0].contentEquals(tableName)) {
@@ -709,8 +670,8 @@ public class Table implements Serializable {
 			e.printStackTrace();
 		}
 
-		System.out.println(tableColNames);
-		System.out.println(tableColTypes);
+		//.out.println(tableColNames);
+		//.out.println(tableColTypes);
 		Hashtable<String, String> colInfo = new Hashtable<String, String>();
 		if (tableColNames.size() == tableColTypes.size()) {
 
@@ -725,7 +686,7 @@ public class Table implements Serializable {
 	}
 
 	public void updateTable(String strClusteringKey, Tuple t) throws DBAppException {
-		System.out.println("I am here method");
+		//.out.println("I am here method");
 		// page.clear();
 
 		Hashtable<String, String> temp = readTableMetadata();
@@ -735,36 +696,36 @@ public class Table implements Serializable {
 			Read(file);
 
 			for (Tuple t1 : page) {
-				System.out.println("I am here for loop 2");
+				//.out.println("I am here for loop 2");
 				String coltype = temp.get(t1.getKey());
 
 				if (coltype.equals("java.lang.Integer")) {
-					System.out.println("integer for sure");
+					//.out.println("integer for sure");
 //					int value=Integer.parseInt(t.getKeyValue());
-//					System.out.println(value);
-//					System.out.println(t1.getKeyValue());
+//					//.out.println(value);
+//					//.out.println(t1.getKeyValue());
 //					if(value==(int)t1.getKeyValue()) {
 					if (t1.getKeyValue().compareTo(t.getKeyValue()) == 0) {
-						System.out.println("OMG THEY ARE EQUAL!");
+						//.out.println("OMG THEY ARE EQUAL!");
 						// for (String key : t.getAttributes().keySet()) {
-						// System.out.println("lets hope it enters the for loop");
+						// //.out.println("lets hope it enters the for loop");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
 
 							t1.edit("TouchDate", currentdate);
-							System.out.println(t1);
-							System.out.println(page);
+							//.out.println(t1);
+							//.out.println(page);
 
 						}
 						Write(file);
 					}
-					System.out.println("not equal go ckeck next tuple!");
+					//.out.println("not equal go ckeck next tuple!");
 
 				} else if (coltype.equals("java.lang.Double")) {
 					double value = Double.parseDouble(t.getKey());
 					if (value == (double) t1.getKeyValue()) {
-						System.out.println("OMG THEY ARE EQUAL!");
+						//.out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -773,11 +734,11 @@ public class Table implements Serializable {
 						}
 					}
 
-					System.out.print("not equal go check next tuple ");
+					//.out.print("not equal go check next tuple ");
 				} else if (coltype.contentEquals("java.util.Date")) {
 					Date value = new Date((String) t.getKeyValue());
 					if (value == (Date) t1.getKeyValue()) {
-						System.out.println("OMG THEY ARE EQUAL!");
+						//.out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -787,7 +748,7 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					System.out.print("not equal go check next tuple ");
+					//.out.print("not equal go check next tuple ");
 				}
 
 //				else if(coltype.contentEquals("java.awt.Polygon")) {
@@ -796,7 +757,7 @@ public class Table implements Serializable {
 //					if(value==(Polygon)t1.getKeyValue()) {
 					Polygon value = (Region) t.getKeyValue();
 					if (value == (Region) t1.getKeyValue()) {
-						System.out.println("OMG THEY ARE EQUAL!");
+						//.out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -806,12 +767,12 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					System.out.print("not equal go check next tuple ");
+					//.out.print("not equal go check next tuple ");
 				} else {
 					String value = (String) t.getKeyValue();
 					if (value.equals(t1.getKeyValue())) {
 
-						System.out.println("OMG THEY ARE EQUAL!");
+						//.out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -821,7 +782,7 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					System.out.print("not equal go check next tuple ");
+					//.out.print("not equal go check next tuple ");
 				}
 			}
 		}
@@ -957,14 +918,14 @@ public class Table implements Serializable {
 			}
 			page.clear();
 		}
-//		System.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
+//		//.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
 
-		System.out.println("Tree for " + strColName + ": " + bt.toString());
+		//.out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
 
 //		String filename = tableName + "_" + strColName;
-//		System.out.println("new index being created at " + filename );
+//		//.out.println("new index being created at " + filename );
 //				File file = new File(filename + ".ser");
 //				try {
 //					file.createNewFile();

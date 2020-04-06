@@ -112,23 +112,23 @@ public class BPTreeInnerNode<T extends Comparable<T>> extends BPTreeNode<T>  imp
 	public ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr)
 			{
 		ArrayList<String> pageOptions = new ArrayList<String>(); 
-		System.out.println("level innerNode " + this.index);
+		//System.out.println("level innerNode " + this.index);
 
 		ArrayList<String> pages = new ArrayList<String>(); 
 		int i = 0;
 		while (i < numberOfKeys) {
 			if(getKey(i).compareTo(key) <= 0 && getKey(i).compareTo(key) >= 0 ) {
-				System.out.println("between");
+				//System.out.println("between");
 
 				pageOptions.addAll(this.children[i].getDeletePage(key, parent, ptr));}
 
 			if(getKey(i).compareTo(key) <= 0 && i==numberOfKeys-1 ) {
-				System.out.println("last");
+				//System.out.println("last");
 
 			
 				pageOptions.addAll(this.getLastChild().getDeletePage(key, parent, ptr));}
 			if(getKey(i).compareTo(key) >= 0 && i==0 ) {
-				System.out.println("first");
+				//System.out.println("first");
 
 				pageOptions.addAll(this.getFirstChild().getDeletePage(key, parent, ptr));}
 			++i;
