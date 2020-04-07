@@ -550,6 +550,7 @@ public class Table implements Serializable {
 	public void delete(Hashtable<String, Comparable> htblColNameValue) throws DBAppException {
 		page.clear();
 		deleteFromAllBtrees(htblColNameValue);
+		deleteFromAllRtrees(htblColNameValue);
 		Hashtable<String, String> temp = readTableMetadata();
 		for (String col : htblColNameValue.keySet()) {
 			if (!temp.keySet().contains(col))
@@ -596,7 +597,28 @@ public class Table implements Serializable {
 		}
 
 	}
+	/**
+	 * 
+	 * @param htblColNameValue values to be deleted from all Rtrees
+	 */
+	
+	private void deleteFromAllRtrees(Hashtable<String, Comparable> htblColNameValue) {
+		for(String key:htblColNameValue.keySet())
+		{
+			RTree tree=rtrees.get(key);
+			if(tree!=null)
+			{
+				Region reg=(Region)htblColNameValue.get(key);
+				tree.delete(reg);
+			}
+		}
+		
+	}
 
+/**
+ * 
+ * @param htblColNameValue   values to be deleted from all Btrees
+ */
 	private void deleteFromAllBtrees(Hashtable<String, Comparable> htblColNameValue) {
 		for(String key:htblColNameValue.keySet())
 		{
@@ -615,9 +637,8 @@ public class Table implements Serializable {
 	 * @param htblColNameValue tuple to be deleted from fileName
 	 */
 
-	public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue) {
+	private void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue) {
 
-		// .out.println("deletepage!!!!!!!!!!1");
 
 		page.clear();
 		Read(fileName);
