@@ -12,24 +12,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-
-import javax.naming.ldap.SortControl;
 
 import BPTree.BPTree;
 import BPTree.Ref;
-import RTree.*;
+import RTree.RTree;
+
 
 @SuppressWarnings("serial")
 public class Table implements Serializable {
@@ -79,6 +76,16 @@ public class Table implements Serializable {
 	public BPTree getBtreeCol(String strColName) {
 
 		BPTree tree = btrees.get(strColName);
+		return tree;
+	}
+	public boolean isRIndexedCol(String strColName) {
+
+		return (rtrees.containsKey(strColName));
+	}
+
+	public RTree getRtreeCol(String strColName) {
+
+		RTree tree = rtrees.get(strColName);
 		return tree;
 	}
 
@@ -203,7 +210,21 @@ public class Table implements Serializable {
 			BPTree bt = btrees.get(col);
 			if (bt != null) {
 				Ref ref = new Ref(page, 0);
-				bt.insert(t.getKeyValue(), ref);
+				bt.insert((t.getAttributes()).get(col), ref);
+				System.out.println(col + " after insert " + bt.toString());
+
+			}
+		}
+		//.out.println("no more B indices");
+	}
+
+	public void insertRTrees(Tuple t, String page) {
+		Set<String> cols = t.getAttributes().keySet();
+		for (String col : cols) {
+			RTree bt = rtrees.get(col);
+			if (bt != null) {
+				Ref ref = new Ref(page, 0);
+				bt.insert((Region)(t.getAttributes()).get(col), ref);
 				System.out.println(col + " after insert " + bt.toString());
 
 			}
@@ -521,6 +542,8 @@ public class Table implements Serializable {
 		}
 		if (!shift) {
 			insertBTrees(t, pageOfInsertion);
+			insertRTrees(t, pageOfInsertion);
+
 		}
 	}
 
@@ -897,14 +920,185 @@ public class Table implements Serializable {
 //		t.Write("tablefile");
 //		t.Read("tablefile");
 	}
+	
+	
+	
+	public void executeQuery(String strColumnName, String strOperator, Object objValue) throws DBAppException {
+		String strColumnType = "";
+		//get type of strColumnName 
+		for(int i=0;i<columnNames.size();i++) {
+			if(columnNames.get(i).equals(strColumnName)) {
+				strColumnType = columnTypes.get(i);
+			}	
+		}
+		if(strColumnType == "") {
+			throw new DBAppException("column does not exist");
+		}
+		//cast objValue to that type  (reflection)(switch 3ady lol)
+//		try {
+//			Class keyClass = Class.forName(strColumnType);
+//			try {
+//				Constructor keyConstructor = keyClass.getConstructor(keyClass);
+//			failed attempt
+//				
+//				try {
+//					objValue = keyConstructor.newInstance(objValue);
+//				} catch (InstantiationException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (IllegalAccessException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (IllegalArgumentException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (InvocationTargetException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//					
+//			} catch (NoSuchMethodException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (SecurityException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	
+	
+		Comparable keyValue;
+		switch (strColumnType.toLowerCase()){
+		case "java.lang.integer": keyValue = new Integer((int) objValue);break;
+		case "java.lang.string": keyValue = new String((String) objValue);break;
+		case "java.lang.double":  keyValue = new Double((double) objValue);break;
+		case "java.lang.boolean":keyValue = new Boolean((boolean) objValue);break;
+//		case "java.util.date":keyValue = new Date((Date) objValue);break;
+		case "java.awt.polygon":keyValue = (Region) objValue;break;
+		case "dbengine.region":keyValue = (Region) objValue;break;
+		default: throw new DBAppException("type not supported");
+		}
+			
 
+		
+		
+		//switch on operator to call suitable search method
+		switch (strOperator) {
+		case "=":searchEqual(strColumnName, keyValue);break;
+		case "!=":searchNotEqual(strColumnName, keyValue);break;
+		case ">=":searchGreaterOREqual(strColumnName, keyValue);break;
+		case "<=":searchLessOREqual(strColumnName, keyValue);break;
+		case ">":searchGreater(strColumnName, keyValue);break;
+		case "<":searchLess(strColumnName, keyValue);break;
+		default:throw new DBAppException("operator not found");
+				}
+			
+		
+	}
+
+	public Vector<Tuple> searchEqual(String colName, Comparable value){
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		//check if indexed
+			
+			//get index
+			//get pages where entries exist
+		
+		//or
+			//go through all pages
+		
+		
+		return results;
+	}
+	
+	public Vector<Tuple> searchNotEqual(String colName, Comparable value){
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		//check if indexed
+			
+			//get index
+			//get pages where entries exist
+		
+		//or
+			//go through all pages
+		
+		
+		return results;
+	}
+	
+	public Vector<Tuple> searchLessOREqual(String colName, Comparable value){
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		//check if indexed
+			
+			//get index
+			//get pages where entries exist
+		
+		//or
+			//go through all pages
+		
+		
+		return results;
+	}
+	
+	public Vector<Tuple> searchGreaterOREqual(String colName, Comparable value){
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		//check if indexed
+			
+			//get index
+			//get pages where entries exist
+		
+		//or
+			//go through all pages
+		
+		
+		return results;
+	}
+	
+	public Vector<Tuple> searchLess(String colName, Comparable value){
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		//check if indexed
+			
+			//get index
+			//get pages where entries exist
+		
+		//or
+			//go through all pages
+		
+		
+		return results;
+	}
+	
+	public Vector<Tuple> searchGreater(String colName, Comparable value){
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		//check if indexed
+			
+			//get index
+			//get pages where entries exist
+		
+		//or
+			//go through all pages
+		
+		
+		return results;
+	}
+	
+
+	
 	public void newBTree(String strColName, int nodeSize) throws DBAppException {
 		// TODO Auto-generated method stub
 		Hashtable<String, String> tableMeta = readTableMetadata();
 
 		String strColType = tableMeta.get(strColName);
 
-		BPTree bt = new BPTree(2);
+		BPTree bt = new BPTree(nodeSize);
 
 		// add to table's indices
 		btrees.put(strColName, bt);
@@ -918,6 +1112,45 @@ public class Table implements Serializable {
 				Comparable value = t.getAttributes().get(strColName);
 				Ref ref = new Ref(block, 0);
 				bt.insert(value, ref);
+			}
+			page.clear();
+		}
+//		//.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
+
+		System.out.println("Tree for " + strColName + ": " + bt.toString());
+		// TODO write index into a file
+		// should each node be in a file?
+
+//		String filename = tableName + "_" + strColName;
+//		//.out.println("new index being created at " + filename );
+//				File file = new File(filename + ".ser");
+//				try {
+//					file.createNewFile();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+	}
+	
+	public void newRTree(String strColName, int nodeSize) throws DBAppException {
+		// TODO Auto-generated method stub
+		Hashtable<String, String> tableMeta = readTableMetadata();
+
+		String strColType = tableMeta.get(strColName);
+
+		RTree bt = new RTree(nodeSize);
+
+		// add to table's indices
+		rtrees.put(strColName, bt);
+
+		// add everything already in table
+		for (String block : pageInfo.keySet()) {
+			Read(block);
+//			int i=1;
+			for (Tuple t : page) {
+
+				Comparable value = t.getAttributes().get(strColName);
+				Ref ref = new Ref(block, 0);
+				bt.insert((Region)value, ref);
 			}
 			page.clear();
 		}

@@ -137,10 +137,35 @@ public class DBApp {
 	 * arrSQLTerms array of SQLTerm objects representing conditions in query
 	 * strarrOperators array of strings of Logical operators in order
 	 * */
-	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String strarrOperators) throws DBAppException {
+	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String strarrOperators) throws DBAppException, ClassNotFoundException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
+		ArrayList<Vector<Tuple>> resultSets = new ArrayList<Vector<Tuple>>();
+		
 		for (SQLTerm cond :arrSQLTerms ) {
-			String tableName = cond.strTableName;
+			String strTableName = cond.strTableName;
+			
+			Object[] tableNamesObj = (tables.keySet().toArray());
+			String[] tableNames = new String[tableNamesObj.length];
+			int j = 0;
+			for (Object name : tableNamesObj) {
+				tableNames[j] = (String) name;
+				j++;
+			}
+			boolean flag = false;
+			for (int i = 0; i < tableNames.length; i++) {
+				if (tableNames[i].equals(strTableName)) {
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				throw new DBAppException("This table doens't exist");
+			}else {
+				tables.get(strTableName).executeQuery(cond.strColumnName, cond.strOperator, cond.objValue);
+
+				
+			}
+			
 			
 		}
 		

@@ -3,7 +3,7 @@ import java.util.Hashtable;
 
 public class DBAppTest {
 
-	public static void main(String [] args) throws DBAppException {
+	public static void main(String [] args) throws DBAppException, ClassNotFoundException {
 		String strTableName = "Student";
 		DBApp dbApp = new DBApp( );
 		dbApp.init();
@@ -54,13 +54,11 @@ public class DBAppTest {
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
-		
-		System.out.println("helllooooooooooooo");
-		
+				
 		
 		
 		
-		dbApp.createBTreeIndex("Student", "id");
+		dbApp.createBTreeIndex("Student", "name");
 
 		
 	
@@ -75,7 +73,7 @@ public class DBAppTest {
 		
 		
 //		htblColNameValue.put("id", new Integer( 23498 ));
-		htblColNameValue.put("name", new String("ahmed Noor" ) );
+		htblColNameValue.put("name", new String("Ahmed Noor" ) );
 //		htblColNameValue.put("gpa", new Double( 1.5 ) );
 		System.out.println("deleting..........................");
 		dbApp.deleteFromTable( strTableName , htblColNameValue );
