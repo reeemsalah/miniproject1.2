@@ -130,8 +130,41 @@ public class DBApp {
 			tables.get(strTableName).newBTree(strColName, nodeSize);
 		}
 		
-	BPTree b = new BPTree( nodeSize);
+//	BPTree b = new BPTree( nodeSize);
 	}
+	
+	public void createRTreeIndex(String strTableName, String strColName) throws DBAppException 
+	{													//same for RTree // any more exceptions to throw?
+		//TODO throw an exception on entering a invalid column name
+		
+		boolean flag = false;
+
+		//creating an array of table names
+		Object[] tableNamesObj = (tables.keySet().toArray());
+		String[] tableNames = new String[tableNamesObj.length];
+		int j = 0;
+		for (Object name : tableNamesObj) {
+			tableNames[j] = (String) name;
+			j++;
+		}
+
+		for (int i = 0; i < tableNames.length; i++) {
+			if (tableNames[i].equals(strTableName)) {
+				flag = true;
+				break;
+			}
+		}
+		if (!flag) {
+			throw new DBAppException("This table doens't exist. Cannot create RTree index");
+		} else {
+
+		
+			modifyIndexedMetadata(strTableName, strColName);
+			tables.get(strTableName).newRTree(strColName, nodeSize);
+		}
+		
+	}
+
 	
 	/*
 	 * arrSQLTerms array of SQLTerm objects representing conditions in query
