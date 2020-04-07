@@ -137,6 +137,7 @@ public class DBApp {
 	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String strarrOperators) throws DBAppException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
 		
+		
 Vector<Tuple> results = null;
 //actually search 
 return results.iterator();
@@ -219,18 +220,26 @@ return results.iterator();
 	public ArrayList<String> getNameOfObjects(String query){
 		String[] temp = query.split("\\s");
 		int size = temp.length;
+	
 		ArrayList<String> result = new ArrayList<String>();
-		for(int i = 5;i>0;i=i-2) {
-			String statement = temp[size-i];
+		for(int i = 5;i<size;i=i+2) {
+			String statement = temp[i];
 			String ans = "";
 			int j = 0;
-			while(statement.charAt(j)!='=') {
+			Character [] operators = {'=','>','<', '!'};
+			while(!isIn(statement.charAt(j),operators)) {
 				ans += statement.charAt(j);
 				j++;
 			}
 			result.add(ans);
 		}
 		return result;
+	}
+	private boolean isIn(Object o, Object [] ol) {
+		for(Object obj:ol) {
+			if(obj.equals(o)) return true;
+		}
+		return false;
 	}
 
 	/*
@@ -476,6 +485,9 @@ return results.iterator();
 //		}
 
 		DBApp d = new DBApp();
-		//.out.print(d.getObjValues("SELECT * FROM student WHERE id=123 AND name=ali"));
-	}
+		System.out.println(d.getObjValues("SELECT * FROM student WHERE id=123 AND name=ali"));
+		System.out.println(d.getNameOfObjects("SELECT * FROM student WHERE id>123 AND name=ali"));
+		System.out.println(d.getColumnNames("SELECT * FROM student WHERE id>123 AND name=ali"));
+		System.out.println(d.getOperators("SELECT * FROM student WHERE id>123 AND name=ali"));
+		System.out.println(d.getLogicalOperators("SELECT * FROM student WHERE id>123 AND name=ali"));	}
 }
