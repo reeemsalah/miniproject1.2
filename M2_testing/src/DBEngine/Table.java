@@ -204,7 +204,7 @@ public class Table implements Serializable {
 			if (bt != null) {
 				Ref ref = new Ref(page, 0);
 				bt.insert(t.getKeyValue(), ref);
-				//.out.println(col + " " + bt.toString());
+				System.out.println(col + " after insert " + bt.toString());
 
 			}
 		}
@@ -396,6 +396,7 @@ public class Table implements Serializable {
 			}
 
 		}
+		System.out.println("Options for "+t.getKeyValue()+ "are " + options);
 //		options = 
 ////				removeDuplicates(options);
 
@@ -598,6 +599,7 @@ public class Table implements Serializable {
 				//.out.println("matched!!!!!!!!!!");
 				if (btree != null) {
 					btrees.get(col).delete(htblColNameValue.get(col));
+					System.out.println("after delete  " +btrees.get(col).toString());
 				}
 			} else {
 				i++;
@@ -921,7 +923,7 @@ public class Table implements Serializable {
 		}
 //		//.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
 
-		//.out.println("Tree for " + strColName + ": " + bt.toString());
+		System.out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
 
