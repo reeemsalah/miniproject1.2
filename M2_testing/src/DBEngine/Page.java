@@ -15,6 +15,30 @@ public class Page {
 		this.maxRows = maxRows;
 		this.size = 0;
 	}
+
+	public Comparable getMinKey() {
+		return minKey;
+	}
+
+	public void setMinKey(Comparable minKey) {
+		this.minKey = minKey;
+	}
+
+	public Comparable getMaxKey() {
+		return maxKey;
+	}
+
+	public void setMaxKey(Comparable maxKey) {
+		this.maxKey = maxKey;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public int getSize() {
+		return size;
+	}
 	
 	
 }
