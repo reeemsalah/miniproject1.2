@@ -27,7 +27,6 @@ import BPTree.BPTree;
 import BPTree.Ref;
 import RTree.RTree;
 
-
 @SuppressWarnings("serial")
 public class Table implements Serializable {
 	private static int maxRows;
@@ -78,6 +77,7 @@ public class Table implements Serializable {
 		BPTree tree = btrees.get(strColName);
 		return tree;
 	}
+
 	public boolean isRIndexedCol(String strColName) {
 
 		return (rtrees.containsKey(strColName));
@@ -97,7 +97,7 @@ public class Table implements Serializable {
 	 */
 	public String addPage() {
 		String filename = tableName + "_" + (++numOfPages);
-		//.out.println("pagecount " + numOfPages);
+		// .out.println("pagecount " + numOfPages);
 		File file = new File(filename + ".ser");
 		try {
 			file.createNewFile();
@@ -161,7 +161,7 @@ public class Table implements Serializable {
 				fi.close();
 			} catch (EOFException e) {
 
-				//.out.println("end of file ");
+				// .out.println("end of file ");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -215,7 +215,7 @@ public class Table implements Serializable {
 
 			}
 		}
-		//.out.println("no more B indices");
+		// .out.println("no more B indices");
 	}
 
 	public void insertRTrees(Tuple t, String page) {
@@ -224,12 +224,12 @@ public class Table implements Serializable {
 			RTree bt = rtrees.get(col);
 			if (bt != null) {
 				Ref ref = new Ref(page, 0);
-				bt.insert((Region)(t.getAttributes()).get(col), ref);
+				bt.insert((Region) (t.getAttributes()).get(col), ref);
 				System.out.println(col + " after insert " + bt.toString());
 
 			}
 		}
-		//.out.println("no more B indices");
+		// .out.println("no more B indices");
 	}
 
 	public boolean checkInsert(Tuple t) throws DBAppException {
@@ -279,7 +279,7 @@ public class Table implements Serializable {
 		}
 
 		Object[] allFilesObj = pageInfo.keySet().toArray();
-		//.out.println("allFiles length " + allFilesObj.length);
+		// .out.println("allFiles length " + allFilesObj.length);
 
 //		String [] allFiles = intoArray(allFilesObj);
 		String[] allFiles = new String[allFilesObj.length];
@@ -289,16 +289,16 @@ public class Table implements Serializable {
 			f++;
 		}
 
-		//.out.println("allFiles length " + allFiles.length);
+		// .out.println("allFiles length " + allFiles.length);
 
 		Comparable[] allMin = new Comparable[allFiles.length];
 		Comparable[] allMax = new Comparable[allFiles.length];
 		int i = 0;
 		for (String name : allFiles) {
 			allMin[i] = (Comparable) pageInfo.get(name)[1];
-			//.out.println(allMin[i] + ", ");
+			// .out.println(allMin[i] + ", ");
 			allMax[i] = (Comparable) pageInfo.get(name)[2];
-			//.out.println(allMax[i] + ", ");
+			// .out.println(allMax[i] + ", ");
 			i++;
 		}
 		Arrays.sort(allMin);
@@ -371,44 +371,44 @@ public class Table implements Serializable {
 //		options= sortPages(options);
 
 		if (options.size() == 0) {
-			//.out.println("options are empty" + options);
+			// .out.println("options are empty" + options);
 			if (pageInfo.isEmpty()) {
-				//.out.println("options are empty3" + options);
+				// .out.println("options are empty3" + options);
 
 				options.add(addPage());
-				//.out.println("options are empty2" + options);
+				// .out.println("options are empty2" + options);
 
-				//.out.println("table has no pages");
+				// .out.println("table has no pages");
 
 			} else {
 				if (t.getKeyValue().compareTo(allMin[0]) <= 0) // smaller than smallest key
 				{
-					//.out.println("small 1" + options);
+					// .out.println("small 1" + options);
 
 					for (int j = 0; j < allFiles.length; j++) {
 						if (pageInfo.get(allFiles[j])[1] == allMin[0]) {
 							options.add(allFiles[j]);
-							//.out.println("small 2" + options);
+							// .out.println("small 2" + options);
 
 						}
-						//.out.println("small 3" + options);
+						// .out.println("small 3" + options);
 
 					}
 				} else // larger than largest key
 				{
-					//.out.println("big 0" + options);
+					// .out.println("big 0" + options);
 
 					if (t.getKeyValue().compareTo(allMax[allMax.length - 1]) >= 0) {
-						//.out.println("big 1" + options);
+						// .out.println("big 1" + options);
 
 						for (int j = 0; j < allFiles.length; j++) {
 							if (pageInfo.get(allFiles[j])[2] == allMax[allMax.length - 1]) {
-								//.out.println("big 2" + allFiles[j]);
+								// .out.println("big 2" + allFiles[j]);
 								options.add(allFiles[j]);
-								//.out.println("big 3" + options);
+								// .out.println("big 3" + options);
 //fix me
 							}
-							//.out.println("big 4" + options);
+							// .out.println("big 4" + options);
 
 						}
 					}
@@ -417,7 +417,7 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("Options for "+t.getKeyValue()+ "are " + options);
+		System.out.println("Options for " + t.getKeyValue() + "are " + options);
 //		options = 
 ////				removeDuplicates(options);
 
@@ -425,14 +425,14 @@ public class Table implements Serializable {
 	}
 
 	public void insertHelper(Tuple t, ArrayList<String> pages, boolean shift) {
-		//.out.println("options for id : " + t.getKeyValue() + "are  " + pages);
+		// .out.println("options for id : " + t.getKeyValue() + "are " + pages);
 
 		boolean found = false;
 		for (int i = 0; i < pages.size(); i++) {
 			if (!isPageFull(pages.get(i))) {
 
 				found = true;
-				//.out.println("inserting to : " + pages.get(i) + "!!!!!!!!!!!!!");
+				// .out.println("inserting to : " + pages.get(i) + "!!!!!!!!!!!!!");
 				Read(pages.get(i));
 				insertPage(t, pages.get(i), shift);
 //				updateMinKey(pages.get(i));
@@ -445,11 +445,11 @@ public class Table implements Serializable {
 		}
 		if (!found) {
 			// insert into last possible page and copy and remove one row
-			//.out.println(pages.get(pages.size() - 1));
+			// .out.println(pages.get(pages.size() - 1));
 			Read(pages.get(pages.size() - 1));
-			//.out.println(page);
+			// .out.println(page);
 			insertPage(t, pages.get(pages.size() - 1), shift);
-			//.out.println(page);
+			// .out.println(page);
 			Tuple temp = page.lastElement();
 			page.remove(page.lastElement());
 //			updateMinKey(pages.get(pages.size() - 1));
@@ -462,7 +462,7 @@ public class Table implements Serializable {
 
 			if (next == null) {// no next page
 				page.clear();
-				//.out.println("NO NEXT!!!!!!!!!!!!!!!");
+				// .out.println("NO NEXT!!!!!!!!!!!!!!!");
 				String file1 = addPage(); // adding the info in the hashtable
 				pageInfo.put(file1, new Comparable[] { 1, t.getKeyValue(), t.getKeyValue() });
 				page.add(temp);
@@ -491,7 +491,7 @@ public class Table implements Serializable {
 //					updatenoOfRows(next);
 					updatePageInfo(next);
 					Write(next);
-					//.out.println("RECURSIVE!!!!!!!!!!!" + temp.getKeyValue());
+					// .out.println("RECURSIVE!!!!!!!!!!!" + temp.getKeyValue());
 					insert(temp2, true);
 				}
 
@@ -502,7 +502,7 @@ public class Table implements Serializable {
 
 	public boolean isPageFull(String filename) {
 		int noOfRows = (int) pageInfo.get(filename)[0];
-		//.out.println("page rows: " + noOfRows + "maxRows: " + maxRows);
+		// .out.println("page rows: " + noOfRows + "maxRows: " + maxRows);
 		if (maxRows - noOfRows > 0) {
 			return false;
 		} else
@@ -510,7 +510,7 @@ public class Table implements Serializable {
 	}
 
 	public void insertPage(Tuple t, String pageOfInsertion, boolean shift) {
-		//.out.println("inserting......");
+		// .out.println("inserting......");
 		if (this.page.size() > 0) {
 			Iterator it = this.page.iterator();
 			int i = 0;
@@ -518,12 +518,12 @@ public class Table implements Serializable {
 			while (it.hasNext() && inserted == false) {
 				Tuple tmp = (Tuple) it.next();
 				i++;
-				//.out.println(i + "   comp:" + t.compareTo(tmp) + "val: " + tmp.getKeyValue());
+				// .out.println(i + " comp:" + t.compareTo(tmp) + "val: " + tmp.getKeyValue());
 
 				if (t.compareTo(tmp) <= 0) {
 					this.page.insertElementAt(t, i - 1);
 					inserted = true;
-					//.out.println("   found:" + inserted);
+					// .out.println(" found:" + inserted);
 
 //				 this.rows.add(t);
 
@@ -532,7 +532,7 @@ public class Table implements Serializable {
 			}
 			if (!inserted) {
 				page.add(t);
-				//.out.println("   found:" + inserted);
+				// .out.println(" found:" + inserted);
 
 			}
 		} else {
@@ -549,7 +549,7 @@ public class Table implements Serializable {
 
 	public void delete(Hashtable<String, Comparable> htblColNameValue) throws DBAppException {
 		page.clear();
-
+		deleteFromAllBtrees(htblColNameValue);
 		Hashtable<String, String> temp = readTableMetadata();
 		for (String col : htblColNameValue.keySet()) {
 			if (!temp.keySet().contains(col))
@@ -585,16 +585,28 @@ public class Table implements Serializable {
 		if (colIndexedPages.isEmpty()) {
 
 			for (String file : pageInfo.keySet()) {
-				deleteFromPage(file, htblColNameValue, null, null);
+				deleteFromPage(file, htblColNameValue);
 			}
 
 		} else {
 			ArrayList<String> canPages = btrees.get(minCol).getDeletePage(htblColNameValue.get(minCol));
 			for (String file : canPages) {
-				deleteFromPage(file, htblColNameValue, btrees.get(minCol), minCol);
+				deleteFromPage(file, htblColNameValue);
 			}
 		}
 
+	}
+
+	private void deleteFromAllBtrees(Hashtable<String, Comparable> htblColNameValue) {
+		for(String key:htblColNameValue.keySet())
+		{
+			BPTree btree=btrees.get(key);
+			if(btree!=null)
+			{
+				btree.delete(htblColNameValue.get(key));
+			}
+		}
+		
 	}
 
 	/**
@@ -603,27 +615,19 @@ public class Table implements Serializable {
 	 * @param htblColNameValue tuple to be deleted from fileName
 	 */
 
-	public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue, BPTree btree,
-			String col) {
+	public void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue) {
 
-		//.out.println("deletepage!!!!!!!!!!1");
+		// .out.println("deletepage!!!!!!!!!!1");
 
 		page.clear();
 		Read(fileName);
 		int i = 0;
 		while (i < page.size()) {// startoftrial
-			//.out.println("vector at" + i);
-			//.out.println(page.get(i));
-			//.out.println(htblColNameValue);
 
 			if (page.get(i).helperDelete(htblColNameValue)) {
 
 				page.remove(i);
-				//.out.println("matched!!!!!!!!!!");
-				if (btree != null) {
-					btrees.get(col).delete(htblColNameValue.get(col));
-					System.out.println("after delete  " +btrees.get(col).toString());
-				}
+
 			} else {
 				i++;
 			}
@@ -638,7 +642,7 @@ public class Table implements Serializable {
 
 		}
 		Write(fileName);
-		//System.out.println(page);
+		// System.out.println(page);
 		page.clear();
 	}
 
@@ -696,8 +700,8 @@ public class Table implements Serializable {
 			e.printStackTrace();
 		}
 
-		//.out.println(tableColNames);
-		//.out.println(tableColTypes);
+		// .out.println(tableColNames);
+		// .out.println(tableColTypes);
 		Hashtable<String, String> colInfo = new Hashtable<String, String>();
 		if (tableColNames.size() == tableColTypes.size()) {
 
@@ -712,7 +716,7 @@ public class Table implements Serializable {
 	}
 
 	public void updateTable(String strClusteringKey, Tuple t) throws DBAppException {
-		//.out.println("I am here method");
+		// .out.println("I am here method");
 		// page.clear();
 
 		Hashtable<String, String> temp = readTableMetadata();
@@ -722,17 +726,17 @@ public class Table implements Serializable {
 			Read(file);
 
 			for (Tuple t1 : page) {
-				//.out.println("I am here for loop 2");
+				// .out.println("I am here for loop 2");
 				String coltype = temp.get(t1.getKey());
 
 				if (coltype.equals("java.lang.Integer")) {
-					//.out.println("integer for sure");
+					// .out.println("integer for sure");
 //					int value=Integer.parseInt(t.getKeyValue());
 //					//.out.println(value);
 //					//.out.println(t1.getKeyValue());
 //					if(value==(int)t1.getKeyValue()) {
 					if (t1.getKeyValue().compareTo(t.getKeyValue()) == 0) {
-						//.out.println("OMG THEY ARE EQUAL!");
+						// .out.println("OMG THEY ARE EQUAL!");
 						// for (String key : t.getAttributes().keySet()) {
 						// //.out.println("lets hope it enters the for loop");
 						for (String key : t.getAttributes().keySet()) {
@@ -740,18 +744,18 @@ public class Table implements Serializable {
 							Date currentdate = new Date();
 
 							t1.edit("TouchDate", currentdate);
-							//.out.println(t1);
-							//.out.println(page);
+							// .out.println(t1);
+							// .out.println(page);
 
 						}
 						Write(file);
 					}
-					//.out.println("not equal go ckeck next tuple!");
+					// .out.println("not equal go ckeck next tuple!");
 
 				} else if (coltype.equals("java.lang.Double")) {
 					double value = Double.parseDouble(t.getKey());
 					if (value == (double) t1.getKeyValue()) {
-						//.out.println("OMG THEY ARE EQUAL!");
+						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -760,11 +764,11 @@ public class Table implements Serializable {
 						}
 					}
 
-					//.out.print("not equal go check next tuple ");
+					// .out.print("not equal go check next tuple ");
 				} else if (coltype.contentEquals("java.util.Date")) {
 					Date value = new Date((String) t.getKeyValue());
 					if (value == (Date) t1.getKeyValue()) {
-						//.out.println("OMG THEY ARE EQUAL!");
+						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -774,7 +778,7 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					//.out.print("not equal go check next tuple ");
+					// .out.print("not equal go check next tuple ");
 				}
 
 //				else if(coltype.contentEquals("java.awt.Polygon")) {
@@ -783,7 +787,7 @@ public class Table implements Serializable {
 //					if(value==(Polygon)t1.getKeyValue()) {
 					Polygon value = (Region) t.getKeyValue();
 					if (value == (Region) t1.getKeyValue()) {
-						//.out.println("OMG THEY ARE EQUAL!");
+						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -793,12 +797,12 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					//.out.print("not equal go check next tuple ");
+					// .out.print("not equal go check next tuple ");
 				} else {
 					String value = (String) t.getKeyValue();
 					if (value.equals(t1.getKeyValue())) {
 
-						//.out.println("OMG THEY ARE EQUAL!");
+						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
@@ -808,7 +812,7 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					//.out.print("not equal go check next tuple ");
+					// .out.print("not equal go check next tuple ");
 				}
 			}
 		}
@@ -920,21 +924,19 @@ public class Table implements Serializable {
 //		t.Write("tablefile");
 //		t.Read("tablefile");
 	}
-	
-	
-	
+
 	public void executeQuery(String strColumnName, String strOperator, Object objValue) throws DBAppException {
 		String strColumnType = "";
-		//get type of strColumnName 
-		for(int i=0;i<columnNames.size();i++) {
-			if(columnNames.get(i).equals(strColumnName)) {
+		// get type of strColumnName
+		for (int i = 0; i < columnNames.size(); i++) {
+			if (columnNames.get(i).equals(strColumnName)) {
 				strColumnType = columnTypes.get(i);
-			}	
+			}
 		}
-		if(strColumnType == "") {
+		if (strColumnType == "") {
 			throw new DBAppException("column does not exist");
 		}
-		//cast objValue to that type  (reflection)(switch 3ady lol)
+		// cast objValue to that type (reflection)(switch 3ady lol)
 //		try {
 //			Class keyClass = Class.forName(strColumnType);
 //			try {
@@ -969,129 +971,142 @@ public class Table implements Serializable {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-	
-	
+
 		Comparable keyValue;
-		switch (strColumnType.toLowerCase()){
-		case "java.lang.integer": keyValue = new Integer((int) objValue);break;
-		case "java.lang.string": keyValue = new String((String) objValue);break;
-		case "java.lang.double":  keyValue = new Double((double) objValue);break;
-		case "java.lang.boolean":keyValue = new Boolean((boolean) objValue);break;
+		switch (strColumnType.toLowerCase()) {
+		case "java.lang.integer":
+			keyValue = new Integer((int) objValue);
+			break;
+		case "java.lang.string":
+			keyValue = new String((String) objValue);
+			break;
+		case "java.lang.double":
+			keyValue = new Double((double) objValue);
+			break;
+		case "java.lang.boolean":
+			keyValue = new Boolean((boolean) objValue);
+			break;
 //		case "java.util.date":keyValue = new Date((Date) objValue);break;
-		case "java.awt.polygon":keyValue = (Region) objValue;break;
-		case "dbengine.region":keyValue = (Region) objValue;break;
-		default: throw new DBAppException("type not supported");
+		case "java.awt.polygon":
+			keyValue = (Region) objValue;
+			break;
+		case "dbengine.region":
+			keyValue = (Region) objValue;
+			break;
+		default:
+			throw new DBAppException("type not supported");
 		}
-			
 
-		
-		
-		//switch on operator to call suitable search method
+		// switch on operator to call suitable search method
 		switch (strOperator) {
-		case "=":searchEqual(strColumnName, keyValue);break;
-		case "!=":searchNotEqual(strColumnName, keyValue);break;
-		case ">=":searchGreaterOREqual(strColumnName, keyValue);break;
-		case "<=":searchLessOREqual(strColumnName, keyValue);break;
-		case ">":searchGreater(strColumnName, keyValue);break;
-		case "<":searchLess(strColumnName, keyValue);break;
-		default:throw new DBAppException("operator not found");
-				}
-			
-		
+		case "=":
+			searchEqual(strColumnName, keyValue);
+			break;
+		case "!=":
+			searchNotEqual(strColumnName, keyValue);
+			break;
+		case ">=":
+			searchGreaterOREqual(strColumnName, keyValue);
+			break;
+		case "<=":
+			searchLessOREqual(strColumnName, keyValue);
+			break;
+		case ">":
+			searchGreater(strColumnName, keyValue);
+			break;
+		case "<":
+			searchLess(strColumnName, keyValue);
+			break;
+		default:
+			throw new DBAppException("operator not found");
+		}
+
 	}
 
-	public Vector<Tuple> searchEqual(String colName, Comparable value){
+	public Vector<Tuple> searchEqual(String colName, Comparable value) {
 		Vector<Tuple> results = new Vector<Tuple>();
 		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
-		//check if indexed
-			
-			//get index
-			//get pages where entries exist
-		
-		//or
-			//go through all pages
-		
-		
-		return results;
-	}
-	
-	public Vector<Tuple> searchNotEqual(String colName, Comparable value){
-		Vector<Tuple> results = new Vector<Tuple>();
-		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
-		//check if indexed
-			
-			//get index
-			//get pages where entries exist
-		
-		//or
-			//go through all pages
-		
-		
-		return results;
-	}
-	
-	public Vector<Tuple> searchLessOREqual(String colName, Comparable value){
-		Vector<Tuple> results = new Vector<Tuple>();
-		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
-		//check if indexed
-			
-			//get index
-			//get pages where entries exist
-		
-		//or
-			//go through all pages
-		
-		
-		return results;
-	}
-	
-	public Vector<Tuple> searchGreaterOREqual(String colName, Comparable value){
-		Vector<Tuple> results = new Vector<Tuple>();
-		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
-		//check if indexed
-			
-			//get index
-			//get pages where entries exist
-		
-		//or
-			//go through all pages
-		
-		
-		return results;
-	}
-	
-	public Vector<Tuple> searchLess(String colName, Comparable value){
-		Vector<Tuple> results = new Vector<Tuple>();
-		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
-		//check if indexed
-			
-			//get index
-			//get pages where entries exist
-		
-		//or
-			//go through all pages
-		
-		
-		return results;
-	}
-	
-	public Vector<Tuple> searchGreater(String colName, Comparable value){
-		Vector<Tuple> results = new Vector<Tuple>();
-		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
-		//check if indexed
-			
-			//get index
-			//get pages where entries exist
-		
-		//or
-			//go through all pages
-		
-		
-		return results;
-	}
-	
+		// check if indexed
 
-	
+		// get index
+		// get pages where entries exist
+
+		// or
+		// go through all pages
+
+		return results;
+	}
+
+	public Vector<Tuple> searchNotEqual(String colName, Comparable value) {
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		// check if indexed
+
+		// get index
+		// get pages where entries exist
+
+		// or
+		// go through all pages
+
+		return results;
+	}
+
+	public Vector<Tuple> searchLessOREqual(String colName, Comparable value) {
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		// check if indexed
+
+		// get index
+		// get pages where entries exist
+
+		// or
+		// go through all pages
+
+		return results;
+	}
+
+	public Vector<Tuple> searchGreaterOREqual(String colName, Comparable value) {
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		// check if indexed
+
+		// get index
+		// get pages where entries exist
+
+		// or
+		// go through all pages
+
+		return results;
+	}
+
+	public Vector<Tuple> searchLess(String colName, Comparable value) {
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		// check if indexed
+
+		// get index
+		// get pages where entries exist
+
+		// or
+		// go through all pages
+
+		return results;
+	}
+
+	public Vector<Tuple> searchGreater(String colName, Comparable value) {
+		Vector<Tuple> results = new Vector<Tuple>();
+		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
+		// check if indexed
+
+		// get index
+		// get pages where entries exist
+
+		// or
+		// go through all pages
+
+		return results;
+	}
+
 	public void newBTree(String strColName, int nodeSize) throws DBAppException {
 		// TODO Auto-generated method stub
 		Hashtable<String, String> tableMeta = readTableMetadata();
@@ -1130,7 +1145,7 @@ public class Table implements Serializable {
 //					e.printStackTrace();
 //				}
 	}
-	
+
 	public void newRTree(String strColName, int nodeSize) throws DBAppException {
 		// TODO Auto-generated method stub
 		Hashtable<String, String> tableMeta = readTableMetadata();
@@ -1150,7 +1165,7 @@ public class Table implements Serializable {
 
 				Comparable value = t.getAttributes().get(strColName);
 				Ref ref = new Ref(block, 0);
-				bt.insert((Region)value, ref);
+				bt.insert((Region) value, ref);
 			}
 			page.clear();
 		}
