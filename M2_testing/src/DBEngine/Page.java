@@ -39,7 +39,11 @@ public class Page {
 	public int getSize() {
 		return size;
 	}
-	
+	public boolean isFull()
+
+	{
+		return (maxRows-size)==0;
+	}
 	
 }
 

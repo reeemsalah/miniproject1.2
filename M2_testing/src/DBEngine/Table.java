@@ -31,7 +31,6 @@ import RTree.RTree;
 public class Table implements Serializable {
 	private static int maxRows;
 	private String tableName;
-	// private Vector<Page> tablePages;
 	private ArrayList<String> columnNames;
 	private ArrayList<String> columnTypes;
 	private ArrayList<Boolean> clusteredCoulmns;
@@ -41,10 +40,7 @@ public class Table implements Serializable {
 	private int numOfPages;
 	Hashtable<String, BPTree> btrees = new Hashtable<String, BPTree>();
 	Hashtable<String, RTree> rtrees = new Hashtable<String, RTree>();
-	// awel string esm el file w el array of comparables at index 0 el current
-	// noOfRows
-	// array of comparables at index 1 hoe el minKey fel page
-	private Hashtable<String, Comparable[]> pageInfo = new Hashtable<String, Comparable[]>();
+	private ArrayList<Page> pages = new ArrayList<Page>();
 	private Vector<Tuple> page = new Vector<Tuple>();
 
 	public Table(String tableName, ArrayList<String> columnNames, ArrayList<String> columnTypes,
@@ -55,14 +51,7 @@ public class Table implements Serializable {
 		this.clusteredCoulmns = clustered;
 		this.indexedCoulmns = indexed;
 		this.clusteredKey = clusteredKey;
-//		String firstFile = addPage();
-//		Comparable [] info = new Comparable[3];
-//		info[0]=0;
-//		info[1]=-1;
-//		info[2]=-1;
-//		pageInfo.put(firstFile, info);	
 		Properties prop = new Properties();
-
 		this.maxRows = 2;
 
 	}
@@ -97,32 +86,27 @@ public class Table implements Serializable {
 	 */
 	public String addPage() {
 		String filename = tableName + "_" + (++numOfPages);
-		// .out.println("pagecount " + numOfPages);
 		File file = new File(filename + ".ser");
 		try {
 			file.createNewFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		Comparable [] info = new Comparable[3];
-//		info[0]=0;
-////		info[1]=null;
-////		info[2]=null;
-//		pageInfo.put(filename, info);
+
 		return filename;
 	}
 
 	public ArrayList<String> findPages(Tuple t) {
 		Comparable tKey = t.getKeyValue();
-		ArrayList<String> pages = new ArrayList<String>();
-		Set<String> keys = pageInfo.keySet();
-		for (String key : keys) {
-			Comparable[] temp = pageInfo.get(key);
-			if (tKey.compareTo(temp[1]) > 0 && tKey.compareTo(temp[2]) < 0) {
-				pages.add((String) tKey);
+		ArrayList<String> candidatePages = new ArrayList<String>();
+		for (Page p : pages) {
+			Comparable minKey = p.getMinKey();
+			Comparable maxKey = p.getMaxKey();
+			if (tKey.compareTo(minKey) > 0 && tKey.compareTo(maxKey) < 0) {
+				candidatePages.add((String) tKey);
 			}
 		}
-		return pages;
+		return candidatePages;
 
 	}
 
@@ -174,35 +158,22 @@ public class Table implements Serializable {
 		}
 
 	}
-
-	public String getNextPage(String currFile) {
-		Comparable currKey = pageInfo.get(currFile)[2];
-
-		Object[] tmpObj = (pageInfo.keySet().toArray());
-		String[] tmp = new String[tmpObj.length];
-		int j = 0;
-		for (Object name : tmpObj) {
-			tmp[j] = (String) name;
-			j++;
-		}
-		String[] keyArr = new String[tmp.length];
-		int i;
-		for (i = 0; i < tmp.length; i++)
-			keyArr[i] = (String) tmp[i];
-		boolean found = false;
-		for (i = 0; i < keyArr.length; i++) {
-			Comparable maxIndex = pageInfo.get(keyArr[i])[2];
-			if (currKey.compareTo(maxIndex) <= 0 && keyArr[i] != currFile) // compare to min index of each page
-				found = true;
-			break; // stop at page wanted (first page where entry key is greater)
-		}
-		if (found) {
-			return keyArr[i];
-		} else {
-			return null;
-		}
-
-	}
+	/*
+	 * public String getNextPage(String currFile) { Comparable currKey =
+	 * pages.get(currFile)[2];
+	 * 
+	 * Object[] tmpObj = (pages.keySet().toArray()); String[] tmp = new
+	 * String[tmpObj.length]; int j = 0; for (Object name : tmpObj) { tmp[j] =
+	 * (String) name; j++; } String[] keyArr = new String[tmp.length]; int i; for (i
+	 * = 0; i < tmp.length; i++) keyArr[i] = (String) tmp[i]; boolean found = false;
+	 * for (i = 0; i < keyArr.length; i++) { Comparable maxIndex =
+	 * pages.get(keyArr[i])[2]; if (currKey.compareTo(maxIndex) <= 0 && keyArr[i] !=
+	 * currFile) // compare to min index of each page found = true; break; // stop
+	 * at page wanted (first page where entry key is greater) } if (found) { return
+	 * keyArr[i]; } else { return null; }
+	 * 
+	 * }
+	 */
 
 	public void insertBTrees(Tuple t, String page) {
 		Set<String> cols = t.getAttributes().keySet();
@@ -243,7 +214,6 @@ public class Table implements Serializable {
 			j++;
 		}
 
-//		if(colNames.length!=tableData.keySet().size()) {
 		if (colNames.length != t.getAttributes().size()) {
 
 			throw new DBAppException("please enter all fields");
@@ -260,6 +230,7 @@ public class Table implements Serializable {
 	}
 
 	public void insert(Tuple t, boolean shift) {
+		// FIXME for insert to follow the new implementation
 		if (page != null)
 			page.clear();
 		try {
@@ -269,16 +240,16 @@ public class Table implements Serializable {
 			e.printStackTrace();
 		}
 
-		if (pageInfo.isEmpty()) {
+		if (pages.isEmpty()) {
 			String firstFile = addPage();
 			Comparable[] info = new Comparable[3];
 			info[0] = 0;
 			info[1] = t.getKeyValue();
 			info[2] = t.getKeyValue();
-			pageInfo.put(firstFile, info);
+			pages.put(firstFile, info);
 		}
 
-		Object[] allFilesObj = pageInfo.keySet().toArray();
+		Object[] allFilesObj = pages.keySet().toArray();
 		// .out.println("allFiles length " + allFilesObj.length);
 
 //		String [] allFiles = intoArray(allFilesObj);
@@ -295,9 +266,9 @@ public class Table implements Serializable {
 		Comparable[] allMax = new Comparable[allFiles.length];
 		int i = 0;
 		for (String name : allFiles) {
-			allMin[i] = (Comparable) pageInfo.get(name)[1];
+			allMin[i] = (Comparable) pages.get(name)[1];
 			// .out.println(allMin[i] + ", ");
-			allMax[i] = (Comparable) pageInfo.get(name)[2];
+			allMax[i] = (Comparable) pages.get(name)[2];
 			// .out.println(allMax[i] + ", ");
 			i++;
 		}
@@ -316,14 +287,14 @@ public class Table implements Serializable {
 		if (!isBIndexedCol(clusteredKey)) {
 			if (t.getKeyValue().compareTo(bounds[0]) <= 0) {
 				for (String e : allFiles) {
-					if (pageInfo.get(e)[1].compareTo(bounds[0]) == 0)
+					if (pages.get(e)[1].compareTo(bounds[0]) == 0)
 						options.add(e);
 
 				}
 			}
 			if (t.getKeyValue().compareTo(bounds[bounds.length - 1]) >= 0) {
 				for (String e : allFiles) {
-					if (pageInfo.get(e)[2].compareTo(bounds[0]) == 0)
+					if (pages.get(e)[2].compareTo(bounds[0]) == 0)
 						options.add(e);
 
 				}
@@ -334,15 +305,15 @@ public class Table implements Serializable {
 				if (bounds[l].compareTo(t.getKeyValue()) <= 0 && bounds[l + 1].compareTo(t.getKeyValue()) >= 0) {
 					if (l % 2 == 0) { // in a file's limits
 						for (String e : allFiles) {
-							if (pageInfo.get(e)[1].compareTo(bounds[l]) == 0
-									|| pageInfo.get(e)[2].compareTo(bounds[l + 1]) == 0)
+							if (pages.get(e)[1].compareTo(bounds[l]) == 0
+									|| pages.get(e)[2].compareTo(bounds[l + 1]) == 0)
 								options.add(e);
 
 						}
 					} else {
 						for (String e : allFiles) {
-							if (pageInfo.get(e)[1].compareTo(bounds[l + 1]) == 0
-									|| pageInfo.get(e)[2].compareTo(bounds[l]) == 0)
+							if (pages.get(e)[1].compareTo(bounds[l + 1]) == 0
+									|| pages.get(e)[2].compareTo(bounds[l]) == 0)
 								options.add(e);
 
 						}
@@ -355,58 +326,31 @@ public class Table implements Serializable {
 			BPTree clusBtree = getBtreeCol(clusteredKey);
 			options.addAll(clusBtree.getInsertPage(t.getKeyValue()));
 		}
-//}
-//		for(int m=0;m<allFiles.length;m++)
-//		{
-//			if(t.getKeyValue().compareTo(pageInfo.get(allFiles[m])[1])>=0) {
-//				options.add(allFiles[m]);
-//			}
-//		}
-//options =removeDuplicates(options);
-//options= sortPages(options);
-
-//		ArrayList<String> 
-//		options = findPage(t);
-//		options =removeDuplicates(options);
-//		options= sortPages(options);
 
 		if (options.size() == 0) {
-			// .out.println("options are empty" + options);
-			if (pageInfo.isEmpty()) {
-				// .out.println("options are empty3" + options);
+			if (pages.isEmpty()) {
 
 				options.add(addPage());
-				// .out.println("options are empty2" + options);
-
-				// .out.println("table has no pages");
-
 			} else {
 				if (t.getKeyValue().compareTo(allMin[0]) <= 0) // smaller than smallest key
 				{
-					// .out.println("small 1" + options);
-
 					for (int j = 0; j < allFiles.length; j++) {
-						if (pageInfo.get(allFiles[j])[1] == allMin[0]) {
+						if (pages.get(allFiles[j])[1] == allMin[0]) {
 							options.add(allFiles[j]);
-							// .out.println("small 2" + options);
 
 						}
-						// .out.println("small 3" + options);
 
 					}
 				} else // larger than largest key
 				{
-					// .out.println("big 0" + options);
 
 					if (t.getKeyValue().compareTo(allMax[allMax.length - 1]) >= 0) {
-						// .out.println("big 1" + options);
 
 						for (int j = 0; j < allFiles.length; j++) {
-							if (pageInfo.get(allFiles[j])[2] == allMax[allMax.length - 1]) {
+							if (pages.get(allFiles[j])[2] == allMax[allMax.length - 1]) {
 								// .out.println("big 2" + allFiles[j]);
 								options.add(allFiles[j]);
-								// .out.println("big 3" + options);
-//fix me
+								// FIXME
 							}
 							// .out.println("big 4" + options);
 
@@ -417,56 +361,39 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("Options for " + t.getKeyValue() + "are " + options);
-//		options = 
-////				removeDuplicates(options);
 
 		insertHelper(t, options, shift);
 	}
 
 	public void insertHelper(Tuple t, ArrayList<String> pages, boolean shift) {
-		// .out.println("options for id : " + t.getKeyValue() + "are " + pages);
-
+		//FIXME match the new implementation
 		boolean found = false;
 		for (int i = 0; i < pages.size(); i++) {
 			if (!isPageFull(pages.get(i))) {
 
 				found = true;
-				// .out.println("inserting to : " + pages.get(i) + "!!!!!!!!!!!!!");
 				Read(pages.get(i));
 				insertPage(t, pages.get(i), shift);
-//				updateMinKey(pages.get(i));
-//				updateMaxKey(pages.get(i));
-//				updatenoOfRows(pages.get(i));
-				updatePageInfo(pages.get(i));
+				updatepages(pages.get(i));
 				Write(pages.get(i));
 				return;
 			}
 		}
 		if (!found) {
-			// insert into last possible page and copy and remove one row
-			// .out.println(pages.get(pages.size() - 1));
 			Read(pages.get(pages.size() - 1));
-			// .out.println(page);
 			insertPage(t, pages.get(pages.size() - 1), shift);
-			// .out.println(page);
 			Tuple temp = page.lastElement();
 			page.remove(page.lastElement());
-//			updateMinKey(pages.get(pages.size() - 1));
-//			updateMaxKey(pages.get(pages.size() - 1));
-//			updatenoOfRows(pages.get(pages.size() - 1));
-			updatePageInfo(pages.get(pages.size() - 1));
+			updatepages(pages.get(pages.size() - 1));
 			Write(pages.get(pages.size() - 1));
 
 			String next = getNextPage(pages.get(pages.size() - 1)); // what if arraylist is not sorted by minkey?
 
 			if (next == null) {// no next page
 				page.clear();
-				// .out.println("NO NEXT!!!!!!!!!!!!!!!");
 				String file1 = addPage(); // adding the info in the hashtable
-				pageInfo.put(file1, new Comparable[] { 1, t.getKeyValue(), t.getKeyValue() });
+				pages.put(file1, new Comparable[] { 1, t.getKeyValue(), t.getKeyValue() });
 				page.add(temp);
-//				page.add(t); // only add to vector
 				Write(file1); // write to new file
 				return;
 			} else {
@@ -477,7 +404,7 @@ public class Table implements Serializable {
 					updateMinKey(next);
 					updateMaxKey(next);
 					updatenoOfRows(next);
-					updatePageInfo(next);
+					updatepages(next);
 					Write(next);
 					return;
 				} else { // next is full
@@ -486,12 +413,8 @@ public class Table implements Serializable {
 					insertPage(temp, next, true);
 					Tuple temp2 = page.lastElement();
 					page.remove(page.lastElement());
-//					updateMinKey(next);
-//					updateMaxKey(next);
-//					updatenoOfRows(next);
-					updatePageInfo(next);
+					updatepages(next);
 					Write(next);
-					// .out.println("RECURSIVE!!!!!!!!!!!" + temp.getKeyValue());
 					insert(temp2, true);
 				}
 
@@ -499,18 +422,16 @@ public class Table implements Serializable {
 
 		}
 	}
-
-	public boolean isPageFull(String filename) {
-		int noOfRows = (int) pageInfo.get(filename)[0];
-		// .out.println("page rows: " + noOfRows + "maxRows: " + maxRows);
+//FIXME replaced with  isFull() in page class
+	/*public boolean isPageFull(String filename) {
+		int noOfRows = (int) pages.get(filename)[0];
 		if (maxRows - noOfRows > 0) {
 			return false;
 		} else
 			return true;
-	}
-
+	}*/
+//FIXME match the new implementation
 	public void insertPage(Tuple t, String pageOfInsertion, boolean shift) {
-		// .out.println("inserting......");
 		if (this.page.size() > 0) {
 			Iterator it = this.page.iterator();
 			int i = 0;
@@ -518,25 +439,17 @@ public class Table implements Serializable {
 			while (it.hasNext() && inserted == false) {
 				Tuple tmp = (Tuple) it.next();
 				i++;
-				// .out.println(i + " comp:" + t.compareTo(tmp) + "val: " + tmp.getKeyValue());
 
 				if (t.compareTo(tmp) <= 0) {
 					this.page.insertElementAt(t, i - 1);
 					inserted = true;
-					// .out.println(" found:" + inserted);
-
-//				 this.rows.add(t);
-
 				}
-//				i++;
 			}
 			if (!inserted) {
 				page.add(t);
-				// .out.println(" found:" + inserted);
 
 			}
 		} else {
-//		 this.rows.insertElementAt(t, 0);
 			this.page.add(t);
 
 		}
@@ -585,8 +498,8 @@ public class Table implements Serializable {
 		}
 		if (colIndexedPages.isEmpty()) {
 
-			for (String file : pageInfo.keySet()) {
-				deleteFromPage(file, htblColNameValue);
+			for (Page p : pages) {
+				deleteFromPage(p.getFileName(), htblColNameValue);
 			}
 
 		} else {
@@ -597,38 +510,35 @@ public class Table implements Serializable {
 		}
 
 	}
+
 	/**
 	 * 
 	 * @param htblColNameValue values to be deleted from all Rtrees
 	 */
-	
+
 	private void deleteFromAllRtrees(Hashtable<String, Comparable> htblColNameValue) {
-		for(String key:htblColNameValue.keySet())
-		{
-			RTree tree=rtrees.get(key);
-			if(tree!=null)
-			{
-				Region reg=(Region)htblColNameValue.get(key);
+		for (String key : htblColNameValue.keySet()) {
+			RTree tree = rtrees.get(key);
+			if (tree != null) {
+				Region reg = (Region) htblColNameValue.get(key);
 				tree.delete(reg);
 			}
 		}
-		
+
 	}
 
-/**
- * 
- * @param htblColNameValue   values to be deleted from all Btrees
- */
+	/**
+	 * 
+	 * @param htblColNameValue values to be deleted from all Btrees
+	 */
 	private void deleteFromAllBtrees(Hashtable<String, Comparable> htblColNameValue) {
-		for(String key:htblColNameValue.keySet())
-		{
-			BPTree btree=btrees.get(key);
-			if(btree!=null)
-			{
+		for (String key : htblColNameValue.keySet()) {
+			BPTree btree = btrees.get(key);
+			if (btree != null) {
 				btree.delete(htblColNameValue.get(key));
 			}
 		}
-		
+
 	}
 
 	/**
@@ -638,7 +548,6 @@ public class Table implements Serializable {
 	 */
 
 	private void deleteFromPage(String fileName, Hashtable<String, Comparable> htblColNameValue) {
-
 
 		page.clear();
 		Read(fileName);
@@ -655,15 +564,34 @@ public class Table implements Serializable {
 		} // endoftrial
 		if (page.size() == 0) {
 			deletePage(fileName);
+			for (Page p : pages) {
+				if (p.getFileName().equals(fileName)) {
+					pages.remove(p);
+				}
+			}
 		} else {
-			Comparable[] currentPageInfo = pageInfo.get(fileName);
-			int currentNoOfPages = (int) currentPageInfo[0];
-			pageInfo.replace(fileName,
-					new Comparable[] { (currentNoOfPages - i), updateMinKey(fileName), updateMaxKey(fileName) });
+			// FIXME WTFF
+			/*
+			 * Comparable[] currentpages = pages.get(fileName); int currentNoOfPages = (int)
+			 * currentpages[0]; pages.replace(fileName, new Comparable[] { (currentNoOfPages
+			 * - i), updateMinKey(fileName), updateMaxKey(fileName) });
+			 */
+			// Changing the key of the page
+			for (Page p : pages) {
+				if (p.getFileName().equals(fileName)) {
+					Comparable minKey = p.getMinKey();
+					Comparable maxKey = p.getMaxKey();
+					Comparable key = htblColNameValue.get(this.clusteredKey);
+					if (minKey.compareTo(key) > 0)
+						p.setMinKey(key);
+					if (maxKey.compareTo(key) < 0)
+						p.setMaxKey(key);
+
+				}
+			}
 
 		}
 		Write(fileName);
-		// System.out.println(page);
 		page.clear();
 	}
 
@@ -721,8 +649,6 @@ public class Table implements Serializable {
 			e.printStackTrace();
 		}
 
-		// .out.println(tableColNames);
-		// .out.println(tableColTypes);
 		Hashtable<String, String> colInfo = new Hashtable<String, String>();
 		if (tableColNames.size() == tableColTypes.size()) {
 
@@ -737,12 +663,10 @@ public class Table implements Serializable {
 	}
 
 	public void updateTable(String strClusteringKey, Tuple t) throws DBAppException {
-		// .out.println("I am here method");
-		// page.clear();
-
 		Hashtable<String, String> temp = readTableMetadata();
-
-		for (String file : pageInfo.keySet()) {
+		// FIXME change update to match the new implementation
+		for (Page p : pages) {
+			String file = p.getFileName();
 			page.clear();
 			Read(file);
 
@@ -751,41 +675,26 @@ public class Table implements Serializable {
 				String coltype = temp.get(t1.getKey());
 
 				if (coltype.equals("java.lang.Integer")) {
-					// .out.println("integer for sure");
-//					int value=Integer.parseInt(t.getKeyValue());
-//					//.out.println(value);
-//					//.out.println(t1.getKeyValue());
-//					if(value==(int)t1.getKeyValue()) {
 					if (t1.getKeyValue().compareTo(t.getKeyValue()) == 0) {
-						// .out.println("OMG THEY ARE EQUAL!");
-						// for (String key : t.getAttributes().keySet()) {
-						// //.out.println("lets hope it enters the for loop");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
 
 							t1.edit("TouchDate", currentdate);
-							// .out.println(t1);
-							// .out.println(page);
-
 						}
 						Write(file);
 					}
-					// .out.println("not equal go ckeck next tuple!");
 
 				} else if (coltype.equals("java.lang.Double")) {
 					double value = Double.parseDouble(t.getKey());
 					if (value == (double) t1.getKeyValue()) {
-						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
-
 							t1.edit("TouchDate", currentdate);
 						}
 					}
 
-					// .out.print("not equal go check next tuple ");
 				} else if (coltype.contentEquals("java.util.Date")) {
 					Date value = new Date((String) t.getKeyValue());
 					if (value == (Date) t1.getKeyValue()) {
@@ -799,26 +708,19 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					// .out.print("not equal go check next tuple ");
 				}
 
-//				else if(coltype.contentEquals("java.awt.Polygon")) {
 				else if (coltype.contentEquals("Region")) {
-//				Polygon value= (Polygon)t.getKeyValue();
-//					if(value==(Polygon)t1.getKeyValue()) {
 					Polygon value = (Region) t.getKeyValue();
 					if (value == (Region) t1.getKeyValue()) {
-						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							t1.edit(key, t.getValueOfColumn(key));
 							Date currentdate = new Date();
-
 							t1.edit("TouchDate", currentdate);
 						}
 						Write(file);
 
 					}
-					// .out.print("not equal go check next tuple ");
 				} else {
 					String value = (String) t.getKeyValue();
 					if (value.equals(t1.getKeyValue())) {
@@ -833,7 +735,6 @@ public class Table implements Serializable {
 						Write(file);
 
 					}
-					// .out.print("not equal go check next tuple ");
 				}
 			}
 		}
@@ -864,20 +765,22 @@ public class Table implements Serializable {
 		return page.size();
 
 	}
-
-	public void updatePageInfo(String fileName) {
+	//TODO can be deleted?
+/*
+	public void updatepages(String fileName) {
 
 		Comparable noOfRows = updatenoOfRows(fileName);
 		Comparable min = updateMinKey(fileName);
 		Comparable max = updateMaxKey(fileName);
 
-		pageInfo.replace(fileName, new Comparable[] { (noOfRows), min, max });
+		pages.replace(fileName, new Comparable[] { (noOfRows), min, max });
 	}
+	*/
 
 	public void deletePage(String fileName) {
 		File file = new File(fileName);
 		file.delete();
-		pageInfo.remove(fileName);
+		pages.remove(fileName);
 	}
 
 	/**
@@ -886,26 +789,26 @@ public class Table implements Serializable {
 	 * @return an array of files that may contain t sorted in ascending order
 	 *         according to their minimum key
 	 */
-	public ArrayList<String> findPage(Tuple t) {
+	public ArrayList<Page> findPage(Tuple t) {
 		Comparable tupleKey = t.getKeyValue();
 		// holds the values of the pages that may contain the tuple
-		ArrayList<String> temp = new ArrayList<String>();
-		for (String key : pageInfo.keySet()) {
-			Comparable minKey = pageInfo.get(key)[1];
-			Comparable maxKey = pageInfo.get(key)[2];
+		ArrayList<Page> temp = new ArrayList<Page>();
+		for (Page p : pages) {
+			Comparable minKey = p.getMinKey();
+			Comparable maxKey =p.getMaxKey();
 			if (tupleKey.compareTo(minKey) >= 0 && tupleKey.compareTo(maxKey) <= 0) {
-				temp.add(key);
+				temp.add(p);
 			}
 
 		}
-		ArrayList<String> res = new ArrayList<String>();
-		for (String s1 : temp) {
-			Comparable minKey1 = pageInfo.get(s1)[1];
-			String toBeInserted = s1;
-			for (String s2 : temp) {
-				Comparable minKey2 = pageInfo.get(s2)[1];
-				if (!s1.equals(s2) && minKey1.compareTo(minKey2) > 0) {
-					toBeInserted = s2;
+		ArrayList<Page> res = new ArrayList<Page>();
+		for (Page p1 : temp) {
+			Comparable minKey1 = p1.getMinKey();
+			Page toBeInserted = p1;
+			for (Page p2:temp) {
+				Comparable minKey2 = p2.getMinKey();
+				if (!p1.equals(p2) && minKey1.compareTo(minKey2) > 0) {
+					toBeInserted = p2;
 				}
 			}
 			res.add(toBeInserted);
@@ -958,40 +861,7 @@ public class Table implements Serializable {
 			throw new DBAppException("column does not exist");
 		}
 		// cast objValue to that type (reflection)(switch 3ady lol)
-//		try {
-//			Class keyClass = Class.forName(strColumnType);
-//			try {
-//				Constructor keyConstructor = keyClass.getConstructor(keyClass);
-//			failed attempt
-//				
-//				try {
-//					objValue = keyConstructor.newInstance(objValue);
-//				} catch (InstantiationException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IllegalAccessException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IllegalArgumentException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (InvocationTargetException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//					
-//			} catch (NoSuchMethodException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (SecurityException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 
 		Comparable keyValue;
 		switch (strColumnType.toLowerCase()) {
@@ -1140,13 +1010,12 @@ public class Table implements Serializable {
 		btrees.put(strColName, bt);
 
 		// add everything already in table
-		for (String block : pageInfo.keySet()) {
-			Read(block);
-//			int i=1;
+		for (Page p:pages) {
+			Read(p.getFileName());
 			for (Tuple t : page) {
 
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(block, 0);
+				Ref ref = new Ref(p.getFileName(), 0);
 				bt.insert(value, ref);
 			}
 			page.clear();
@@ -1156,15 +1025,6 @@ public class Table implements Serializable {
 		System.out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
-
-//		String filename = tableName + "_" + strColName;
-//		//.out.println("new index being created at " + filename );
-//				File file = new File(filename + ".ser");
-//				try {
-//					file.createNewFile();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
 	}
 
 	public void newRTree(String strColName, int nodeSize) throws DBAppException {
@@ -1179,31 +1039,20 @@ public class Table implements Serializable {
 		rtrees.put(strColName, bt);
 
 		// add everything already in table
-		for (String block : pageInfo.keySet()) {
-			Read(block);
-//			int i=1;
+		for (Page p:pages) {
+			Read(p.getFileName());
 			for (Tuple t : page) {
 
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(block, 0);
+				Ref ref = new Ref(p.getFileName(), 0);
 				bt.insert((Region) value, ref);
 			}
 			page.clear();
 		}
-//		//.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
 
 		System.out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
-
-//		String filename = tableName + "_" + strColName;
-//		//.out.println("new index being created at " + filename );
-//				File file = new File(filename + ".ser");
-//				try {
-//					file.createNewFile();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
 	}
 
 }
