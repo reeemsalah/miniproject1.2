@@ -133,17 +133,29 @@ public class DBApp {
 	BPTree b = new BPTree( nodeSize);
 	}
 	
-
+	/*
+	 * arrSQLTerms array of SQLTerm objects representing conditions in query
+	 * strarrOperators array of strings of Logical operators in order
+	 * */
 	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String strarrOperators) throws DBAppException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
-		
+		for (SQLTerm cond :arrSQLTerms ) {
+			String tableName = cond.strTableName;
+			
+		}
 		
 Vector<Tuple> results = null;
 //actually search 
 return results.iterator();
 	}
 	
-	
+	public void parseSQLTerm(String query) {
+		ArrayList<Object> values =  getObjValues(query);
+		ArrayList<String> names = getNameOfObjects(query);
+		String colsToSelect = getColumnNames(query);
+		getOperators(query);
+		
+	}
 	/*
 	 * gets the table name from the query string
 	 * */
