@@ -33,6 +33,14 @@ public class TestBPTree {
 
 			
 			System.out.println(tree.toString());
+			tree.delete(18);
+			System.out.println(tree);
+			tree.delete(18);
+			System.out.println(tree);
+			tree.delete(18);
+			System.out.println(tree);
+			//tree.delete(18);
+			//System.out.println(tree);
 			break;
 		}
 		
