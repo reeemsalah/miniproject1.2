@@ -245,6 +245,15 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 		return refs;
 	}
 	
+	@Override
+	public void updateRef(T key, String oldPage, String newPage) 
+	{ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i) {
+			if(this.getKey(i).compareTo(key) == 0 && this.getRecord(i).getPage().equals(oldPage))
+				records[i]= new Ref(newPage,0);
+		break;}
+	}
+	
 	/**
 	 * delete the passed key from the B+ tree
 	 */

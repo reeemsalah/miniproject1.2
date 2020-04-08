@@ -75,15 +75,15 @@ public class DBAppTest {
 		
 		
 		
-		
-//		htblColNameValue.put("id", new Integer( 23498 ));
-		htblColNameValue.put("name", new String("Ahmed Noor" ) );
-//		htblColNameValue.put("gpa", new Double( 1.5 ) );
-		System.out.println("deleting..........................");
-		dbApp.deleteFromTable( strTableName , htblColNameValue );
-		htblColNameValue.clear( );//delete is case sensetive
-		
-		
+//		
+////		htblColNameValue.put("id", new Integer( 23498 ));
+//		htblColNameValue.put("name", new String("Ahmed Noor" ) );
+////		htblColNameValue.put("gpa", new Double( 1.5 ) );
+//		System.out.println("deleting..........................");
+//		dbApp.deleteFromTable( strTableName , htblColNameValue );
+//		htblColNameValue.clear( );//delete is case sensetive
+//		
+//		
 		
 		
 		SQLTerm[] arrSQLTerms;
@@ -104,7 +104,7 @@ public class DBAppTest {
 //		arrSQLTerms[1].objValue = new Double( 1.5 );
 		String[]strarrOperators = new String[1];
 //		strarrOperators[0] = "OR";
-		dbApp.selectFromTable(arrSQLTerms , strarrOperators);
+		System.out.println(dbApp.selectFromTable(arrSQLTerms , strarrOperators));
 
 //		t.executeQuery(arrSQLTerms[0].strColumnName, arrSQLTerms[0].strOperator,arrSQLTerms[0].objValue);
 		// select * from Student where name = “John Noor” or gpa = 1.5;		

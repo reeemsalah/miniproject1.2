@@ -80,7 +80,10 @@ public class RTree<T extends Comparable<T>> implements Serializable{
 	{
 		return root.search(key);
 	}
-	
+	public void updateRef(Region key, String oldPage, String newPage)
+	{
+		root.updateRef(key,oldPage,newPage);
+	}
 	/**
 	 * Delete a key and its associated record from the tree.
 	 * @param key the key to be deleted

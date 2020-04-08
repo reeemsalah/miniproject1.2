@@ -173,7 +173,7 @@ public class DBApp {
 	public Vector<Tuple> selectFromTable(SQLTerm[] arrSQLTerms, String[] strarrOperators) throws DBAppException, ClassNotFoundException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
 		ArrayList<Vector<Tuple>> resultSets = new ArrayList<Vector<Tuple>>();
-		
+		Vector<Tuple> results = null;
 		for (SQLTerm cond :arrSQLTerms ) {
 			String strTableName = cond.strTableName;
 			
@@ -194,14 +194,14 @@ public class DBApp {
 			if (!flag) {
 				throw new DBAppException("This table doens't exist");
 			}else {
-				tables.get(strTableName).executeQuery(cond.strColumnName, cond.strOperator, cond.objValue);
+				results = tables.get(strTableName).executeQuery(cond.strColumnName, cond.strOperator, cond.objValue);
 
 				
 			}
 			
 			
 		}
-		Vector<Tuple> results = null;
+	
 return results;
 //actually search 
 //return results.iterator();

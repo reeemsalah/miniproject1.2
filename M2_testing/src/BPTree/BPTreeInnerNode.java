@@ -351,6 +351,12 @@ return pageOptions;
 		return children[findIndex(key)].search(key);
 	}
 	
+	@Override
+	public void updateRef(T key,String oldPage, String newPage) 
+	{
+		children[findIndex(key)].updateRef(key, oldPage, newPage);
+	}
+	
 	/**
 	 * delete the key at the given index and deleting its right child
 	 */

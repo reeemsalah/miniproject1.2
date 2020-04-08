@@ -321,7 +321,7 @@ public class Table implements Serializable {
 			}
 			if (t.getKeyValue().compareTo(bounds[bounds.length - 1]) >= 0) {
 				for (Page p : pages) {
-					if (p.getMaxKey().compareTo(bounds[0]) == 0)
+					if (p.getMaxKey().compareTo(bounds[bounds.length - 1]) == 0)
 						options.add(p);
 
 				}
@@ -353,8 +353,13 @@ public class Table implements Serializable {
 			if (isBIndexedCol(clusteredKey)) {
 			BPTree clusBtree = getBtreeCol(clusteredKey);
 			ArrayList<String> BoptionfileNames = clusBtree.getInsertPage(t.getKeyValue());
+			System.out.println(BoptionfileNames);
+		
 			for(String name : BoptionfileNames ) {
-				for(int z=0;i<pages.size();i++) {
+//				System.out.println(name);
+				for(int z=0;z<pages.size();z++) {
+					
+//					System.out.print(pages.get(z));
 					if(pages.get(z).getFileName().equals(name)) {
 						options.add(pages.get(z));
 					}
@@ -363,9 +368,9 @@ public class Table implements Serializable {
 		
 			if (isRIndexedCol(clusteredKey)) {
 				RTree clusRtree = getRtreeCol(clusteredKey);
-				ArrayList<String> BoptionfileNames = clusRtree.getInsertPage((Region)t.getKeyValue());
-				for(String name : BoptionfileNames ) {
-					for(int z=0;i<pages.size();i++) {
+				ArrayList<String> RoptionfileNames = clusRtree.getInsertPage((Region)t.getKeyValue());
+				for(String name : RoptionfileNames ) {
+					for(int z=0;z<pages.size();z++) {
 						if(pages.get(z).getFileName().equals(name)) {
 							options.add(pages.get(z));
 						}
@@ -421,14 +426,14 @@ public class Table implements Serializable {
 
 	public void insertHelper(Tuple t, ArrayList<Page> pages, boolean shift) {
 		//FIXME match the new implementation
-		System.out.println("options for " +t.getKeyValue()+" are " + pages);
+		System.out.println("options for " +t.getKeyValue()+" are " + pages.toString());
 		boolean found = false;
 		for (int i = 0; i < pages.size(); i++) {
 			if (!pages.get(i).isFull()) {
 
 				found = true;
 				Read(pages.get(i).getFileName());
-				insertPage(t, pages.get(i), shift);
+				insertPage(t,pages.get(i), pages.get(i), shift);
 				updatepages(pages.get(i));
 				Write(pages.get(i).getFileName());
 				return;
@@ -436,7 +441,7 @@ public class Table implements Serializable {
 		}
 		if (!found) {
 			Read(pages.get(pages.size()- 1).getFileName());
-			insertPage(t, pages.get(pages.size() - 1), shift);
+			insertPage(t, pages.get(pages.size() - 1), pages.get(pages.size() - 1), shift);
 			Tuple temp = page.lastElement();
 			page.remove(page.lastElement());
 			updatepages(pages.get(pages.size() - 1));
@@ -458,7 +463,7 @@ public class Table implements Serializable {
 				if (!next.isFull()) { // shifting can be done
 					page.clear();
 					Read(next.getFileName());
-					insertPage(temp, next, true);
+					insertPage(temp,pages.get(pages.size() - 1), next, true);
 //					updateMinKey(next);
 //					updateMaxKey(next);
 //					updatenoOfRows(next);
@@ -468,7 +473,7 @@ public class Table implements Serializable {
 				} else { // next is full
 					page.clear();
 					Read(next.getFileName());
-					insertPage(temp, next, true);
+					insertPage(temp, pages.get(pages.size() - 1), next, true);
 					Tuple temp2 = page.lastElement();
 					page.remove(page.lastElement());
 					updatepages(next);
@@ -489,7 +494,7 @@ public class Table implements Serializable {
 			return true;
 	}*/
 //FIXME match the new implementation
-	public void insertPage(Tuple t, Page pageOfInsertion, boolean shift) {
+	public void insertPage(Tuple t,Page fromShift, Page pageOfInsertion, boolean shift) {
 		if (this.page.size() > 0) {
 			Iterator it = this.page.iterator();
 			int i = 0;
@@ -515,6 +520,14 @@ public class Table implements Serializable {
 			insertBTrees(t, pageOfInsertion);
 			insertRTrees(t, pageOfInsertion);
 
+		}
+		else {
+			for (String col : btrees.keySet()) {
+				btrees.get(col).updateRef(t.getKeyValue(),fromShift.getFileName() , pageOfInsertion.getFileName());
+			}
+//			for (String col : rtrees.keySet()) {
+//				btrees.get(col).updateRef(t.getKeyValue(),fromShift.getFileName() , pageOfInsertion.getFileName());
+//			}
 		}
 	}
 

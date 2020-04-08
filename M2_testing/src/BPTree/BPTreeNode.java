@@ -102,7 +102,8 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 
 	
 	public abstract ArrayList<Ref> search(T key);
-	 
+	public abstract void updateRef(T key, String oldPage, String newPage);
+
 	public abstract ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr);
 
 //	public int getNextNewKeyIndex(int currIndex){

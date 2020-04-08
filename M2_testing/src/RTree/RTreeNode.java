@@ -110,6 +110,8 @@ public abstract class RTreeNode<T extends Comparable<T>> implements Serializable
 
 	
 	public abstract ArrayList<Ref> search(Region key);
+	public abstract void updateRef(Region key, String oldPage, String newPage);
+
 
 	/**
 	 * delete a key from the B+ tree recursively
