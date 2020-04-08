@@ -39,11 +39,16 @@ public class Page {
 	public int getSize() {
 		return size;
 	}
+	
+	public void setSize(int rows) {
+		this.size=rows;
+	}
 	public boolean isFull()
 
 	{
 		return (maxRows-size)==0;
 	}
+	
 	
 }
 

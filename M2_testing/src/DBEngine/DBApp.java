@@ -170,7 +170,7 @@ public class DBApp {
 	 * arrSQLTerms array of SQLTerm objects representing conditions in query
 	 * strarrOperators array of strings of Logical operators in order
 	 * */
-	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String strarrOperators) throws DBAppException, ClassNotFoundException {
+	public Vector<Tuple> selectFromTable(SQLTerm[] arrSQLTerms, String[] strarrOperators) throws DBAppException, ClassNotFoundException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
 		ArrayList<Vector<Tuple>> resultSets = new ArrayList<Vector<Tuple>>();
 		
@@ -201,10 +201,10 @@ public class DBApp {
 			
 			
 		}
-		
-Vector<Tuple> results = null;
+		Vector<Tuple> results = null;
+return results;
 //actually search 
-return results.iterator();
+//return results.iterator();
 	}
 	
 	public void parseSQLTerm(String query) {

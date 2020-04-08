@@ -255,12 +255,12 @@ return pageOptions;
 	 * returns the record reference with the passed key and null if does not exist
 	 */
 	@Override
-	public Ref search(Region key) 
-	{
+	public ArrayList<Ref> search(Region key) 
+	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i)
 			if(this.getKey(i).compareTo(key) == 0)
-				return this.getRecord(i);
-		return null;
+				refs.add(this.getRecord(i));
+		return refs;
 	}
 	
 	/**

@@ -101,7 +101,7 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 	public abstract ArrayList<String> getInsertPage(T key, BPTreeInnerNode<T> parent, int ptr);
 
 	
-	public abstract Ref search(T key);
+	public abstract ArrayList<Ref> search(T key);
 	 
 	public abstract ArrayList<String> getDeletePage(T key, BPTreeInnerNode<T> parent, int ptr);
 

@@ -76,7 +76,7 @@ public class RTree<T extends Comparable<T>> implements Serializable{
 	 * @param key the key to find its record
 	 * @return the reference of the record associated with this key 
 	 */
-	public Ref search(Region key)
+	public ArrayList<Ref> search(Region key)
 	{
 		return root.search(key);
 	}

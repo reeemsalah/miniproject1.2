@@ -237,12 +237,12 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	 * returns the record reference with the passed key and null if does not exist
 	 */
 	@Override
-	public Ref search(T key) 
-	{
+	public ArrayList<Ref> search(T key) 
+	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i)
 			if(this.getKey(i).compareTo(key) == 0)
-				return this.getRecord(i);
-		return null;
+				refs.add(this.getRecord(i));
+		return refs;
 	}
 	
 	/**
@@ -357,4 +357,5 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 		
 		this.setNext(foreignNode.getNext());
 	}
+	
 }

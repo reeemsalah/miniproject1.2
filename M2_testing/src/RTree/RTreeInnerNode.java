@@ -367,7 +367,7 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 	 * searches for the record reference of the specified key
 	 */
 	@Override
-	public Ref search(Region key) 
+	public ArrayList<Ref> search(Region key) 
 	{
 		return children[findIndex(key)].search(key);
 	}

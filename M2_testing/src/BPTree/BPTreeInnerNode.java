@@ -346,7 +346,7 @@ return pageOptions;
 	 * searches for the record reference of the specified key
 	 */
 	@Override
-	public Ref search(T key) 
+	public ArrayList<Ref> search(T key) 
 	{
 		return children[findIndex(key)].search(key);
 	}

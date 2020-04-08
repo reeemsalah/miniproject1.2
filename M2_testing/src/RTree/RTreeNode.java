@@ -109,7 +109,7 @@ public abstract class RTreeNode<T extends Comparable<T>> implements Serializable
 	public abstract ArrayList<String> getDeletePage(Region key, RTreeInnerNode<T> parent, int ptr);
 
 	
-	public abstract Ref search(Region key);
+	public abstract ArrayList<Ref> search(Region key);
 
 	/**
 	 * delete a key from the B+ tree recursively
