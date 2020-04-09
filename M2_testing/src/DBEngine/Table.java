@@ -801,18 +801,15 @@ public class Table implements Serializable {
 		fileName.setMaxKey(page.lastElement().getKeyValue());
 
 		fileName.setSize(page.size());
-
-		// Comparable noOfRows = updatenoOfRows(fileName);
-//		Comparable min = updateMinKey(fileName);
-//		Comparable max = updateMaxKey(fileName);
-
-//		pages.replace(fileName, new Comparable[] { (noOfRows), min, max });
 	}
 
 	public void deletePage(String fileName) {
 		File file = new File(fileName);
 		file.delete();
-		pages.remove(fileName);
+		for(int i=0;i<pages.size();i++) {
+			if(pages.get(i).equals(fileName))
+				pages.remove(i);
+		}
 	}
 
 	/**
