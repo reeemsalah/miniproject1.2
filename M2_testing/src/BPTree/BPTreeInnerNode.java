@@ -229,6 +229,7 @@ return pageOptions;
 	 */
 	public boolean delete(T key, BPTreeInnerNode<T> parent, int ptr) 
 	{
+		System.out.println("deleting in node " + this.index);
 		boolean done = false;
 		for(int i = 0; !done && i < numberOfKeys; ++i)
 			if(keys[i].compareTo(key) > 0)

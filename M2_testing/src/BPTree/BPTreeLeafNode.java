@@ -259,6 +259,8 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	 */
 	public boolean delete(T key, BPTreeInnerNode<T> parent, int ptr) 
 	{
+		System.out.println("deleting in node " + this.index);
+
 		for(int i = 0; i < numberOfKeys; ++i)
 			if(keys[i].compareTo(key) == 0)
 			{
