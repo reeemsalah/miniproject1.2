@@ -69,6 +69,11 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 		return root.search(key);
 	}
 	
+	public ArrayList<Ref> searchLess(T key)
+	{
+		return root.search(key);
+	}
+	
 	public void updateRef(T key, String oldPage, String newPage)
 	{
 		root.updateRef(key,oldPage,newPage);

@@ -175,9 +175,10 @@ public class DBApp {
 		ArrayList<Vector<Tuple>> resultSets = new ArrayList<Vector<Tuple>>();
 		Vector<Tuple> results = null;
 		String strTableName="";
+		int iz = 0;
 		for (SQLTerm cond :arrSQLTerms ) {
 			strTableName = cond.strTableName;
-			
+			System.out.println("term  " + iz++);
 			Object[] tableNamesObj = (tables.keySet().toArray());
 			String[] tableNames = new String[tableNamesObj.length];
 			int j = 0;
@@ -206,26 +207,26 @@ public class DBApp {
 			switch (logOp)
 			{
 			case "AND":
-//				System.out.println(resultSets.get(0)+ " AND " +resultSets.get(1));
+				System.out.println(resultSets.get(0)+ " AND " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).AND(resultSets.get(0),resultSets.get(1)));
 			resultSets.remove(1);
 			resultSets.remove(1);break;
 			case "OR":
 				System.out.println(resultSets.get(0)+ " OR " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).OR(resultSets.get(0),resultSets.get(1)));
-//			System.out.println(resultSets);
+			System.out.println(resultSets);
 			resultSets.remove(1);
 			resultSets.remove(1);break;
 			case "XOR":
-//				System.out.println(resultSets.get(0)+ " XOR " +resultSets.get(1));
+				System.out.println(resultSets.get(0)+ " XOR " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).XOR(resultSets.get(0),resultSets.get(1)));
 			resultSets.remove(1);
 			resultSets.remove(1);break;
 			}
 				
 		}
-	
 results =  resultSets.get(0);
+//System.out.println("final  "+results);
 //actually search 
 return results.iterator();
 	}
