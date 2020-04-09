@@ -87,23 +87,23 @@ public class DBAppTest {
 		
 		
 		SQLTerm[] arrSQLTerms;
-		arrSQLTerms = new SQLTerm[1];
+		arrSQLTerms = new SQLTerm[2];
 		
 //		query1 = new SQLTerm("Student", "name", "=","John Noor");
 		SQLTerm query1 = new SQLTerm();
-//		SQLTerm query2 = new SQLTerm();
+		SQLTerm query2 = new SQLTerm();
 		arrSQLTerms[0] = query1;
-//		arrSQLTerms[1] = query2;
+		arrSQLTerms[1] = query2;
 		arrSQLTerms[0].strTableName = "Student";
 		arrSQLTerms[0].strColumnName= "name";
 		arrSQLTerms[0].strOperator = "=";
 		arrSQLTerms[0].objValue = "John Noor";
-//		arrSQLTerms[1].strTableName = "Student";
-//		arrSQLTerms[1].strColumnName= "gpa";
-//		arrSQLTerms[1].strOperator = "=";
-//		arrSQLTerms[1].objValue = new Double( 1.5 );
+		arrSQLTerms[1].strTableName = "Student";
+		arrSQLTerms[1].strColumnName= "gpa";
+		arrSQLTerms[1].strOperator = "=";
+		arrSQLTerms[1].objValue = new Double( 1.5 );
 		String[]strarrOperators = new String[1];
-//		strarrOperators[0] = "OR";
+		strarrOperators[0] = "OR";
 		System.out.println(dbApp.selectFromTable(arrSQLTerms , strarrOperators));
 
 //		t.executeQuery(arrSQLTerms[0].strColumnName, arrSQLTerms[0].strOperator,arrSQLTerms[0].objValue);

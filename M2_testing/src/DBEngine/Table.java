@@ -1150,6 +1150,100 @@ public class Table implements Serializable {
 
 		return results;
 	}
+	
+	public Vector<Tuple> AND(Vector<Tuple> A,Vector<Tuple> B){
+		boolean flag = false;
+		Vector<Tuple> result = new Vector<Tuple>();
+		Iterator<Tuple> itA = A.iterator();
+		Iterator<Tuple> itB = B.iterator();
+		while(itA.hasNext()) {
+			Tuple x = itA.next();
+			Hashtable<String, Comparable> atX = x.getAttributes();
+			Set<String> keyX = atX.keySet();
+			while(itB.hasNext()) {
+				Tuple y = itB.next();
+				Hashtable<String, Comparable> atY = y.getAttributes();
+				for(String key : keyX) {
+					if(atX.get(key).compareTo(atY.get(key))!=0) {
+						flag = false;
+						break;
+					}else {
+						flag = true;
+					}
+				}
+				if(flag = true) {
+					flag = false;
+					result.add(x);
+				}
+			}
+		}
+		return result;
+	}
+	
+	public Vector<Tuple> OR(Vector<Tuple> A,Vector<Tuple> B){
+		boolean flag = false;
+		Vector<Tuple> result = new Vector<Tuple>();
+		Iterator<Tuple> itA = A.iterator();
+		Iterator<Tuple> itB = B.iterator();
+		while(itA.hasNext()) {
+			Tuple x = itA.next();
+			result.add(x);
+		}
+		Iterator<Tuple> itResult = result.iterator();
+		while(itB.hasNext()) {
+			Tuple y = itB.next();
+			Hashtable<String, Comparable> atY = y.getAttributes();
+			Set<String> keyY = atY.keySet();
+			while(itResult.hasNext()) {
+				Tuple res = itResult.next();
+				Hashtable<String, Comparable> atRes = res.getAttributes();
+				for(String key : keyY) {
+					if(atY.get(key).compareTo(atRes.get(key)) == 0) {
+						flag = false;
+					}else {
+						flag = true;
+						break;
+					}
+				}
+				if(flag = true) {
+					flag = false;
+					result.add(y);	
+				}
+			}
+		}
+		return result;
+	}
+	
+	public Vector<Tuple> XOR(Vector<Tuple> A,Vector<Tuple> B){
+		boolean flag = false;
+		Vector<Tuple> anded = this.AND(A,B);
+		Vector<Tuple> ored = this.AND(A,B);
+		Vector<Tuple> result = new Vector<Tuple>();
+		Iterator<Tuple> itAnd = anded.iterator();
+		Iterator<Tuple> itOr = ored.iterator();
+		while(itOr.hasNext()) {
+			Tuple x = itOr.next();
+			Hashtable<String, Comparable> atX = x.getAttributes();
+			Set<String> keyX = atX.keySet();
+			while(itAnd.hasNext()) {
+				Tuple y = itAnd.next();
+				Hashtable<String, Comparable> atY = y.getAttributes();
+				for(String key : keyX) {
+					if(atX.get(key).compareTo(atY.get(key)) == 0) {
+						flag = false;
+					}else {
+						flag = true;
+						break;
+					}
+				}
+				if(flag = true) {
+					flag = false;
+					result.add(x);
+				}
+			}
+		}
+		return result;
+	}
 
 	public void newBTree(String strColName, int nodeSize) throws DBAppException {
 		// TODO Auto-generated method stub

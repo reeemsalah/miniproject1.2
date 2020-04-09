@@ -170,12 +170,13 @@ public class DBApp {
 	 * arrSQLTerms array of SQLTerm objects representing conditions in query
 	 * strarrOperators array of strings of Logical operators in order
 	 * */
-	public Vector<Tuple> selectFromTable(SQLTerm[] arrSQLTerms, String[] strarrOperators) throws DBAppException, ClassNotFoundException {
+	public ArrayList<Vector<Tuple>> selectFromTable(SQLTerm[] arrSQLTerms, String[] strarrOperators) throws DBAppException, ClassNotFoundException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
 		ArrayList<Vector<Tuple>> resultSets = new ArrayList<Vector<Tuple>>();
 		Vector<Tuple> results = null;
+		String strTableName="";
 		for (SQLTerm cond :arrSQLTerms ) {
-			String strTableName = cond.strTableName;
+			strTableName = cond.strTableName;
 			
 			Object[] tableNamesObj = (tables.keySet().toArray());
 			String[] tableNames = new String[tableNamesObj.length];
@@ -195,14 +196,35 @@ public class DBApp {
 				throw new DBAppException("This table doens't exist");
 			}else {
 				results = tables.get(strTableName).executeQuery(cond.strColumnName, cond.strOperator, cond.objValue);
-
+				resultSets.add(results);
 				
 			}
 			
 			
 		}
+		for (String logOp: strarrOperators) {
+			switch (logOp)
+			{
+			case "AND":
+				System.out.println(resultSets.get(0)+ " AND " +resultSets.get(1));
+			resultSets.add(0,tables.get(strTableName).AND(resultSets.get(0),resultSets.get(1)));
+			resultSets.remove(1);
+			resultSets.remove(2);break;
+			case "OR":
+				System.out.println(resultSets.get(0)+ " OR " +resultSets.get(1));
+			resultSets.add(0,tables.get(strTableName).OR(resultSets.get(0),resultSets.get(1)));
+			resultSets.remove(1);
+			resultSets.remove(2);break;
+			case "XOR":
+				System.out.println(resultSets.get(0)+ " XOR " +resultSets.get(1));
+			resultSets.add(0,tables.get(strTableName).XOR(resultSets.get(0),resultSets.get(1)));
+			resultSets.remove(1);
+			resultSets.remove(2);break;
+			}
+				
+		}
 	
-return results;
+return resultSets;
 //actually search 
 //return results.iterator();
 	}
