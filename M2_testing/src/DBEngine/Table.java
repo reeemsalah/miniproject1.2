@@ -147,7 +147,6 @@ public class Table implements Serializable {
 				fi.close();
 			} catch (EOFException e) {
 
-				// .out.println("end of file ");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -244,7 +243,6 @@ public class Table implements Serializable {
 	}
 
 	public void insert(Tuple t, boolean shift) {
-		// FIXME for insert to follow the new implementation
 		if (page != null)
 			page.clear();
 		try {
@@ -264,10 +262,6 @@ public class Table implements Serializable {
 			pages.add(firstPage);
 		}
 
-//		Object[] allFilesObj = pages.keySet().toArray();
-		// .out.println("allFiles length " + allFilesObj.length);
-
-//		String [] allFiles = intoArray(allFilesObj);
 		String[] allFiles = new String[pages.size()];
 		int f = 0;
 		for (Page pg : pages) {
@@ -275,33 +269,18 @@ public class Table implements Serializable {
 			f++;
 		}
 
-		// .out.println("allFiles length " + allFiles.length);
-
-//		Comparable[] allMin = new Comparable[allFiles.length];
-//		Comparable[] allMax = new Comparable[allFiles.length];
-//		int i = 0;
-//		for (String name : allFiles) {
-//			allMin[i] = (Comparable) pages.get(name)[1];
-//			// .out.println(allMin[i] + ", ");
-//			allMax[i] = (Comparable) pages.get(name)[2];
-//			// .out.println(allMax[i] + ", ");
-//			i++;
-//		}
 		Comparable[] allMin = new Comparable[allFiles.length];
 		Comparable[] allMax = new Comparable[allFiles.length];
 		int i = 0;
 		for (Page p : pages) {
 			allMin[i] = (Comparable) p.getMinKey();
-			// .out.println(allMin[i] + ", ");
 			allMax[i] = (Comparable) p.getMaxKey();
-			// .out.println(allMax[i] + ", ");
 			i++;
 		}
 
 		Arrays.sort(allMin);
 		Arrays.sort(allMax);
 		ArrayList<Page> options = new ArrayList<Page>();
-//		ArrayList<String> options = new ArrayList<String>();
 
 		Arrays.sort(allFiles);
 
@@ -408,7 +387,6 @@ public class Table implements Serializable {
 							if (pages.get(j).getMaxKey() == allMax[allMax.length - 1]) {
 								// .out.println("big 2" + allFiles[j]);
 								options.add(pages.get(j));
-								// FIXME
 							}
 
 						}
@@ -423,7 +401,6 @@ public class Table implements Serializable {
 	}
 
 	public void insertHelper(Tuple t, ArrayList<Page> pages, boolean shift) {
-		// FIXME match the new implementation
 		System.out.println("options for " + t.getKeyValue() + " are " + pages.toString());
 		boolean found = false;
 		for (int i = 0; i < pages.size(); i++) {
@@ -479,13 +456,11 @@ public class Table implements Serializable {
 		}
 	}
 
-//FIXME replaced with  isFull() in page class
 	/*
 	 * public boolean isPageFull(String filename) { int noOfRows = (int)
 	 * pages.get(filename)[0]; if (maxRows - noOfRows > 0) { return false; } else
 	 * return true; }
 	 */
-//FIXME match the new implementation
 	public void insertPage(Tuple t, Page fromShift, Page pageOfInsertion, boolean shift) {
 		if (this.page.size() > 0) {
 			Iterator it = this.page.iterator();
@@ -518,6 +493,14 @@ public class Table implements Serializable {
 			}
 		}
 	}
+
+	/**
+	 * 
+	 * @param htblColNameValue the hashtable to be deleted from the table and the
+	 *                         values are anded together
+	 * @throws DBAppException an exception if the is incompatible types or metadata
+	 *                        error such as a column that doesn't exist
+	 */
 
 	public void delete(Hashtable<String, Comparable> htblColNameValue) throws DBAppException {
 		page.clear();
@@ -629,12 +612,6 @@ public class Table implements Serializable {
 				}
 			}
 		} else {
-			// FIXME WTFF
-			/*
-			 * Comparable[] currentpages = pages.get(fileName); int currentNoOfPages = (int)
-			 * currentpages[0]; pages.replace(fileName, new Comparable[] { (currentNoOfPages
-			 * - i), updateMinKey(fileName), updateMaxKey(fileName) });
-			 */
 			// Changing the key of the page
 			for (Page p : pages) {
 				if (p.getFileName().equals(fileName)) {
@@ -1152,7 +1129,6 @@ public class Table implements Serializable {
 	}
 
 	public void newBTree(String strColName, int nodeSize) throws DBAppException {
-		// TODO Auto-generated method stub
 		Hashtable<String, String> tableMeta = readTableMetadata();
 
 		String strColType = tableMeta.get(strColName);
@@ -1186,7 +1162,6 @@ public class Table implements Serializable {
 	}
 
 	public void newRTree(String strColName, int nodeSize) throws DBAppException {
-		// TODO Auto-generated method stub
 		Hashtable<String, String> tableMeta = readTableMetadata();
 
 		String strColType = tableMeta.get(strColName);

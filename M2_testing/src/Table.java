@@ -202,7 +202,7 @@ System.out.println("pagecount " + numOfPages);
 				System.out.println("end of file ");
 //				page = new Vector<Tuple>();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			System.out.println("READ: "+page);
@@ -954,7 +954,6 @@ public void updatePageInfo(String fileName) {
 	}
 
 	public void newBTree(String strColName, int nodeSize) throws DBAppException {
-		// TODO Auto-generated method stub
 		Hashtable <String , String> tableMeta = readTableMetadata();
 		
 		String strColType = tableMeta.get(strColName);

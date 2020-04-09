@@ -14,6 +14,43 @@ public class TestBPTree {
 		Page p4 = new Page("p4", 0,0,0);
 
 		BPTree<Integer> tree = new BPTree<Integer>(2);
+
+		tree.insert(5, new Ref("p1", 0));
+		tree.insert(7, new Ref("p1", 0));
+		tree.insert(15, new Ref("p2", 0));
+		//first
+		tree.insert(18, new Ref("p3", 0));
+		//second
+		tree.insert(18, new Ref("p3", 0));
+		//third
+		tree.insert(18, new Ref("p3", 0));
+		tree.insert(4, new Ref("p1", 0));
+		tree.insert(23, new Ref("p4", 0));
+		tree.insert(25, new Ref("p4", 0));
+		//forth
+		tree.insert(18, new Ref("p3", 0));
+		//fifth
+		tree.insert(18, new Ref("p4", 0));
+		tree.insert(16, new Ref("p2", 0));
+		tree.insert(9, new Ref("p2", 0));
+
+		System.out.println(tree.toString());
+		System.out.println(tree.search(18));
+
+		System.out.println(tree.delete(18));
+		System.out.println(tree);
+		System.out.println(tree.search(18));
+
+		System.out.println(tree.delete(18));
+		System.out.println(tree);
+		System.out.println(tree.search(18));
+
+		System.out.println(tree.delete(18));
+		System.out.println(tree);
+		System.out.println(tree.search(18));
+		//tree.delete(18);
+		//System.out.println(tree);
+		/*
 		Scanner sc = new Scanner(System.in);
 		while(true) 
 		{
@@ -44,10 +81,8 @@ public class TestBPTree {
 			break;
 		}
 		
-//		System.out.println(tree.root);
 		int entry= sc.nextInt();
 		System.out.println(entry +" can go to pages "+tree.getInsertPage(entry));
-//		System.out.println(18 +" is in pages "+tree.getDeletePage(18));
 		
 		
 		while(true) 
@@ -61,6 +96,7 @@ public class TestBPTree {
 		
 		
 		sc.close();
+		*/
 	
 		
 	}	
