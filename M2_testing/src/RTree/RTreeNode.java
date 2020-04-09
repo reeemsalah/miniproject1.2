@@ -2,6 +2,7 @@ package RTree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import BPTree.BPTreeInnerNode;
 import DBEngine.Region;
@@ -110,7 +111,9 @@ public abstract class RTreeNode<T extends Comparable<T>> implements Serializable
 
 	
 	public abstract ArrayList<Ref> search(Region key);
-	public abstract void updateRef(Region key, String oldPage, String newPage);
+	public abstract ArrayList<Ref> searchLess(Region key);
+
+	public abstract void updateRef(Region key, String oldPage, String newPage, Date td);
 
 
 	/**
@@ -120,7 +123,7 @@ public abstract class RTreeNode<T extends Comparable<T>> implements Serializable
 	 * @param ptr the index of the parent pointer that points to this node 
 	 * @return true if this node was successfully deleted and false otherwise
 	 */
-	public abstract boolean delete(Region key, RTreeInnerNode<T> parent, int ptr);
+	public abstract boolean delete(Region key, RTreeInnerNode<T> parent, int ptr, Date td);
 	
 	/**
 	 * A string represetation for the node

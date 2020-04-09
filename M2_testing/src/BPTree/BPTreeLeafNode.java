@@ -2,6 +2,7 @@ package BPTree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> implements Serializable{
 
@@ -246,21 +247,34 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	}
 	
 	@Override
-	public void updateRef(T key, String oldPage, String newPage) 
+	public ArrayList<Ref> searchLess(T key) 
+	{		System.out.println("searchLess at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) < 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	
+	@Override
+	public void updateRef(T key, String oldPage, String newPage, Date td) 
 	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i) {
 			if(this.getKey(i).compareTo(key) == 0 && this.getRecord(i).getPage().equals(oldPage))
-				records[i]= new Ref(newPage,0);
+				records[i]= new Ref(newPage,td);
 		break;}
 	}
 	
 	/**
 	 * delete the passed key from the B+ tree
 	 */
-	public boolean delete(T key, BPTreeInnerNode<T> parent, int ptr) 
+	public boolean delete(T key, BPTreeInnerNode<T> parent, int ptr, Date td) 
 	{
+		System.out.println("deleting in node " + this.index);
+
 		for(int i = 0; i < numberOfKeys; ++i)
-			if(keys[i].compareTo(key) == 0)
+			if(keys[i].compareTo(key) == 0 && records[i].getIndexInPage().compareTo(td)==0)
 			{
 				this.deleteAt(i);
 				if(i == 0 && ptr > 0)

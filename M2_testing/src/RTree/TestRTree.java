@@ -1,5 +1,7 @@
 package RTree;
 import DBEngine.Region;
+
+import java.util.Date;
 import java.util.Scanner;
 import BPTree.Ref;
 
@@ -22,7 +24,7 @@ public class TestRTree {
 		Region r11 = new Region(new int[] { 0, 20, 0 , 20}, new int[] { 0, 0, 20 , 20}, 4);
 		Region r12 = new Region(new int[] { 0, 23, 0 , 23}, new int[] { 0, 0, 23 , 23}, 4);
 		
-		
+		Date d = new Date();
 //		Region r7 = new Region(new int[] { 0, 16, 0 , 16}, new int[] { 0, 0, 16 , 16}, 4);
 //		System.out.println(r1.getArea());
 
@@ -36,18 +38,18 @@ public class TestRTree {
 //				break;
 //			int page = sc.nextInt();
 //			tree.insert(x, null);
-			tree.insert(r1, new Ref("p1", 1));
-			tree.insert(r2, new Ref("p1", 2));
-			tree.insert(r3, new Ref("p1", 1));
-			tree.insert(r4, new Ref("p2", 2));
-			tree.insert(r5, new Ref("p2", 1));
-			tree.insert(r6, new Ref("p2", 1));
-			tree.insert(r7, new Ref("p3", 1));
-			tree.insert(r8, new Ref("p3", 2));
-			tree.insert(r9, new Ref("p3", 1));
-			tree.insert(r10,new Ref("p4", 2));
-			tree.insert(r11,new Ref("p4", 1));
-			tree.insert(r12,new Ref("p4", 1));
+			tree.insert(r1, new Ref("p1", d));
+			tree.insert(r2, new Ref("p1", d));
+			tree.insert(r3, new Ref("p1", d));
+			tree.insert(r4, new Ref("p2", d));
+			tree.insert(r5, new Ref("p2", d));
+			tree.insert(r6, new Ref("p2", d));
+			tree.insert(r7, new Ref("p3", d));
+			tree.insert(r8, new Ref("p3", d));
+			tree.insert(r9, new Ref("p3", d));
+			tree.insert(r10,new Ref("p4", d));
+			tree.insert(r11,new Ref("p4", d));
+			tree.insert(r12,new Ref("p4", d));
 			
 			System.out.println(tree.toString());
 			break;
@@ -64,7 +66,7 @@ public class TestRTree {
 				break;
 			Region temp = new Region(new int[] { 0, x, 0, x }, new int[] { 0, 0, x , x}, 4);
 
-			tree.delete(temp);
+			tree.delete(temp, d);
 			System.out.println(tree.toString());
 		}
 		
