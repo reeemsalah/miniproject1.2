@@ -1,5 +1,6 @@
 package DBEngine;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 public class DBAppTest {
 
@@ -104,7 +105,10 @@ public class DBAppTest {
 		arrSQLTerms[1].objValue = new Double( 0.88 );
 		String[]strarrOperators = new String[1];
 		strarrOperators[0] = "XOR";
-		System.out.println(dbApp.selectFromTable(arrSQLTerms , strarrOperators));
+		Iterator it = dbApp.selectFromTable(arrSQLTerms , strarrOperators);
+		while(it.hasNext()) {
+			System.out.println(it.next());
+		}
 
 //		t.executeQuery(arrSQLTerms[0].strColumnName, arrSQLTerms[0].strOperator,arrSQLTerms[0].objValue);
 		// select * from Student where name = “John Noor” or gpa = 1.5;		

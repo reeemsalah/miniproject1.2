@@ -46,6 +46,7 @@ public class TestBPTree {
 			break;
 		}
 		
+		
 //		System.out.println(tree.root);
 		int entry= sc.nextInt();
 		System.out.println(entry +" can go to pages "+tree.getInsertPage(entry));

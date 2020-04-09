@@ -165,7 +165,7 @@ public class DBApp {
 		
 	}
 
-	
+	 
 	/*
 	 * arrSQLTerms array of SQLTerm objects representing conditions in query
 	 * strarrOperators array of strings of Logical operators in order
@@ -206,18 +206,18 @@ public class DBApp {
 			switch (logOp)
 			{
 			case "AND":
-				System.out.println(resultSets.get(0)+ " AND " +resultSets.get(1));
+//				System.out.println(resultSets.get(0)+ " AND " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).AND(resultSets.get(0),resultSets.get(1)));
 			resultSets.remove(1);
 			resultSets.remove(1);break;
 			case "OR":
 				System.out.println(resultSets.get(0)+ " OR " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).OR(resultSets.get(0),resultSets.get(1)));
-			System.out.println(resultSets);
+//			System.out.println(resultSets);
 			resultSets.remove(1);
 			resultSets.remove(1);break;
 			case "XOR":
-				System.out.println(resultSets.get(0)+ " XOR " +resultSets.get(1));
+//				System.out.println(resultSets.get(0)+ " XOR " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).XOR(resultSets.get(0),resultSets.get(1)));
 			resultSets.remove(1);
 			resultSets.remove(1);break;

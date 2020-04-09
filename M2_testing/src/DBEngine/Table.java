@@ -1167,7 +1167,7 @@ public class Table implements Serializable {
 			if(x.equals(y)) {
 				flag = false;
 			}
-			System.out.println(y +"    " + x + flag);
+//			System.out.println(y +"    " + x + flag);
 	
 			}
 			if(!flag) {
@@ -1192,10 +1192,8 @@ public class Table implements Serializable {
 //		Iterator<Tuple> itResult = result.iterator();
 //		while(itB.hasNext()) {
 		Tuple y;
-		int z = 0;
 			while(true) {
 				flag=true;
-				System.out.println(z++);
 				try { y = itB.next();}
 				catch (NoSuchElementException e) {
 				break;}
@@ -1231,13 +1229,11 @@ public class Table implements Serializable {
 		Vector<Tuple> result = new Vector<Tuple>();
 		Iterator<Tuple> itOr = ored.iterator();
 		Tuple x;
-		int z =0;
 		while(true) {
 			flag=true;
 			try { x = itOr.next();}
 			catch (NoSuchElementException e) {
 			break;}
-	System.out.println(z++);
 			Tuple y;
 			Iterator<Tuple> itAnd = anded.iterator();
 
@@ -1249,7 +1245,7 @@ public class Table implements Serializable {
 				if(x.equals(y)) {
 					flag=false;
 				}
-				System.out.println(y +"    " + x + flag);
+//				System.out.println(y +"    " + x + flag);
 			}
 			
 			if(flag){
