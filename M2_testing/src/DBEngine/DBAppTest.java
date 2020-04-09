@@ -20,7 +20,7 @@ public class DBAppTest {
 		
 		
 		Hashtable htblColNameValue = new Hashtable( );
-		
+		/*
 		htblColNameValue.put("id", new Integer( 1 ));
 		htblColNameValue.put("name", new String("Ahmed Noor" ) );
 		htblColNameValue.put("gpa", new Double( 0.95 ) );
@@ -58,13 +58,13 @@ public class DBAppTest {
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
-				
+		/*
 		
 		
 		
 		dbApp.createBTreeIndex("Student", "name");
 		dbApp.createBTreeIndex("Student", "gpa");
-
+		*/
 		
 	
 		htblColNameValue.put("id", new Integer( 12 ));
@@ -81,6 +81,7 @@ public class DBAppTest {
 		dbApp.deleteFromTable("Student", htblColNameValue);
 		htblColNameValue.clear( );
 		
+		/*
 		
 		htblColNameValue.put("id", new Integer( 6 ));
 		dbApp.deleteFromTable("Student", htblColNameValue);
@@ -99,7 +100,7 @@ public class DBAppTest {
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
-				
+		*/		
 		
 		
 		
