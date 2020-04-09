@@ -558,35 +558,7 @@ public class Table implements Serializable {
 
 	}
 
-	/**
-	 * 
-	 * @param htblColNameValue values to be deleted from all Rtrees
-	 */
-
-	private void deleteFromAllRtrees(Hashtable<String, Comparable> htblColNameValue) {
-		for (String key : htblColNameValue.keySet()) {
-			RTree tree = rtrees.get(key);
-			if (tree != null) {
-				Region reg = (Region) htblColNameValue.get(key);
-				tree.delete(reg);
-			}
-		}
-
-	}
-
-	/**
-	 * 
-	 * @param htblColNameValue values to be deleted from all Btrees
-	 */
-	private void deleteFromAllBtrees(Hashtable<String, Comparable> htblColNameValue) {
-		for (String key : htblColNameValue.keySet()) {
-			BPTree btree = btrees.get(key);
-			if (btree != null) {
-				btree.delete(htblColNameValue.get(key));
-			}
-		}
-
-	}
+	
 
 	/**
 	 * 
@@ -604,6 +576,18 @@ public class Table implements Serializable {
 			if (page.get(i).helperDelete(htblColNameValue)) {
 
 				page.remove(i);
+				for(String key: htblColNameValue.keySet())
+				{
+					BPTree tree=btrees.get(key);
+					tree.delete(htblColNameValue.get(key), (Date)(page.get(i)).getValueOfColumn("TouchDate"));
+					
+				}
+				for(String key: htblColNameValue.keySet())
+				{
+					RTree tree=rtrees.get(key);
+					tree.delete((Region)htblColNameValue.get(key), (Date)(page.get(i)).getValueOfColumn("TouchDate"));
+					
+				}
 
 			} else {
 				i++;
