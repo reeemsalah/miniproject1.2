@@ -352,6 +352,11 @@ return pageOptions;
 		return children[findIndex(key)].search(key);
 	}
 	
+	public ArrayList<Ref> searchLess(T key) 
+	{
+		return children[findIndex(key)].search(key);
+	}
+	
 	@Override
 	public void updateRef(T key,String oldPage, String newPage) 
 	{

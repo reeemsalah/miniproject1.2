@@ -143,4 +143,6 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 		return s;
 	}
 
+	public abstract ArrayList<Ref> searchLess(T key);
+
 }

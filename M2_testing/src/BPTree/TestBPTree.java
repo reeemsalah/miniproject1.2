@@ -59,7 +59,7 @@ public class TestBPTree {
 			if(x == -1)
 				break;
 //			tree.delete(x);
-			System.out.println(tree.search(x));
+			System.out.println(tree.searchLess(x));
 		}
 		
 		

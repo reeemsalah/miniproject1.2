@@ -246,6 +246,15 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	}
 	
 	@Override
+	public ArrayList<Ref> searchLess(T key) 
+	{ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) < 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	
+	@Override
 	public void updateRef(T key, String oldPage, String newPage) 
 	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i) {
