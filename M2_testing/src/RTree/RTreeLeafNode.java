@@ -2,6 +2,7 @@ package RTree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import BPTree.BPTreeInnerNode;
 import BPTree.BPTreeLeafNode;
@@ -264,21 +265,32 @@ return pageOptions;
 	}
 	
 	@Override
-	public void updateRef(Region key, String oldPage, String newPage) 
+	public ArrayList<Ref> searchLess(Region key) 
+	{		System.out.println("searchLess at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) < 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	
+	@Override
+	public void updateRef(Region key, String oldPage, String newPage, Date td) 
 	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i) {
 			if(this.getKey(i).compareTo(key) == 0 && this.getRecord(i).getPage().equals(oldPage))
-				records[i]= new Ref(newPage,0);
+				records[i]= new Ref(newPage,td);
 		break;}
 	}
 	
 	/**
 	 * delete the passed key from the B+ tree
 	 */
-	public boolean delete(Region key, RTreeInnerNode<T> parent, int ptr) 
+	public boolean delete(Region key, RTreeInnerNode<T> parent, int ptr, Date td) 
 	{
 		for(int i = 0; i < numberOfKeys; ++i)
-			if(keys[i].compareTo(key) == 0)
+			if(keys[i].compareTo(key) == 0 && td.compareTo(this.records[i].getIndexInPage())==0)
 			{
 				this.deleteAt(i);
 				if(i == 0 && ptr > 0)

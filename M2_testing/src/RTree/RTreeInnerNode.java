@@ -2,6 +2,7 @@ package RTree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import BPTree.BPTreeInnerNode;
 import DBEngine.Region;
@@ -248,15 +249,15 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 	/**
 	 * delete key and return true or false if it is deleted or not
 	 */
-	public boolean delete(Region key, RTreeInnerNode<T> parent, int ptr) 
+	public boolean delete(Region key, RTreeInnerNode<T> parent, int ptr, Date td) 
 	{
 		boolean done = false;
 		for(int i = 0; !done && i < numberOfKeys; ++i)
 			if(keys[i].compareTo(key) > 0)
-				done = children[i].delete(key, this, i);
+				done = children[i].delete(key, this, i, td);
 			
 		if(!done)
-			done = children[numberOfKeys].delete(key, this, numberOfKeys);
+			done = children[numberOfKeys].delete(key, this, numberOfKeys, td);
 		if(numberOfKeys < this.minKeys())
 		{
 			if(isRoot())
@@ -371,10 +372,24 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 	{
 		return children[findIndex(key)].search(key);
 	}
-	@Override
-	public void updateRef(Region key,String oldPage, String newPage) 
+	
+	public ArrayList<Ref> searchLess(Region key) 
 	{
-		children[findIndex(key)].updateRef(key, oldPage, newPage);
+		System.out.println("searchLess at "+this.index);
+		ArrayList<Ref> res = new ArrayList<Ref>();
+		for (int i=0;i<numberOfKeys;i++) {
+			if (keys[i].compareTo(key)<=0)
+			res.addAll(children[i].searchLess(key));
+		}
+		res.addAll(children[0].searchLess(key));
+
+		return res ;
+	}
+	
+	@Override
+	public void updateRef(Region key,String oldPage, String newPage, Date td) 
+	{
+		children[findIndex(key)].updateRef(key, oldPage, newPage, td);
 	}
 	
 	/**

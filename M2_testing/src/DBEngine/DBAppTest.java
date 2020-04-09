@@ -103,7 +103,7 @@ public class DBAppTest {
 		arrSQLTerms[0].objValue = "Ahmed Noor";
 		arrSQLTerms[1].strTableName = "Student";
 		arrSQLTerms[1].strColumnName= "gpa";
-		arrSQLTerms[1].strOperator = ">=";
+		arrSQLTerms[1].strOperator = "<";
 		arrSQLTerms[1].objValue = new Double( 0.88 );
 		arrSQLTerms[2].strTableName = "Student";
 		arrSQLTerms[2].strColumnName= "id";

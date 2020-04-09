@@ -1,6 +1,7 @@
 package BPTree;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Ref implements Serializable{
 	
@@ -8,13 +9,13 @@ public class Ref implements Serializable{
 	 * This class represents a pointer to the record. It is used at the leaves of the B+ tree 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int indexInPage;
+	private Date touchDate;
 	private String pageNo;
 	
-	public Ref(String pageNo, int indexInPage)
+	public Ref(String pageNo, Date touchDate)
 	{
 		this.pageNo = pageNo;
-		this.indexInPage = indexInPage;
+		this.touchDate = touchDate;
 	}
 	
 	/**
@@ -28,9 +29,9 @@ public class Ref implements Serializable{
 	/**
 	 * @return the index at which the record is saved in the page
 	 */
-	public int getIndexInPage()
+	public Date getIndexInPage()
 	{
-		return indexInPage;
+		return touchDate;
 	}
 	@Override
 	public String toString()

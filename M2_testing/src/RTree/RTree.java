@@ -2,6 +2,7 @@ package RTree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -80,18 +81,24 @@ public class RTree<T extends Comparable<T>> implements Serializable{
 	{
 		return root.search(key);
 	}
-	public void updateRef(Region key, String oldPage, String newPage)
+	
+	public ArrayList<Ref> searchLess(Region key)
 	{
-		root.updateRef(key,oldPage,newPage);
+		return root.searchLess(key);
+	}
+	
+	public void updateRef(Region key, String oldPage, String newPage, Date td)
+	{
+		root.updateRef(key,oldPage,newPage, td);
 	}
 	/**
 	 * Delete a key and its associated record from the tree.
 	 * @param key the key to be deleted
 	 * @return a boolean to indicate whether the key is successfully deleted or it was not in the tree
 	 */
-	public boolean delete(Region key)
+	public boolean delete(Region key, Date td)
 	{
-		boolean done = root.delete(key, null, -1);
+		boolean done = root.delete(key, null, -1, td);
 		//go down and find the new root in case the old root is deleted
 		while(root instanceof RTreeInnerNode && !root.isRoot())
 			root = ((RTreeInnerNode<T>) root).getFirstChild();

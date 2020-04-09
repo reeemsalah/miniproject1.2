@@ -195,7 +195,7 @@ public class Table implements Serializable {
 		for (String col : cols) {
 			BPTree bt = btrees.get(col);
 			if (bt != null) {
-				Ref ref = new Ref(page.getFileName(), 0);
+				Ref ref = new Ref(page.getFileName(), (Date)t.getAttributes().get("TouchDate"));
 				bt.insert((t.getAttributes()).get(col), ref);
 				System.out.println(col + " after insert " + bt.toString());
 
@@ -209,7 +209,7 @@ public class Table implements Serializable {
 		for (String col : cols) {
 			RTree bt = rtrees.get(col);
 			if (bt != null) {
-				Ref ref = new Ref(page.getFileName(), 0);
+				Ref ref = new Ref(page.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
 				bt.insert((Region) (t.getAttributes()).get(col), ref);
 				System.out.println(col + " after insert " + bt.toString());
 
@@ -516,10 +516,10 @@ public class Table implements Serializable {
 
 		} else {
 			for (String col : btrees.keySet()) {
-				btrees.get(col).updateRef(t.getAttributes().get(col), fromShift.getFileName(), pageOfInsertion.getFileName());
+				btrees.get(col).updateRef(t.getAttributes().get(col), fromShift.getFileName(), pageOfInsertion.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
 			}
 			for (String col : rtrees.keySet()) {
-				rtrees.get(col).updateRef((Region)t.getAttributes().get(col), fromShift.getFileName(), pageOfInsertion.getFileName());
+				rtrees.get(col).updateRef((Region)t.getAttributes().get(col), fromShift.getFileName(), pageOfInsertion.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
 			}
 		}
 	}
@@ -1354,7 +1354,7 @@ public class Table implements Serializable {
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
-			ArrayList<Ref> references = Index.search(value);
+			ArrayList<Ref> references = Index.searchLess(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
 			int z=0;
 			for (Ref r :references) {
@@ -1613,7 +1613,7 @@ public class Table implements Serializable {
 //				System.out.println("data now:  " + page);
 
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(p.getFileName(), 0);
+				Ref ref = new Ref(p.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
 				bt.insert(value, ref);
 			}
 			page.clear();
@@ -1642,7 +1642,7 @@ public class Table implements Serializable {
 			for (Tuple t : page) {
 
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(p.getFileName(), 0);
+				Ref ref = new Ref(p.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
 				bt.insert((Region) value, ref);
 			}
 			page.clear();
