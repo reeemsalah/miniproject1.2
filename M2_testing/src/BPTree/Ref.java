@@ -9,7 +9,6 @@ public class Ref implements Serializable{
 	 * This class represents a pointer to the record. It is used at the leaves of the B+ tree 
 	 */
 	
-	
 	private static final long serialVersionUID = 1L;
 	private Date touchDate;
 	private String pageNo;
