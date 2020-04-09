@@ -21,31 +21,31 @@ public class DBAppTest {
 		
 		Hashtable htblColNameValue = new Hashtable( );
 		
-		htblColNameValue.put("id", new Integer( 2343432 ));
+		htblColNameValue.put("id", new Integer( 1 ));
 		htblColNameValue.put("name", new String("Ahmed Noor" ) );
 		htblColNameValue.put("gpa", new Double( 0.95 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 		
-		htblColNameValue.put("id", new Integer( 453455 ));
+		htblColNameValue.put("id", new Integer( 2 ));
 		htblColNameValue.put("name", new String("Ahmed Noor" ) );
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 		
-		htblColNameValue.put("id", new Integer( 5674567 ));
+		htblColNameValue.put("id", new Integer( 3 ));
 		htblColNameValue.put("name", new String("Dalia Noor" ) );
 		htblColNameValue.put("gpa", new Double( 1.25 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 		
-		htblColNameValue.put("id", new Integer( 23498 ));
+		htblColNameValue.put("id", new Integer( 4 ));
 		htblColNameValue.put("name", new String("John Noor" ) );
 		htblColNameValue.put("gpa", new Double( 1.5 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 		
-		htblColNameValue.put("id", new Integer( 78452 ));
+		htblColNameValue.put("id", new Integer( 5 ));
 		htblColNameValue.put("name", new String("Zaky Noor" ) );
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
@@ -53,9 +53,8 @@ public class DBAppTest {
 		
 
 
-		htblColNameValue.put("id", new Integer( 78452 ));
+		htblColNameValue.put("id", new Integer( 6 ));
 		htblColNameValue.put("name", new String("alyaa Noor" ) );
-		//
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
@@ -74,6 +73,37 @@ public class DBAppTest {
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 		
+		htblColNameValue.put("id", new Integer( 12 ));
+		dbApp.deleteFromTable("Student", htblColNameValue);
+		htblColNameValue.clear( );
+		
+		htblColNameValue.put("id", new Integer( 5 ));
+		dbApp.deleteFromTable("Student", htblColNameValue);
+		htblColNameValue.clear( );
+		
+		
+		htblColNameValue.put("id", new Integer( 6 ));
+		dbApp.deleteFromTable("Student", htblColNameValue);
+		htblColNameValue.clear( );
+		
+		htblColNameValue.put("id", new Integer( 5 ));
+		htblColNameValue.put("name", new String("Zaky Noor" ) );
+		htblColNameValue.put("gpa", new Double( 0.88 ) );
+		dbApp.insertIntoTable( strTableName , htblColNameValue );
+		
+		
+
+
+		htblColNameValue.put("id", new Integer( 6 ));
+		htblColNameValue.put("name", new String("alyaa Noor" ) );
+		htblColNameValue.put("gpa", new Double( 0.88 ) );
+		dbApp.insertIntoTable( strTableName , htblColNameValue );
+		htblColNameValue.clear( );
+				
+		
+		
+		
+		
 		
 		
 		
@@ -85,7 +115,7 @@ public class DBAppTest {
 //		htblColNameValue.clear( );//delete is case sensetive
 //		
 		
-		
+		/*
 		
 		SQLTerm[] arrSQLTerms;
 		arrSQLTerms = new SQLTerm[3];
@@ -122,7 +152,7 @@ public class DBAppTest {
 		
 		
 //		
-		
+		*/
 ////		htblColNameValue.put("id", new Integer( 23498 ));
 //		htblColNameValue.put("name", new String("Ahmed Noor" ) );
 ////		htblColNameValue.put("gpa", new Double( 1.5 ) );

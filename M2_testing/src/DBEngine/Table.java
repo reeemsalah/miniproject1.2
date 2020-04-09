@@ -194,9 +194,9 @@ public class Table implements Serializable {
 		for (String col : cols) {
 			BPTree bt = btrees.get(col);
 			if (bt != null) {
-				Ref ref = new Ref(page.getFileName(), (Date)t.getAttributes().get("TouchDate"));
+				Ref ref = new Ref(page.getFileName(), (Date) t.getAttributes().get("TouchDate"));
 				bt.insert((t.getAttributes()).get(col), ref);
-				System.out.println(col + " after insert " + bt.toString());
+				// .out.println(col + " after insert " + bt.toString());
 
 			}
 		}
@@ -208,9 +208,9 @@ public class Table implements Serializable {
 		for (String col : cols) {
 			RTree bt = rtrees.get(col);
 			if (bt != null) {
-				Ref ref = new Ref(page.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
+				Ref ref = new Ref(page.getFileName(), (Date) t.getAttributes().get("TouchDate"));
 				bt.insert((Region) (t.getAttributes()).get(col), ref);
-				System.out.println(col + " after insert " + bt.toString());
+				// .out.println(col + " after insert " + bt.toString());
 
 			}
 		}
@@ -235,7 +235,8 @@ public class Table implements Serializable {
 		}
 
 		for (String col : colNames) {
-			System.out.println("TYPE CHECKK "     + col + " "+(tableData.get(col).toLowerCase()+""+(t.getAttributes().get(col)).getClass().getCanonicalName().toLowerCase()));
+			// .out.println("TYPE CHECKK " + col + "
+			// "+(tableData.get(col).toLowerCase()+""+(t.getAttributes().get(col)).getClass().getCanonicalName().toLowerCase()));
 			if (!(tableData.get(col).toLowerCase())
 					.equals((t.getAttributes().get(col)).getClass().getCanonicalName().toLowerCase())) {
 				throw new DBAppException("type msimatch.cannot insert");
@@ -332,13 +333,13 @@ public class Table implements Serializable {
 			if (isBIndexedCol(clusteredKey)) {
 				BPTree clusBtree = getBtreeCol(clusteredKey);
 				ArrayList<String> BoptionfileNames = clusBtree.getInsertPage(t.getKeyValue());
-				System.out.println(BoptionfileNames);
+				// .out.println(BoptionfileNames);
 
 				for (String name : BoptionfileNames) {
-//				System.out.println(name);
+//				//.out.println(name);
 					for (int z = 0; z < pages.size(); z++) {
 
-//					System.out.print(pages.get(z));
+//					//.out.print(pages.get(z));
 						if (pages.get(z).getFileName().equals(name)) {
 							options.add(pages.get(z));
 						}
@@ -403,7 +404,7 @@ public class Table implements Serializable {
 	}
 
 	public void insertHelper(Tuple t, ArrayList<Page> pages, boolean shift) {
-		System.out.println("options for " + t.getKeyValue() + " are " + pages.toString());
+		// .out.println("options for " + t.getKeyValue() + " are " + pages.toString());
 		boolean found = false;
 		for (int i = 0; i < pages.size(); i++) {
 			if (!pages.get(i).isFull()) {
@@ -491,10 +492,12 @@ public class Table implements Serializable {
 
 		} else {
 			for (String col : btrees.keySet()) {
-				btrees.get(col).updateRef(t.getAttributes().get(col), fromShift.getFileName(), pageOfInsertion.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
+				btrees.get(col).updateRef(t.getAttributes().get(col), fromShift.getFileName(),
+						pageOfInsertion.getFileName(), (Date) t.getAttributes().get("TouchDate"));
 			}
 			for (String col : rtrees.keySet()) {
-				rtrees.get(col).updateRef((Region)t.getAttributes().get(col), fromShift.getFileName(), pageOfInsertion.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
+				rtrees.get(col).updateRef((Region) t.getAttributes().get(col), fromShift.getFileName(),
+						pageOfInsertion.getFileName(), (Date) t.getAttributes().get("TouchDate"));
 			}
 		}
 	}
@@ -542,9 +545,8 @@ public class Table implements Serializable {
 
 		}
 		if (colIndexedPages.isEmpty()) {
-//Page todeleteFromPage = null;
-			for (Page p : pages) {
-				deleteFromPage(p.getFileName(), htblColNameValue);
+			for (int i = 0; i < pages.size(); i++) {
+				deleteFromPage(pages.get(i).getFileName(), htblColNameValue);
 			}
 
 		} else {
@@ -572,18 +574,19 @@ public class Table implements Serializable {
 			if (page.get(i).helperDelete(htblColNameValue)) {
 
 				page.remove(i);
-				//deleting that object from the BPtrees and RTrees
-				for(String key: htblColNameValue.keySet())
-				{
-					BPTree tree=btrees.get(key);
-					tree.delete(htblColNameValue.get(key), (Date)(page.get(i)).getValueOfColumn("TouchDate"));
-					
+				// deleting that object from the BPtrees and RTrees
+				for (String key : htblColNameValue.keySet()) {
+					BPTree tree = btrees.get(key);
+					if (tree != null)
+						tree.delete(htblColNameValue.get(key), (Date) (page.get(i)).getValueOfColumn("TouchDate"));
+
 				}
-				for(String key: htblColNameValue.keySet())
-				{
-					RTree tree=rtrees.get(key);
-					tree.delete((Region)htblColNameValue.get(key), (Date)(page.get(i)).getValueOfColumn("TouchDate"));
-					
+				for (String key : htblColNameValue.keySet()) {
+					RTree tree = rtrees.get(key);
+					if (tree != null)
+						tree.delete((Region) htblColNameValue.get(key),
+								(Date) (page.get(i)).getValueOfColumn("TouchDate"));
+
 				}
 
 			} else {
@@ -596,7 +599,7 @@ public class Table implements Serializable {
 			for (Page p : pages) {
 				if (p.getFileName().equals(fileName)) {
 					toBeDeleted = p;
-					
+
 				}
 			}
 			pages.remove(toBeDeleted);
@@ -662,9 +665,6 @@ public class Table implements Serializable {
 			while ((line = br.readLine()) != null) // returns a Boolean value
 			{
 				String[] entry = line.split(splitBy); // use comma as separator
-				// //.out.println("Employee [First Name=" + employee[0] + ", Last Name=" +
-				// employee[1] + ", Designation=" + employee[2] + ", Contact=" + employee[3] +
-				// ", Salary= " + employee[4] + ", City= " + employee[5] +"]");
 				if (entry[0].contentEquals(tableName)) {
 
 					tableColNames.add(entry[1]);
@@ -804,12 +804,16 @@ public class Table implements Serializable {
 	}
 
 	public void deletePage(String fileName) {
-		File file = new File(fileName);
-		file.delete();
-		for(int i=0;i<pages.size();i++) {
-			if(pages.get(i).equals(fileName))
+
+		File file = new File(fileName + ".ser");
+
+		System.out.println(file.getName());
+		System.out.println(file.delete());
+		for (int i = 0; i < pages.size(); i++) {
+			if (pages.get(i).equals(fileName))
 				pages.remove(i);
 		}
+
 	}
 
 	/**
@@ -889,7 +893,7 @@ public class Table implements Serializable {
 		arrSQLTerms[0].strColumnName = "name";
 		arrSQLTerms[0].strOperator = "=";
 		arrSQLTerms[0].objValue = "John Noor";
-		System.out.println(arrSQLTerms[0].strTableName);
+		// .out.println(arrSQLTerms[0].strTableName);
 		arrSQLTerms[1].strTableName = "Student";
 		arrSQLTerms[1].strColumnName = "gpa";
 		arrSQLTerms[1].strOperator = "=";
@@ -941,57 +945,58 @@ public class Table implements Serializable {
 
 		// switch on operator to call suitable search method
 //		if (strOperator.equals("=")) {
-//			System.out.println("searchEqual " + keyValue.getClass().getCanonicalName());
+//			//.out.println("searchEqual " + keyValue.getClass().getCanonicalName());
 //			return searchEqual(strColumnName, keyValue);
 //		}else {
 //		if(strOperator.equals("!=")) {
-//			System.out.print("searchNotEqual " + keyValue.getClass().getCanonicalName());
+//			//.out.print("searchNotEqual " + keyValue.getClass().getCanonicalName());
 //			return searchNotEqual(strColumnName, keyValue);
 //		}else {
 //		if(strOperator.equals(">=")) {
-//			System.out.println("searchGreaterOREqual " + keyValue.getClass().getCanonicalName());
+//			//.out.println("searchGreaterOREqual " + keyValue.getClass().getCanonicalName());
 //			return searchGreaterOREqual(strColumnName, keyValue);
 //		}else {
 //		if(strOperator.equals("<=")) {
-//			System.out.println("searchLessOREqual " + keyValue.getClass().getCanonicalName());
+//			//.out.println("searchLessOREqual " + keyValue.getClass().getCanonicalName());
 //			return searchLessOREqual(strColumnName, keyValue);
 //		}else {
 //		if(strOperator.equals(">")) {		
-//		System.out.println("searchGreater " + keyValue.getClass().getCanonicalName());
+//		//.out.println("searchGreater " + keyValue.getClass().getCanonicalName());
 //		return searchGreater(strColumnName, keyValue);
 //		}else {
 //		if(strOperator.equals("<")) {		
-//		System.out.println("searchLess " + keyValue.getClass().getCanonicalName());
+//		//.out.println("searchLess " + keyValue.getClass().getCanonicalName());
 //		return searchLess(strColumnName, keyValue);
 //		}else {
 //		throw new DBAppException("operator "+ strOperator+" not found");
 //		}}}}}}
 		switch (strOperator) {
 		case "=":
-			System.out.println("searchEqual " + keyValue.getClass().getCanonicalName());
+			// .out.println("searchEqual " + keyValue.getClass().getCanonicalName());
 			return searchEqual(strColumnName, keyValue);
 //			break;
 		case "!=":
-			System.out.print("searchNotEqual " + keyValue.getClass().getCanonicalName());
+			// .out.print("searchNotEqual " + keyValue.getClass().getCanonicalName());
 			return searchNotEqual(strColumnName, keyValue);
 //			break;
 		case ">=":
-			System.out.println("searchGreaterOREqual " + keyValue.getClass().getCanonicalName());
+			// .out.println("searchGreaterOREqual " +
+			// keyValue.getClass().getCanonicalName());
 			return searchGreaterOREqual(strColumnName, keyValue);
 
 //			break;
 		case "<=":
-			System.out.println("searchLessOREqual " + keyValue.getClass().getCanonicalName());
+			// .out.println("searchLessOREqual " + keyValue.getClass().getCanonicalName());
 			return searchLessOREqual(strColumnName, keyValue);
 
 //			break;
 		case ">":
-			System.out.println("searchGreater " + keyValue.getClass().getCanonicalName());
+			// .out.println("searchGreater " + keyValue.getClass().getCanonicalName());
 			return searchGreater(strColumnName, keyValue);
 
 //			break;
 		case "<":
-			System.out.println("searchLess " + keyValue.getClass().getCanonicalName());
+			// .out.println("searchLess " + keyValue.getClass().getCanonicalName());
 			return searchLess(strColumnName, keyValue);
 
 //			break;
@@ -1004,7 +1009,7 @@ public class Table implements Serializable {
 	public ArrayList<Page> pagesFromNames(ArrayList<String> names) {
 		ArrayList<Page> res = new ArrayList<Page>();
 		for (int i = 0; i < names.size(); i++) {
-			String nom = names.get(i)+".ser";
+			String nom = names.get(i) + ".ser";
 			for (int j = 0; j < this.pages.size(); j++) {
 				if (this.pages.get(j).getFileName().equals(names.get(i))) {
 					res.add(this.pages.get(j));
@@ -1018,24 +1023,24 @@ public class Table implements Serializable {
 		Vector<Tuple> results = new Vector<Tuple>();
 		ArrayList<String> pagesToGoThrough = new ArrayList<String>();
 		// check if indexed
-//		System.out.println(isBIndexedCol(colName));
-//		System.out.println(colName);
+//		//.out.println(isBIndexedCol(colName));
+//		//.out.println(colName);
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.search(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
-			int z=0;
-			for (Ref r :references) {
+			int z = 0;
+			for (Ref r : references) {
 				pageNames.add(references.get(z++).getPage());
 			}
-//			System.out.println("Referenes  "+ pageNames);
+//			//.out.println("Referenes  "+ pageNames);
 			ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 			for (Page p : toScan) {
 				Read(p.getFileName());
 				for (Tuple t : page) {
-//					System.out.println("comparing  "+t.getAttributes().get(colName) +" to " + (value));
+//					//.out.println("comparing  "+t.getAttributes().get(colName) +" to " + (value));
 					if (t.getAttributes().get(colName).compareTo(value) == 0) {
 						results.add(t);
 					}
@@ -1046,12 +1051,13 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region)value);
+				ArrayList<Ref> references = Index.search((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
-				int z=0;
-				for (Ref r :references) {
+				int z = 0;
+				for (Ref r : references) {
 					pageNames.add(references.get(z++).getPage());
-				}				ArrayList<Page> toScan = pagesFromNames(pageNames);
+				}
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
 				for (Page p : toScan) {
 					Read(p.getFileName());
 					for (Tuple t : page) {
@@ -1080,8 +1086,8 @@ public class Table implements Serializable {
 			}
 
 		}
-		
-		System.out.println("searchEqual result:  "+ results);
+
+		// .out.println("searchEqual result: "+ results);
 
 		return results;
 	}
@@ -1094,16 +1100,16 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.search(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
-			int z=0;
-			for (Ref r :references) {
+			int z = 0;
+			for (Ref r : references) {
 				pageNames.add(references.get(z++).getPage());
-			}			ArrayList<Page> toScan = pagesFromNames(pageNames);
+			}
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 			for (Page p : toScan) {
 				Read(p.getFileName());
@@ -1118,12 +1124,13 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region)value);
+				ArrayList<Ref> references = Index.search((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
-				int z=0;
-				for (Ref r :references) {
+				int z = 0;
+				for (Ref r : references) {
 					pageNames.add(references.get(z++).getPage());
-				}				ArrayList<Page> toScan = pagesFromNames(pageNames);
+				}
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 				for (Page p : toScan) {
 					Read(p.getFileName());
@@ -1137,7 +1144,7 @@ public class Table implements Serializable {
 			} else {
 
 			}
-			
+
 			// or
 			// go through all pages
 
@@ -1151,11 +1158,11 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("searchNotEqual result:  "+ results);
+		// .out.println("searchNotEqual result: "+ results);
 
-		return results;	
-		
-		}
+		return results;
+
+	}
 
 	public Vector<Tuple> searchLessOREqual(String colName, Comparable value) {
 		Vector<Tuple> results = new Vector<Tuple>();
@@ -1165,16 +1172,16 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.search(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
-			int z=0;
-			for (Ref r :references) {
+			int z = 0;
+			for (Ref r : references) {
 				pageNames.add(references.get(z++).getPage());
-			}			ArrayList<Page> toScan = pagesFromNames(pageNames);
+			}
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 			for (Page p : toScan) {
 				Read(p.getFileName());
@@ -1189,12 +1196,13 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region)value);
+				ArrayList<Ref> references = Index.search((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
-				int z=0;
-				for (Ref r :references) {
+				int z = 0;
+				for (Ref r : references) {
 					pageNames.add(references.get(z++).getPage());
-				}				ArrayList<Page> toScan = pagesFromNames(pageNames);
+				}
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 				for (Page p : toScan) {
 					Read(p.getFileName());
@@ -1208,7 +1216,7 @@ public class Table implements Serializable {
 			} else {
 
 			}
-			
+
 			// or
 			// go through all pages
 
@@ -1222,9 +1230,9 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("searchLessOrEqual result:  "+ results);
+		// .out.println("searchLessOrEqual result: "+ results);
 
-		return results;	
+		return results;
 	}
 
 	public Vector<Tuple> searchGreaterOREqual(String colName, Comparable value) {
@@ -1235,16 +1243,16 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.search(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
-			int z=0;
-			for (Ref r :references) {
+			int z = 0;
+			for (Ref r : references) {
 				pageNames.add(references.get(z++).getPage());
-			}			ArrayList<Page> toScan = pagesFromNames(pageNames);
+			}
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 			for (Page p : toScan) {
 				Read(p.getFileName());
@@ -1259,12 +1267,13 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region)value);
+				ArrayList<Ref> references = Index.search((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
-				int z=0;
-				for (Ref r :references) {
+				int z = 0;
+				for (Ref r : references) {
 					pageNames.add(references.get(z++).getPage());
-				}				ArrayList<Page> toScan = pagesFromNames(pageNames);
+				}
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 				for (Page p : toScan) {
 					Read(p.getFileName());
@@ -1278,7 +1287,7 @@ public class Table implements Serializable {
 			} else {
 
 			}
-			
+
 			// or
 			// go through all pages
 
@@ -1292,9 +1301,9 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("searchGreaterOrEqual result:  "+ results);
+		// .out.println("searchGreaterOrEqual result: "+ results);
 
-		return results;	
+		return results;
 	}
 
 	public Vector<Tuple> searchLess(String colName, Comparable value) {
@@ -1305,16 +1314,16 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.searchLess(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
-			int z=0;
-			for (Ref r :references) {
+			int z = 0;
+			for (Ref r : references) {
 				pageNames.add(references.get(z++).getPage());
-			}			ArrayList<Page> toScan = pagesFromNames(pageNames);
+			}
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 			for (Page p : toScan) {
 				Read(p.getFileName());
@@ -1329,12 +1338,13 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region)value);
+				ArrayList<Ref> references = Index.search((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
-				int z=0;
-				for (Ref r :references) {
+				int z = 0;
+				for (Ref r : references) {
 					pageNames.add(references.get(z++).getPage());
-				}				ArrayList<Page> toScan = pagesFromNames(pageNames);
+				}
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 				for (Page p : toScan) {
 					Read(p.getFileName());
@@ -1348,7 +1358,7 @@ public class Table implements Serializable {
 			} else {
 
 			}
-			
+
 			// or
 			// go through all pages
 
@@ -1362,9 +1372,9 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("searchLess result:  "+ results);
+		// .out.println("searchLess result: "+ results);
 
-		return results;	
+		return results;
 	}
 
 	public Vector<Tuple> searchGreater(String colName, Comparable value) {
@@ -1375,16 +1385,16 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.search(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
-			int z=0;
-			for (Ref r :references) {
+			int z = 0;
+			for (Ref r : references) {
 				pageNames.add(references.get(z++).getPage());
-			}			ArrayList<Page> toScan = pagesFromNames(pageNames);
+			}
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 			for (Page p : toScan) {
 				Read(p.getFileName());
@@ -1399,12 +1409,13 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region)value);
+				ArrayList<Ref> references = Index.search((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
-				int z=0;
-				for (Ref r :references) {
+				int z = 0;
+				for (Ref r : references) {
 					pageNames.add(references.get(z++).getPage());
-				}				ArrayList<Page> toScan = pagesFromNames(pageNames);
+				}
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
 
 				for (Page p : toScan) {
 					Read(p.getFileName());
@@ -1418,7 +1429,7 @@ public class Table implements Serializable {
 			} else {
 
 			}
-			
+
 			// or
 			// go through all pages
 
@@ -1432,116 +1443,124 @@ public class Table implements Serializable {
 			}
 
 		}
-		System.out.println("searchGreater result:  "+ results);
+		// .out.println("searchGreater result: "+ results);
 
-		return results;	
+		return results;
 	}
-	
-	public Vector<Tuple> AND(Vector<Tuple> A,Vector<Tuple> B){
+
+	public Vector<Tuple> AND(Vector<Tuple> A, Vector<Tuple> B) {
 		boolean flag = false;
 		Vector<Tuple> result = new Vector<Tuple>();
 		Iterator<Tuple> itA = A.iterator();
-		while(itA.hasNext()) {
+		while (itA.hasNext()) {
 			Tuple x = itA.next();
 			Hashtable<String, Comparable> atX = x.getAttributes();
 			Set<String> keyX = atX.keySet();
 			Iterator<Tuple> itB = B.iterator();
-			while(itB.hasNext()) {
+			while (itB.hasNext()) {
 				Tuple y = itB.next();
 				Hashtable<String, Comparable> atY = y.getAttributes();
-			if(x.equals(y)) {
-				flag = true;
+				if (x.equals(y)) {
+					flag = true;
+				}
+//			//.out.println(y +"    " + x + flag);
+
 			}
-//			System.out.println(y +"    " + x + flag);
-	
-			}
-			if(flag) {
+			if (flag) {
 				flag = false;
 				result.add(x);
 			}
 		}
-		System.out.println("AND result:  "+ result);
+		// .out.println("AND result: "+ result);
 		return result;
 	}
-	
-	public Vector<Tuple> OR(Vector<Tuple> A,Vector<Tuple> B){
+
+	public Vector<Tuple> OR(Vector<Tuple> A, Vector<Tuple> B) {
 		boolean flag = true;
 		Vector<Tuple> result = new Vector<Tuple>();
 		Vector<Tuple> tempresult = new Vector<Tuple>();
 
 		Iterator<Tuple> itA = A.iterator();
 		Iterator<Tuple> itB = B.iterator();
-		while(itA.hasNext()) {
+		while (itA.hasNext()) {
 			Tuple x = itA.next();
 			result.add(x);
 		}
 //		Iterator<Tuple> itResult = result.iterator();
 //		while(itB.hasNext()) {
 		Tuple y;
-			while(true) {
-				flag=true;
-				try { y = itB.next();}
-				catch (NoSuchElementException e) {
-				break;}
+		while (true) {
+			flag = true;
+			try {
+				y = itB.next();
+			} catch (NoSuchElementException e) {
+				break;
+			}
 //			Hashtable<String, Comparable> atY = y.getAttributes();
 //			Set<String> keyY = atY.keySet();
 			Tuple res;
 			Iterator<Tuple> itResult = result.iterator();
 
-			while(true) {
-				
-				try { res = itResult.next();}
-				catch (NoSuchElementException e) {
-				break;}
+			while (true) {
+
+				try {
+					res = itResult.next();
+				} catch (NoSuchElementException e) {
+					break;
+				}
 //				
-				if(res.equals(y)) {
+				if (res.equals(y)) {
 //					tempresult.add(y);	
 					flag = false;
 				}
 
 			}
-			if(flag) {
-				tempresult.add(y);	
+			if (flag) {
+				tempresult.add(y);
 			}
 		}
-			result.addAll(tempresult);
-			System.out.println("OR result:  "+ result);
+		result.addAll(tempresult);
+		// .out.println("OR result: "+ result);
 
-			return result;
+		return result;
 	}
-	
-	public Vector<Tuple> XOR(Vector<Tuple> A,Vector<Tuple> B){
+
+	public Vector<Tuple> XOR(Vector<Tuple> A, Vector<Tuple> B) {
 		boolean flag = true;
-		Vector<Tuple> anded = this.AND(A,B);
-		Vector<Tuple> ored = this.OR(A,B);
+		Vector<Tuple> anded = this.AND(A, B);
+		Vector<Tuple> ored = this.OR(A, B);
 		Vector<Tuple> result = new Vector<Tuple>();
 		Iterator<Tuple> itOr = ored.iterator();
 		Tuple x;
-		while(true) {
-			flag=true;
-			try { x = itOr.next();}
-			catch (NoSuchElementException e) {
-			break;}
+		while (true) {
+			flag = true;
+			try {
+				x = itOr.next();
+			} catch (NoSuchElementException e) {
+				break;
+			}
 			Tuple y;
 			Iterator<Tuple> itAnd = anded.iterator();
 
-			while(true) {
-				try { y = itAnd.next();}
-				catch (NoSuchElementException e) {
-				break;}
-				
-				if(x.equals(y)) {
-					flag=false;
+			while (true) {
+				try {
+					y = itAnd.next();
+				} catch (NoSuchElementException e) {
+					break;
 				}
-//				System.out.println(y +"    " + x + flag);
+
+				if (x.equals(y)) {
+					flag = false;
+				}
+//				//.out.println(y +"    " + x + flag);
 			}
-			
-			if(flag){
-				flag=true;
+
+			if (flag) {
+				flag = true;
 				result.add(x);
 			}
 		}
-		System.out.println("XOR result:  "+ result);
+		// .out.println("XOR result: "+ result);
 
 		return result;
 	}
@@ -1556,25 +1575,25 @@ public class Table implements Serializable {
 		// add to table's indices
 		btrees.put(strColName, bt);
 		for (Page p : pages) {
-			System.out.println("scanning:  " + p.getFileName());
+			// .out.println("scanning: " + p.getFileName());
 		}
 		// add everything already in table
 		for (Page p : pages) {
-			System.out.println("scanning:  " + p.getFileName());
+			// .out.println("scanning: " + p.getFileName());
 
 			Read(p.getFileName());
 			for (Tuple t : page) {
-//				System.out.println("data now:  " + page);
+//				//.out.println("data now:  " + page);
 
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(p.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
+				Ref ref = new Ref(p.getFileName(), (Date) t.getAttributes().get("TouchDate"));
 				bt.insert(value, ref);
 			}
 			page.clear();
 		}
 //		//.out.println("I AM HEEEERRREEEEEE!!!!!!!!!!!");		
 
-		System.out.println("Tree for " + strColName + ": " + bt.toString());
+		// .out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
 	}
@@ -1595,13 +1614,13 @@ public class Table implements Serializable {
 			for (Tuple t : page) {
 
 				Comparable value = t.getAttributes().get(strColName);
-				Ref ref = new Ref(p.getFileName(),  (Date)t.getAttributes().get("TouchDate"));
+				Ref ref = new Ref(p.getFileName(), (Date) t.getAttributes().get("TouchDate"));
 				bt.insert((Region) value, ref);
 			}
 			page.clear();
 		}
 
-		System.out.println("Tree for " + strColName + ": " + bt.toString());
+		// .out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
 	}
