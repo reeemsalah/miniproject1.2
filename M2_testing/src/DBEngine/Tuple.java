@@ -58,6 +58,22 @@ public class Tuple implements Serializable, Comparable {
 
 		return id1.compareTo(id2);
 	}
+	
+	
+	/**
+	 * 
+	 * @param t the Tuple to be compared to this
+	 * @return true if they are exact duplicates, false if not
+	 */
+	public boolean equals(Tuple t) {
+	for (String c: this.attributes.keySet()) {
+		if(this.getAttributes().get(c).compareTo(t.getAttributes().get(c))!=0) {
+			return false;
+		}
+	}
+
+		return true;
+	}
 
 	/**
 	 * 

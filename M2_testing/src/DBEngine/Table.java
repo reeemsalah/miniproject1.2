@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
@@ -53,7 +54,7 @@ public class Table implements Serializable {
 		this.indexedCoulmns = indexed;
 		this.clusteredKey = clusteredKey;
 		Properties prop = new Properties();
-		this.maxRows = 2;
+		this.maxRows = maxRows;
 
 	}
 
@@ -1152,7 +1153,7 @@ public class Table implements Serializable {
 	}
 	
 	public Vector<Tuple> AND(Vector<Tuple> A,Vector<Tuple> B){
-		boolean flag = false;
+		boolean flag = true;
 		Vector<Tuple> result = new Vector<Tuple>();
 		Iterator<Tuple> itA = A.iterator();
 		Iterator<Tuple> itB = B.iterator();
@@ -1163,83 +1164,97 @@ public class Table implements Serializable {
 			while(itB.hasNext()) {
 				Tuple y = itB.next();
 				Hashtable<String, Comparable> atY = y.getAttributes();
-				for(String key : keyX) {
-					if(atX.get(key).compareTo(atY.get(key))!=0) {
-						flag = false;
-						break;
-					}else {
-						flag = true;
-					}
-				}
-				if(flag = true) {
-					flag = false;
-					result.add(x);
-				}
+			if(x.equals(y)) {
+				flag = false;
+			}
+			System.out.println(y +"    " + x + flag);
+	
+			}
+			if(!flag) {
+				flag = true;
+				result.add(x);
 			}
 		}
 		return result;
 	}
 	
 	public Vector<Tuple> OR(Vector<Tuple> A,Vector<Tuple> B){
-		boolean flag = false;
+		boolean flag = true;
 		Vector<Tuple> result = new Vector<Tuple>();
+		Vector<Tuple> tempresult = new Vector<Tuple>();
+
 		Iterator<Tuple> itA = A.iterator();
 		Iterator<Tuple> itB = B.iterator();
 		while(itA.hasNext()) {
 			Tuple x = itA.next();
 			result.add(x);
 		}
-		Iterator<Tuple> itResult = result.iterator();
-		while(itB.hasNext()) {
-			Tuple y = itB.next();
-			Hashtable<String, Comparable> atY = y.getAttributes();
-			Set<String> keyY = atY.keySet();
-			while(itResult.hasNext()) {
-				Tuple res = itResult.next();
-				Hashtable<String, Comparable> atRes = res.getAttributes();
-				for(String key : keyY) {
-					if(atY.get(key).compareTo(atRes.get(key)) == 0) {
-						flag = false;
-					}else {
-						flag = true;
-						break;
-					}
-				}
-				if(flag = true) {
+//		Iterator<Tuple> itResult = result.iterator();
+//		while(itB.hasNext()) {
+		Tuple y;
+		int z = 0;
+			while(true) {
+				flag=true;
+				System.out.println(z++);
+				try { y = itB.next();}
+				catch (NoSuchElementException e) {
+				break;}
+//			Hashtable<String, Comparable> atY = y.getAttributes();
+//			Set<String> keyY = atY.keySet();
+			Tuple res;
+			Iterator<Tuple> itResult = result.iterator();
+
+			while(true) {
+				
+				try { res = itResult.next();}
+				catch (NoSuchElementException e) {
+				break;}
+//				
+				if(res.equals(y)) {
+//					tempresult.add(y);	
 					flag = false;
-					result.add(y);	
 				}
+
+			}
+			if(flag) {
+				tempresult.add(y);	
 			}
 		}
+			result.addAll(tempresult);
 		return result;
 	}
 	
 	public Vector<Tuple> XOR(Vector<Tuple> A,Vector<Tuple> B){
-		boolean flag = false;
+		boolean flag = true;
 		Vector<Tuple> anded = this.AND(A,B);
-		Vector<Tuple> ored = this.AND(A,B);
+		Vector<Tuple> ored = this.OR(A,B);
 		Vector<Tuple> result = new Vector<Tuple>();
-		Iterator<Tuple> itAnd = anded.iterator();
 		Iterator<Tuple> itOr = ored.iterator();
-		while(itOr.hasNext()) {
-			Tuple x = itOr.next();
-			Hashtable<String, Comparable> atX = x.getAttributes();
-			Set<String> keyX = atX.keySet();
-			while(itAnd.hasNext()) {
-				Tuple y = itAnd.next();
-				Hashtable<String, Comparable> atY = y.getAttributes();
-				for(String key : keyX) {
-					if(atX.get(key).compareTo(atY.get(key)) == 0) {
-						flag = false;
-					}else {
-						flag = true;
-						break;
-					}
+		Tuple x;
+		int z =0;
+		while(true) {
+			flag=true;
+			try { x = itOr.next();}
+			catch (NoSuchElementException e) {
+			break;}
+	System.out.println(z++);
+			Tuple y;
+			Iterator<Tuple> itAnd = anded.iterator();
+
+			while(true) {
+				try { y = itAnd.next();}
+				catch (NoSuchElementException e) {
+				break;}
+				
+				if(x.equals(y)) {
+					flag=false;
 				}
-				if(flag = true) {
-					flag = false;
-					result.add(x);
-				}
+				System.out.println(y +"    " + x + flag);
+			}
+			
+			if(flag){
+				flag=true;
+				result.add(x);
 			}
 		}
 		return result;

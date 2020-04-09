@@ -170,7 +170,7 @@ public class DBApp {
 	 * arrSQLTerms array of SQLTerm objects representing conditions in query
 	 * strarrOperators array of strings of Logical operators in order
 	 * */
-	public ArrayList<Vector<Tuple>> selectFromTable(SQLTerm[] arrSQLTerms, String[] strarrOperators) throws DBAppException, ClassNotFoundException {
+	public Iterator selectFromTable(SQLTerm[] arrSQLTerms, String[] strarrOperators) throws DBAppException, ClassNotFoundException {
 		//TODO exception on non-existing table names or invalid column names or incompatible types
 		ArrayList<Vector<Tuple>> resultSets = new ArrayList<Vector<Tuple>>();
 		Vector<Tuple> results = null;
@@ -209,24 +209,25 @@ public class DBApp {
 				System.out.println(resultSets.get(0)+ " AND " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).AND(resultSets.get(0),resultSets.get(1)));
 			resultSets.remove(1);
-			resultSets.remove(2);break;
+			resultSets.remove(1);break;
 			case "OR":
 				System.out.println(resultSets.get(0)+ " OR " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).OR(resultSets.get(0),resultSets.get(1)));
+			System.out.println(resultSets);
 			resultSets.remove(1);
-			resultSets.remove(2);break;
+			resultSets.remove(1);break;
 			case "XOR":
 				System.out.println(resultSets.get(0)+ " XOR " +resultSets.get(1));
 			resultSets.add(0,tables.get(strTableName).XOR(resultSets.get(0),resultSets.get(1)));
 			resultSets.remove(1);
-			resultSets.remove(2);break;
+			resultSets.remove(1);break;
 			}
 				
 		}
 	
-return resultSets;
+results =  resultSets.get(0);
 //actually search 
-//return results.iterator();
+return results.iterator();
 	}
 	
 	public void parseSQLTerm(String query) {

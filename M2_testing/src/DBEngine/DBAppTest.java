@@ -28,7 +28,7 @@ public class DBAppTest {
 		
 		htblColNameValue.put("id", new Integer( 453455 ));
 		htblColNameValue.put("name", new String("Ahmed Noor" ) );
-		htblColNameValue.put("gpa", new Double( 0.95 ) );
+		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 		
@@ -97,13 +97,13 @@ public class DBAppTest {
 		arrSQLTerms[0].strTableName = "Student";
 		arrSQLTerms[0].strColumnName= "name";
 		arrSQLTerms[0].strOperator = "=";
-		arrSQLTerms[0].objValue = "John Noor";
+		arrSQLTerms[0].objValue = "Ahmed Noor";
 		arrSQLTerms[1].strTableName = "Student";
 		arrSQLTerms[1].strColumnName= "gpa";
 		arrSQLTerms[1].strOperator = "=";
-		arrSQLTerms[1].objValue = new Double( 1.5 );
+		arrSQLTerms[1].objValue = new Double( 0.88 );
 		String[]strarrOperators = new String[1];
-		strarrOperators[0] = "OR";
+		strarrOperators[0] = "XOR";
 		System.out.println(dbApp.selectFromTable(arrSQLTerms , strarrOperators));
 
 //		t.executeQuery(arrSQLTerms[0].strColumnName, arrSQLTerms[0].strOperator,arrSQLTerms[0].objValue);
