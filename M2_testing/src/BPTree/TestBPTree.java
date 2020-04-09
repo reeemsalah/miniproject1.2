@@ -13,8 +13,17 @@ public class TestBPTree {
 		Page p2 = new Page("p2", 0,0,0);
 		Page p3 = new Page("p3", 0,0,0);
 		Page p4 = new Page("p4", 0,0,0);
+//<<<<<<< HEAD
+
+		BPTree<Integer> tree = new BPTree<Integer>(2);
+
+		//tree.delete(18);
+		//System.out.println(tree);
+		/*
+=======
 Date d = new Date();
 		BPTree<Integer> tree = new BPTree<Integer>(4);
+>>>>>>> branch 'master' of https://github.com/reeemsalah/miniproject1.2.git
 		Scanner sc = new Scanner(System.in);
 		while(true) 
 		{
@@ -47,11 +56,13 @@ Date d = new Date();
 			break;
 		}
 		
+<<<<<<< HEAD
+=======
 		
 //		System.out.println(tree.root);
+>>>>>>> branch 'master' of https://github.com/reeemsalah/miniproject1.2.git
 		int entry= sc.nextInt();
 		System.out.println(entry +" can go to pages "+tree.getInsertPage(entry));
-//		System.out.println(18 +" is in pages "+tree.getDeletePage(18));
 		
 		
 		while(true) 
@@ -65,6 +76,7 @@ Date d = new Date();
 		
 		
 		sc.close();
+		*/
 	
 		
 	}	

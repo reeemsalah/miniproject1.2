@@ -11,7 +11,6 @@ public class Region extends Polygon implements Comparable {
 
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
 		Dimension dim1 = this.getBounds().getSize();
 		Dimension dim2 = (Dimension) ((Region) o).getBounds().getSize();
 		int area1 = dim1.height * dim1.width;
