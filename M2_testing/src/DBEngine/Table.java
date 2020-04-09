@@ -980,7 +980,7 @@ public class Table implements Serializable {
 		// switch on operator to call suitable search method
 		switch (strOperator) {
 		case "=":
-			System.out.print("searchEqual " + keyValue.getClass().getCanonicalName());
+			System.out.println("searchEqual " + keyValue.getClass().getCanonicalName());
 			return searchEqual(strColumnName, keyValue);
 //			break;
 		case "!=":
@@ -988,22 +988,22 @@ public class Table implements Serializable {
 			return searchNotEqual(strColumnName, keyValue);
 //			break;
 		case ">=":
-			System.out.print("searchGreaterOREqual " + keyValue.getClass().getCanonicalName());
+			System.out.println("searchGreaterOREqual " + keyValue.getClass().getCanonicalName());
 			searchGreaterOREqual(strColumnName, keyValue);
 
 //			break;
 		case "<=":
-			System.out.print("searchLessOREqual " + keyValue.getClass().getCanonicalName());
+			System.out.println("searchLessOREqual " + keyValue.getClass().getCanonicalName());
 			searchLessOREqual(strColumnName, keyValue);
 
 //			break;
 		case ">":
-			System.out.print("searchGreater " + keyValue.getClass().getCanonicalName());
+			System.out.println("searchGreater " + keyValue.getClass().getCanonicalName());
 			searchGreater(strColumnName, keyValue);
 
 //			break;
 		case "<":
-			System.out.print("searchLess " + keyValue.getClass().getCanonicalName());
+			System.out.println("searchLess " + keyValue.getClass().getCanonicalName());
 			searchLess(strColumnName, keyValue);
 
 //			break;
@@ -1090,11 +1090,57 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-		// or
-		// go through all pages
 
-		return results;
-	}
+		if (isBIndexedCol(colName)) {
+
+			BPTree Index = getBtreeCol(colName);
+			ArrayList<String> pageNames = Index.search(value);
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+			for (Page p : toScan) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		} else {
+			if (isRIndexedCol(colName)) {
+
+				RTree Index = getRtreeCol(colName);
+				ArrayList<String> pageNames = Index.search((Region) value);
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+				for (Page p : toScan) {
+					Read(p.getFileName());
+					for (Tuple t : page) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+							results.add(t);
+						}
+					}
+				}
+
+			} else {
+
+			}
+			
+			// or
+			// go through all pages
+
+			for (Page p : pages) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) != 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		}
+		return results;	
+		}
 
 	public Vector<Tuple> searchLessOREqual(String colName, Comparable value) {
 		Vector<Tuple> results = new Vector<Tuple>();
@@ -1104,10 +1150,56 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-		// or
-		// go through all pages
 
-		return results;
+		if (isBIndexedCol(colName)) {
+
+			BPTree Index = getBtreeCol(colName);
+			ArrayList<String> pageNames = Index.search(value);
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+			for (Page p : toScan) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		} else {
+			if (isRIndexedCol(colName)) {
+
+				RTree Index = getRtreeCol(colName);
+				ArrayList<String> pageNames = Index.search((Region) value);
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+				for (Page p : toScan) {
+					Read(p.getFileName());
+					for (Tuple t : page) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+							results.add(t);
+						}
+					}
+				}
+
+			} else {
+
+			}
+			
+			// or
+			// go through all pages
+
+			for (Page p : pages) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) <= 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		}
+		return results;	
 	}
 
 	public Vector<Tuple> searchGreaterOREqual(String colName, Comparable value) {
@@ -1118,10 +1210,56 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-		// or
-		// go through all pages
 
-		return results;
+		if (isBIndexedCol(colName)) {
+
+			BPTree Index = getBtreeCol(colName);
+			ArrayList<String> pageNames = Index.search(value);
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+			for (Page p : toScan) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		} else {
+			if (isRIndexedCol(colName)) {
+
+				RTree Index = getRtreeCol(colName);
+				ArrayList<String> pageNames = Index.search((Region) value);
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+				for (Page p : toScan) {
+					Read(p.getFileName());
+					for (Tuple t : page) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+							results.add(t);
+						}
+					}
+				}
+
+			} else {
+
+			}
+			
+			// or
+			// go through all pages
+
+			for (Page p : pages) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) >= 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		}
+		return results;	
 	}
 
 	public Vector<Tuple> searchLess(String colName, Comparable value) {
@@ -1132,10 +1270,56 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-		// or
-		// go through all pages
 
-		return results;
+		if (isBIndexedCol(colName)) {
+
+			BPTree Index = getBtreeCol(colName);
+			ArrayList<String> pageNames = Index.search(value);
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+			for (Page p : toScan) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		} else {
+			if (isRIndexedCol(colName)) {
+
+				RTree Index = getRtreeCol(colName);
+				ArrayList<String> pageNames = Index.search((Region) value);
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+				for (Page p : toScan) {
+					Read(p.getFileName());
+					for (Tuple t : page) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+							results.add(t);
+						}
+					}
+				}
+
+			} else {
+
+			}
+			
+			// or
+			// go through all pages
+
+			for (Page p : pages) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) < 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		}
+		return results;	
 	}
 
 	public Vector<Tuple> searchGreater(String colName, Comparable value) {
@@ -1146,10 +1330,56 @@ public class Table implements Serializable {
 		// get index
 		// get pages where entries exist
 
-		// or
-		// go through all pages
 
-		return results;
+		if (isBIndexedCol(colName)) {
+
+			BPTree Index = getBtreeCol(colName);
+			ArrayList<String> pageNames = Index.search(value);
+			ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+			for (Page p : toScan) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		} else {
+			if (isRIndexedCol(colName)) {
+
+				RTree Index = getRtreeCol(colName);
+				ArrayList<String> pageNames = Index.search((Region) value);
+				ArrayList<Page> toScan = pagesFromNames(pageNames);
+
+				for (Page p : toScan) {
+					Read(p.getFileName());
+					for (Tuple t : page) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+							results.add(t);
+						}
+					}
+				}
+
+			} else {
+
+			}
+			
+			// or
+			// go through all pages
+
+			for (Page p : pages) {
+				Read(p.getFileName());
+				for (Tuple t : page) {
+					if (t.getAttributes().get(colName).compareTo(value) > 0) {
+						results.add(t);
+					}
+				}
+			}
+
+		}
+		return results;	
 	}
 	
 	public Vector<Tuple> AND(Vector<Tuple> A,Vector<Tuple> B){

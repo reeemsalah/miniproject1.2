@@ -63,7 +63,7 @@ public class DBAppTest {
 		
 		
 		
-		dbApp.createBTreeIndex("Student", "id");
+//		dbApp.createBTreeIndex("Student", "id");
 
 		
 	
@@ -97,11 +97,11 @@ public class DBAppTest {
 		arrSQLTerms[1] = query2;
 		arrSQLTerms[0].strTableName = "Student";
 		arrSQLTerms[0].strColumnName= "name";
-		arrSQLTerms[0].strOperator = "=";
+		arrSQLTerms[0].strOperator = ">";
 		arrSQLTerms[0].objValue = "Ahmed Noor";
 		arrSQLTerms[1].strTableName = "Student";
 		arrSQLTerms[1].strColumnName= "gpa";
-		arrSQLTerms[1].strOperator = "=";
+		arrSQLTerms[1].strOperator = "<";
 		arrSQLTerms[1].objValue = new Double( 0.88 );
 		String[]strarrOperators = new String[1];
 		strarrOperators[0] = "XOR";
