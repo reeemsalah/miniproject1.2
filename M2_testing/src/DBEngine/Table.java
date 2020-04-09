@@ -509,8 +509,6 @@ public class Table implements Serializable {
 
 	public void delete(Hashtable<String, Comparable> htblColNameValue) throws DBAppException {
 		page.clear();
-		deleteFromAllBtrees(htblColNameValue);
-		deleteFromAllRtrees(htblColNameValue);
 		Hashtable<String, String> temp = readTableMetadata();
 		for (String col : htblColNameValue.keySet()) {
 			if (!temp.keySet().contains(col))
@@ -558,8 +556,6 @@ public class Table implements Serializable {
 
 	}
 
-	
-
 	/**
 	 * 
 	 * @param fileName         name of the file to delete t tuple from
@@ -576,6 +572,7 @@ public class Table implements Serializable {
 			if (page.get(i).helperDelete(htblColNameValue)) {
 
 				page.remove(i);
+				//deleting that object from the BPtrees and RTrees
 				for(String key: htblColNameValue.keySet())
 				{
 					BPTree tree=btrees.get(key);
