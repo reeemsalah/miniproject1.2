@@ -386,6 +386,20 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 		return res ;
 	}
 	
+	public ArrayList<Ref> searchNotEqual(Region key) 
+	{
+		System.out.println("searchNotEqual at "+this.index);
+		ArrayList<Ref> res = new ArrayList<Ref>();
+		for (int i=0;i<numberOfKeys;i++) {
+//			if (i+2 <numberOfKeys && !(keys[i+1].compareTo(key)==0 &&  keys[i+2].compareTo(key)==0) )
+			res.addAll(children[i].searchNotEqual(key));
+		}
+//		res.addAll(children[0].searchLess(key));
+
+		return res ;
+	}
+
+	
 	@Override
 	public void updateRef(Region key,String oldPage, String newPage, Date td) 
 	{

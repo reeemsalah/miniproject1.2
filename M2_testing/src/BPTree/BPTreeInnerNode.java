@@ -150,7 +150,7 @@ return pageOptions;
 	public BPTreeInnerNode<T> split(PushUp<T> pushup) 
 	{
 		int keyIndex = this.findIndex((T)pushup.key);
-		int midIndex = numberOfKeys / 2 - 1;
+		int midIndex = (numberOfKeys / 2) - 1;
 		if(keyIndex > midIndex)				//split nodes evenly
 			++midIndex;		
 
@@ -365,7 +365,20 @@ return pageOptions;
 
 		return res ;
 	}
-	
+
+	public ArrayList<Ref> searchNotEqual(T key) 
+	{
+		System.out.println("searchNotEqual at "+this.index);
+		ArrayList<Ref> res = new ArrayList<Ref>();
+		for (int i=0;i<numberOfKeys;i++) {
+//			if (i+2 <numberOfKeys && !(keys[i+1].compareTo(key)==0 &&  keys[i+2].compareTo(key)==0) )
+			res.addAll(children[i].searchNotEqual(key));
+		}
+//		res.addAll(children[0].searchLess(key));
+
+		return res ;
+	}
+
 	@Override
 	public void updateRef(T key,String oldPage, String newPage, Date td) 
 	{

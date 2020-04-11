@@ -157,6 +157,9 @@ public class DBAppTest {
 //    	
 		  
 		File file = new File("Student_1.ser");
+		
+		System.out.println(file.delete());
+		
 		if (file.createNewFile()) {
 			System.out.println("file.txt File Created in Project root directory");
 		} else

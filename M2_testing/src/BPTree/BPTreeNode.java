@@ -104,7 +104,8 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 	
 	public abstract ArrayList<Ref> search(T key);
 	public abstract ArrayList<Ref> searchLess(T key);
-
+	public abstract ArrayList<Ref> searchNotEqual(T key);
+	
 	
 	public abstract void updateRef(T key, String oldPage, String newPage, Date td);
 

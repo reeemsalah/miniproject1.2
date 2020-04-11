@@ -191,7 +191,7 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 	public BPTreeNode<T> split(T key, Ref recordReference) 
 	{
 		int keyIndex = this.findIndex(key);
-		int midIndex = numberOfKeys / 2;
+		int midIndex = (numberOfKeys / 2);
 		if((numberOfKeys & 1) == 1 && keyIndex > midIndex)	//split nodes evenly
 			++midIndex;		
 
@@ -199,15 +199,15 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 		int totalKeys = numberOfKeys + 1;
 		//move keys to a new node
 		BPTreeLeafNode<T> newNode = new BPTreeLeafNode<T>(order);
-		for (int i = midIndex; i < totalKeys - 1; ++i) 
-		{
+		for (int i = midIndex; i < totalKeys-1 ; ++i) 
+		{System.out.println(this.getKey(i));
 			newNode.insertAt(i - midIndex, this.getKey(i), this.getRecord(i));
 			numberOfKeys--;
 		}
 		
 		//insert the new key
-		if(keyIndex < totalKeys / 2)
-			this.insertAt(keyIndex, key, recordReference);
+		if(keyIndex < totalKeys / 2) {
+			this.insertAt(keyIndex, key, recordReference);}
 		else
 			newNode.insertAt(keyIndex - midIndex, key, recordReference);
 		
@@ -253,6 +253,17 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 		ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i)
 			if(this.getKey(i).compareTo(key) < 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+
+	@Override
+	public ArrayList<Ref> searchNotEqual(T key) 
+	{		System.out.println("searchNotEqual at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) != 0)
 				refs.add(this.getRecord(i));
 		return refs;
 	} 

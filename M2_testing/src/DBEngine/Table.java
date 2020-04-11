@@ -1128,7 +1128,7 @@ public class Table implements Serializable {
 		if (isBIndexedCol(colName)) {
 
 			BPTree Index = getBtreeCol(colName);
-			ArrayList<Ref> references = Index.search(value);
+			ArrayList<Ref> references = Index.searchNotEqual(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
 			int z = 0;
 			for (Ref r : references) {
@@ -1149,7 +1149,7 @@ public class Table implements Serializable {
 			if (isRIndexedCol(colName)) {
 
 				RTree Index = getRtreeCol(colName);
-				ArrayList<Ref> references = Index.search((Region) value);
+				ArrayList<Ref> references = Index.searchNotEqual((Region) value);
 				ArrayList<String> pageNames = new ArrayList<String>();
 				int z = 0;
 				for (Ref r : references) {

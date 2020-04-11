@@ -276,6 +276,17 @@ return pageOptions;
 	} 
 	
 	@Override
+	public ArrayList<Ref> searchNotEqual(Region	 key) 
+	{		System.out.println("searchNotEqual at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) != 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	
+	@Override
 	public void updateRef(Region key, String oldPage, String newPage, Date td) 
 	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i) {
