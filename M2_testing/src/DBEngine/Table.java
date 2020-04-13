@@ -115,10 +115,6 @@ public class Table implements Serializable {
 
 	public void Write(String filename) {
 		System.out.println("WRITE: " + page);
-//if (page.size()==0) {
-//	File f = new File(filename);
-////	System.out.println("new attempt1 " + f.delete());
-//}
 		// Serialization
 
 		try {
@@ -133,11 +129,6 @@ public class Table implements Serializable {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-//		if (page.size()==0) {
-//			File f = new File(filename+".ser");
-//			 f.deleteOnExit();
-//			System.out.println("new attempt1 ");
-//		}
 		page.clear();
 	}
 
@@ -682,6 +673,7 @@ public class Table implements Serializable {
 			
 
 			}
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -820,10 +812,8 @@ public class Table implements Serializable {
         if(exists == true) 
         { 
             // printing the permissions associated with the file 
-//        	System.out.println(file);
-//        	file.deleteOnExit();
         	
-            System.out.println(" xecutable: " + file.canExecute()); 
+            System.out.println(" excutable: " + file.canExecute()); 
             System.out.println("Readable: " + file.canRead()); 
             System.out.println("Writable: "+ file.canWrite()); 
         } 
@@ -832,9 +822,15 @@ public class Table implements Serializable {
             System.out.println("File not found."); 
         } 
 		System.out.println(file.getName());
-		System.out.println(file.delete()  + " "+ file.list());
-//		 file.deleteOnExit();
-
+		System.out.println("Is File "+file.getName()+" deleted: "+file.delete()  );
+	/*	System.out.println("creating a new file having the same name as the deleted one...........");
+		try {
+		System.out.println(file.createNewFile());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}*/
 		for (int i = 0; i < pages.size(); i++) {
 			if (pages.get(i).equals(fileName))
 				pages.remove(i);

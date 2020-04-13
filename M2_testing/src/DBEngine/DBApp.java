@@ -522,7 +522,8 @@ return results.iterator();
 				entry[4] = "true";
 		}
 		meta.add(entry);
-		}  
+		}
+		br.close();
 		}   
 		catch (IOException e)   
 		{  

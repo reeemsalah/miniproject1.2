@@ -26,19 +26,19 @@ public class DBAppTest {
 
 		Hashtable htblColNameValue = new Hashtable();
 
-		htblColNameValue.put("id", new Integer(1));
+		htblColNameValue.put("id", new Integer(2));
 		htblColNameValue.put("name", new String("Ahmed Noor"));
 		htblColNameValue.put("gpa", new Double(0.95));
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
 		htblColNameValue.clear();
 
-		htblColNameValue.put("id", new Integer(2));
+		htblColNameValue.put("id", new Integer(1));
 		htblColNameValue.put("name", new String("Ahmed Noor"));
 		htblColNameValue.put("gpa", new Double(0.88));
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
 		htblColNameValue.clear();
 
-		htblColNameValue.put("id", new Integer(3));
+		htblColNameValue.put("id", new Integer(6));
 		htblColNameValue.put("name", new String("Dalia Noor"));
 		htblColNameValue.put("gpa", new Double(1.25));
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
@@ -56,7 +56,7 @@ public class DBAppTest {
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
 		htblColNameValue.clear();
 
-		htblColNameValue.put("id", new Integer(6));
+		htblColNameValue.put("id", new Integer(3));
 		htblColNameValue.put("name", new String("alyaa Noor"));
 		htblColNameValue.put("gpa", new Double(0.88));
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
@@ -67,15 +67,15 @@ public class DBAppTest {
 //		
 //		
 //	
-//		htblColNameValue.put("id", new Integer( 12 ));
-//		htblColNameValue.put("name", new String("salma Noor" ) );
-//		htblColNameValue.put("gpa", new Double( 0.88 ) );
-//		dbApp.insertIntoTable( strTableName , htblColNameValue );
-//		htblColNameValue.clear( );
+/*		htblColNameValue.put("id", new Integer( 12 ));
+		htblColNameValue.put("name", new String("salma Noor" ) );
+		htblColNameValue.put("gpa", new Double( 0.88 ) );
+		dbApp.insertIntoTable( strTableName , htblColNameValue );
+		htblColNameValue.clear( );
 
-//		htblColNameValue.put("id", new Integer( 12 ));
-//		dbApp.deleteFromTable("Student", htblColNameValue);
-//		htblColNameValue.clear( );
+		htblColNameValue.put("id", new Integer( 12 ));
+		dbApp.deleteFromTable("Student", htblColNameValue);
+		htblColNameValue.clear( );*/
 //		
 //		htblColNameValue.put("id", new Integer( 5 ));
 //		dbApp.deleteFromTable("Student", htblColNameValue);
@@ -155,7 +155,7 @@ public class DBAppTest {
 //          
 //        System.out.println("Deletion successful."); 
 //    	
-		  
+	  /*
 		File file = new File("Student_1.ser");
 		
 		System.out.println(file.delete());
@@ -170,7 +170,7 @@ public class DBAppTest {
 			System.out.println("stud2 File Created in Project root directory");
 		} else
 			System.out.println("stud2 file.txt already exists in the project root directory");
-
+*/
 //		SQLTerm[] arrSQLTerms;
 //		arrSQLTerms = new SQLTerm[3];
 //		
