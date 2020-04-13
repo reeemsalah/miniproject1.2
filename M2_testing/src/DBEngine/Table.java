@@ -679,6 +679,7 @@ public class Table implements Serializable {
 					tableColNames.add(entry[1]);
 					tableColTypes.add(entry[2]);
 				}
+			
 
 			}
 		} catch (IOException e) {

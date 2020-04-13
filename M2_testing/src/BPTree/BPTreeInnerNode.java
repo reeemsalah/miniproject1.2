@@ -375,10 +375,46 @@ return pageOptions;
 			res.addAll(children[i].searchNotEqual(key));
 		}
 //		res.addAll(children[0].searchLess(key));
+//lllllljjj
+		return res ;
+	}
+	public ArrayList<Ref> searchgreaterORequal(T key) 
+	{		System.out.println("searchgreaterORequal at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(keys[i].compareTo(key) > 0||keys[i].compareTo(key) == 0)
+				refs.addAll(children[i].searchgreaterORequal(key));
+		return refs;}
+	
+	
+	public ArrayList<Ref> searchgreater(T key) 
+	{		System.out.println("searchgreater at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i) {
+			if(keys[i].compareTo(key) > 0)
+				refs.addAll(children[i].searchgreater(key));}
+		refs.addAll(children[0].searchgreater(key));
+		
+		return refs;}
+	
+	public ArrayList<Ref> searchLessORequal(T key) 
+	{
+		System.out.println("searchLessORequal at "+this.index);
+		ArrayList<Ref> res = new ArrayList<Ref>();
+		for (int i=0;i<numberOfKeys;i++) {
+			if (keys[i].compareTo(key)<=0||keys[i].compareTo(key) == 0)
+			res.addAll(children[i].searchLessORequal(key));
+		}
+		
 
 		return res ;
 	}
-
+	
+	
+	
+//	} 
 	@Override
 	public void updateRef(T key,String oldPage, String newPage, Date td) 
 	{

@@ -256,6 +256,7 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 				refs.add(this.getRecord(i));
 		return refs;
 	} 
+	//jjjjbbb
 
 	@Override
 	public ArrayList<Ref> searchNotEqual(T key) 
@@ -264,6 +265,34 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 		ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i)
 			if(this.getKey(i).compareTo(key) != 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	
+	public ArrayList<Ref> searchgreater(T key) 
+	{		System.out.println("searchgreater at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) > 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	public ArrayList<Ref> searchgreaterORequal(T key) 
+	{		System.out.println("searchgreaterORequal at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) > 0||this.getKey(i).compareTo(key) == 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	public ArrayList<Ref> searchLessORequal(T key) 
+	{		System.out.println("searchlessORequal at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) < 0||this.getKey(i).compareTo(key) == 0)
 				refs.add(this.getRecord(i));
 		return refs;
 	} 

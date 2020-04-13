@@ -2,6 +2,7 @@ package BPTree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 public abstract class BPTreeNode<T extends Comparable<T>> implements Serializable{
@@ -105,7 +106,9 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 	public abstract ArrayList<Ref> search(T key);
 	public abstract ArrayList<Ref> searchLess(T key);
 	public abstract ArrayList<Ref> searchNotEqual(T key);
-	
+	public abstract ArrayList<Ref> searchgreaterORequal(T key);
+	public abstract ArrayList<Ref> searchgreater(T key);
+	public abstract ArrayList<Ref> searchLessORequal(T key);
 	
 	public abstract void updateRef(T key, String oldPage, String newPage, Date td);
 
@@ -147,6 +150,7 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 		s += "]";
 		return s;
 	}
+
 
 
 }
