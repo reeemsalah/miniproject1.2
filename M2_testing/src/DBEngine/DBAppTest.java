@@ -22,7 +22,6 @@ public class DBAppTest {
 		htblColNameType.put("gpa", "java.lang.double");
 		dbApp.createTable(strTableName, "name", htblColNameType);
 
-//	
 
 		Hashtable htblColNameValue = new Hashtable();
 
@@ -31,7 +30,7 @@ public class DBAppTest {
 		htblColNameValue.put("gpa", new Double(0.95));
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
 		htblColNameValue.clear();
-
+		//INSERTING
 		htblColNameValue.put("id", new Integer(1));
 		htblColNameValue.put("name", new String("Ahmed Noor"));
 		htblColNameValue.put("gpa", new Double(0.88));
@@ -62,31 +61,15 @@ public class DBAppTest {
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
 		htblColNameValue.clear();
 
-//		dbApp.createBTreeIndex("Student", "name");
-//		dbApp.createBTreeIndex("Student", "gpa");
-//		
-//		
-//	
-/*		htblColNameValue.put("id", new Integer( 12 ));
+		htblColNameValue.put("id", new Integer( 12 ));
 		htblColNameValue.put("name", new String("salma Noor" ) );
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
 
-		htblColNameValue.put("id", new Integer( 12 ));
-		dbApp.deleteFromTable("Student", htblColNameValue);
-		htblColNameValue.clear( );*/
-//		
-//		htblColNameValue.put("id", new Integer( 5 ));
-//		dbApp.deleteFromTable("Student", htblColNameValue);
-//		htblColNameValue.clear( );
-//		
-//		
+		
 
-//		htblColNameValue.put("id", new Integer( 6 ));
-//		dbApp.deleteFromTable("Student", htblColNameValue);
-//		htblColNameValue.clear( );
-
+/*
 		htblColNameValue.put("id", new Integer(5));
 		htblColNameValue.put("name", new String("Zaky Noor"));
 		htblColNameValue.put("gpa", new Double(0.88));
@@ -97,21 +80,19 @@ public class DBAppTest {
 		htblColNameValue.put("name", new String("alyaa Noor"));
 		htblColNameValue.put("gpa", new Double(0.88));
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
-		htblColNameValue.clear();
-
-		
-		  
-		  // htblColNameValue.put("id", new Integer( 23498 ));
+		htblColNameValue.clear(); 
+*/
+		  //DELETING
 		  htblColNameValue.put("name", new String("alyaa Noor" ) ); 
-		// htblColNameValue.put("gpa", new Double( 1.5 ) ); //
 		  System.out.println("deleting..........................");
 		  dbApp.deleteFromTable( strTableName , htblColNameValue );
 		  htblColNameValue.clear( ); //delete is case sensetive
+		  
 		  htblColNameValue.put("name", new String("salma Noor" ) ); //
-//		  htblColNameValue.put("gpa", new Double( 1.5 ) ); //
 		  System.out.println("deleting..........................");
 		  dbApp.deleteFromTable( strTableName , htblColNameValue );
 		  htblColNameValue.clear( ); 
+		  
 		  htblColNameValue.put("name", new String("Zaky Noor" ) ); // htblColNameValue.put("gpa", new Double( 1.5 ) );
 		  // System.out.println("deleting..........................");
 		  dbApp.deleteFromTable( strTableName , htblColNameValue );

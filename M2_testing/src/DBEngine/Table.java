@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -806,11 +807,22 @@ public class Table implements Serializable {
 	}
 
 	public void deletePage(String fileName) {
-
+		
 		File file = new File(fileName + ".ser");
+		
 		boolean exists = file.exists(); 
         if(exists == true) 
         { 
+        	//deleting content of the file
+        	try {
+        	PrintWriter writer = new PrintWriter(file);
+        	writer.print("");
+        	writer.close();
+        	}
+        	catch(Exception e)
+        	{
+        		e.printStackTrace();
+        	}
             // printing the permissions associated with the file 
         	
             System.out.println(" excutable: " + file.canExecute()); 
@@ -823,6 +835,7 @@ public class Table implements Serializable {
         } 
 		System.out.println(file.getName());
 		System.out.println("Is File "+file.getName()+" deleted: "+file.delete()  );
+		System.out.println("Does file exist after deletion: " +file.exists());
 	/*	System.out.println("creating a new file having the same name as the deleted one...........");
 		try {
 		System.out.println(file.createNewFile());

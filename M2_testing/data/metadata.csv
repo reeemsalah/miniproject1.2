@@ -1,5 +1,0 @@
-Table Name, Column Name, Column Type, ClusteringKey, Indexed
-Student,gpa,java.lang.double,false,false
-Student,name,java.lang.String,true,false
-Student,id,java.lang.Integer,false,false
-Student,TouchDate,java.util.Date,false,false
