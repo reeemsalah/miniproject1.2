@@ -76,11 +76,14 @@ Date d = new Date();
 			System.out.println(tree.toString());
 
 			tree.insert(9, new Ref("p2", d));
-
+			
 			
 			System.out.println(tree.toString());
-//			tree.delete(18,d);
-//			System.out.println(tree);
+		//	tree.delete(4,d);
+			//tree.insert(11,new Ref("p4",d));
+			//System.out.println(tree);
+			//tree.update(10,11,d);
+			//System.out.println(tree.toString());
 //			tree.delete(18,d);
 //			System.out.println(tree);
 //			tree.delete(18,d);

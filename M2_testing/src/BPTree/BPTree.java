@@ -109,6 +109,10 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 			root = ((BPTreeInnerNode<T>) root).getFirstChild();
 		return done;
 	}
+	public void update(T key,T keynew ,Date tdold , Date tdnew, String pagename) {
+		delete(key,tdold);
+	insert(keynew,new Ref(pagename, tdnew));
+		}
 	
 	/**
 	 * Returns a string representation of the B+ tree.
