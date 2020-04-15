@@ -1,5 +1,8 @@
 package BPTree;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +29,36 @@ public class BPTree<T extends Comparable<T>> implements Serializable{
 		root.setRoot(true);
 	}
 	
+	
+//	public void writeToFile() throws IOException {
+//		String filename = "tree.ser";
+//		FileOutputStream file = new FileOutputStream(filename);
+//		ObjectOutputStream out = new ObjectOutputStream(file);
+//		Queue<BPTreeNode<T>> cur = new LinkedList<BPTreeNode<T>>(),next;
+//		cur.add(root);
+//		while(!cur.isEmpty()) {
+//			next = new LinkedList<BPTreeNode<T>>();
+//			while(!cur.isEmpty()) {
+//				BPTreeNode<T> curNode = cur.remove();
+//				out.writeObject(curNode);
+//				if(curNode instanceof BPTreeLeafNode) {
+//					out.writeObject("->");
+//				}else {
+//					out.writeObject("{");
+//					BPTreeInnerNode<T> parent = (BPTreeInnerNode<T>) curNode;
+//					for(int i = 0;i <= parent.numberOfKeys;++i) {
+//						out.writeObject(parent.getChild(i).index+",");
+//						next.add(parent.getChild(i));
+//					}
+//					out.writeObject("}");
+//				}
+//			}
+//			out.writeObject("\n");
+//		}
+//		out.close();
+//		file.close();
+//	}
+//	
 	/**
 	 * Inserts the specified key associated with the given record in the B+ tree
 	 * @param key the key to be inserted

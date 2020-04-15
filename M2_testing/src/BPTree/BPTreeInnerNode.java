@@ -1,5 +1,11 @@
 package BPTree;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -427,6 +433,39 @@ return pageOptions;
 	public void deleteAt(int index) 
 	{
 		deleteAt(index, 1);	
+	}
+
+	@Override
+	public void writeToFile() {
+		 
+		try {
+			FileOutputStream file = new FileOutputStream(filename);
+			ObjectOutputStream out = new ObjectOutputStream(file);
+			out.writeObject(this.keys);
+			out.writeObject(this.children);
+			out.close();
+			file.close();		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void readFromFile() {
+		try {
+			FileInputStream file = new FileInputStream(filename);
+			ObjectInputStream in = new ObjectInputStream(file);
+			this.keys = (Comparable<T>[]) in.readObject();
+			this.children = (BPTreeNode<T>[]) in.readObject();
+			in.close();
+			file.close();		
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

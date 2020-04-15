@@ -17,13 +17,20 @@ public abstract class BPTreeNode<T extends Comparable<T>> implements Serializabl
 	protected int index;		//for printing the tree
 	private boolean isRoot;
 	private static int nextIdx = 0;
-
+	protected String filename;
 	public BPTreeNode(int order) 
 	{
 		index = nextIdx++;
 		numberOfKeys = 0;
 		this.order = order;
 	}
+	
+	
+	public abstract void writeToFile();
+	public abstract void readFromFile();
+	
+	
+	
 	
 	/**
 	 * @return a boolean indicating whether this node is the root of the B+ tree

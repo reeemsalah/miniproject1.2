@@ -1,5 +1,10 @@
 package BPTree;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -419,6 +424,34 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 			this.insertAt(numberOfKeys, foreignNode.getKey(i), foreignNode.getRecord(i));
 		
 		this.setNext(foreignNode.getNext());
+	}
+
+	@Override
+	public void writeToFile() {
+		try {FileOutputStream file = new FileOutputStream(filename);
+		ObjectOutputStream out = new ObjectOutputStream(file);
+		out.writeObject(this.keys);
+		out.writeObject(this.records);
+		out.close();
+		file.close();}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void readFromFile() {
+		try {
+			FileInputStream file = new FileInputStream(filename);
+			ObjectInputStream in = new ObjectInputStream(file);
+			this.keys = (Comparable<T>[]) in.readObject();
+			this.records = (Ref[]) in.readObject();
+			in.close();
+			file.close();		
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
 }
