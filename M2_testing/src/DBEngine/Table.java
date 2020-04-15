@@ -691,9 +691,24 @@ public class Table implements Serializable {
 		return colInfo;
 	}
 
+	/**
+	 * 
+	 * @param strClusteringKey value of the key of the tuple to be updated
+	 * @param t                new values for the columns of the updated tuple
+	 * @throws DBAppException
+	 */
 	public void updateTable(String strClusteringKey, Tuple t) throws DBAppException {
 		Hashtable<String, String> temp = readTableMetadata();
-		// FIXME change update to match the new implementation
+		if (btrees.keySet().contains(this.clusteredKey)) {
+			this.updateTableIndexedB(strClusteringKey, t);
+			return;
+		} else {
+			if (rtrees.keySet().contains(this.clusteredKey)) {
+				this.updateTableIndexedR(strClusteringKey, t);
+				return;
+			}
+		}
+
 		for (Page p : pages) {
 			String file = p.getFileName();
 			page.clear();
@@ -708,7 +723,8 @@ public class Table implements Serializable {
 				Set<String> allcolns = t.getAttributes().keySet();
 
 				if (coltype.equals("java.lang.Integer")) {
-					if (t1.getKeyValue().compareTo(t.getKeyValue()) == 0) {
+					int value = Integer.parseInt(strClusteringKey);
+					if (value == (int) t1.getKeyValue()) {
 
 						for (String key : t.getAttributes().keySet()) {
 
@@ -744,7 +760,7 @@ public class Table implements Serializable {
 					}
 
 				} else if (coltype.equals("java.lang.Double")) {
-					double value = Double.parseDouble(t.getKey());
+					double value = Double.parseDouble(strClusteringKey);
 					if (value == (double) t1.getKeyValue()) {
 						for (String key : t.getAttributes().keySet()) {
 							if (indexedcolns.contains(key)) {
@@ -778,7 +794,7 @@ public class Table implements Serializable {
 					}
 
 				} else if (coltype.contentEquals("java.util.Date")) {
-					Date value = new Date((String) t.getKeyValue());
+					Date value = new Date(strClusteringKey);
 					if (value == (Date) t1.getKeyValue()) {
 						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
@@ -786,8 +802,10 @@ public class Table implements Serializable {
 								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
 										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
 							}
-							if(spatialIndex.contains(key)) {
-								rtrees.get(key).update((Region)t1.getValueOfColumn(key),(Region)t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 							t1.edit(key, t.getValueOfColumn(key));
 
@@ -812,15 +830,17 @@ public class Table implements Serializable {
 				}
 
 				else if (coltype.contentEquals("Region")) {
-					Polygon value = (Region) t.getKeyValue();
+					Region value = Region.StringToRegion(strClusteringKey);
 					if (value == (Region) t1.getKeyValue()) {
 						for (String key : t.getAttributes().keySet()) {
 							if (indexedcolns.contains(key)) {
 								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
 										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
 							}
-							if(spatialIndex.contains(key)) {
-								rtrees.get(key).update((Region)t1.getValueOfColumn(key),(Region)t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 							t1.edit(key, t.getValueOfColumn(key));
 
@@ -844,7 +864,7 @@ public class Table implements Serializable {
 
 					}
 				} else {
-					String value = (String) t.getKeyValue();
+					String value = strClusteringKey;
 					if (value.equals(t1.getKeyValue())) {
 
 						// .out.println("OMG THEY ARE EQUAL!");
@@ -853,8 +873,10 @@ public class Table implements Serializable {
 								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
 										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
 							}
-							if(spatialIndex.contains(key)) {
-								rtrees.get(key).update((Region)t1.getValueOfColumn(key),(Region)t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 							t1.edit(key, t.getValueOfColumn(key));
 
@@ -875,6 +897,254 @@ public class Table implements Serializable {
 						}
 						Write(file);
 
+					}
+				}
+			}
+		}
+	}
+
+	private void updateTableIndexedR(String strClusteringKey, Tuple t) throws DBAppException {
+		Hashtable<String, String> temp = readTableMetadata();
+		RTree tree = rtrees.get(this.clusteredKey);
+		String coltype = temp.get(this.clusteredKey);
+		Date currentdate = new Date();
+		Set<String> indexedcolns = btrees.keySet();
+		Set<String> spatialIndex = rtrees.keySet();
+		Set<String> allcolns = t.getAttributes().keySet();
+		if (coltype.contentEquals("Region")) {
+			Region value = Region.StringToRegion(strClusteringKey);
+			ArrayList<String> files = tree.getDeletePage(value);
+			for (String f : files) {
+				page.clear();
+				Read(f);
+				for (Tuple t1 : page) {
+					if (value.equals((Region) t1.getKeyValue())) {
+
+						for (String key : t.getAttributes().keySet()) {
+
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+
+							t1.edit(key, t.getValueOfColumn(key));
+
+							t1.edit("TouchDate", currentdate);
+						}
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+						}
+
+						Write(f);
+					}
+				}
+			}
+
+		}
+	}
+
+	/**
+	 * 
+	 * @param strClusteringKey
+	 * @param t
+	 * @throws DBAppException
+	 */
+	private void updateTableIndexedB(String strClusteringKey, Tuple t) throws DBAppException {
+		Hashtable<String, String> temp = readTableMetadata();
+		BPTree tree = btrees.get(this.clusteredKey);
+		String coltype = temp.get(this.clusteredKey);
+		Date currentdate = new Date();
+		Set<String> indexedcolns = btrees.keySet();
+		Set<String> spatialIndex = rtrees.keySet();
+		Set<String> allcolns = t.getAttributes().keySet();
+		if (coltype.equals("java.lang.Integer")) {
+			int value = Integer.parseInt(strClusteringKey);
+			ArrayList<String> files = tree.getDeletePage(value);
+			for (String f : files) {
+				page.clear();
+				Read(f);
+				for (Tuple t1 : page) {
+					if (value == (int) t1.getKeyValue()) {
+
+						for (String key : t.getAttributes().keySet()) {
+
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+
+							t1.edit(key, t.getValueOfColumn(key));
+
+							t1.edit("TouchDate", currentdate);
+						}
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+						}
+
+						Write(f);
+					}
+				}
+			}
+
+		} else if (coltype.equals("java.lang.Double")) {
+			double value = Double.parseDouble(strClusteringKey);
+			ArrayList<String> files = tree.getDeletePage(value);
+			for (String f : files) {
+				page.clear();
+				Read(f);
+				for (Tuple t1 : page) {
+					if (value == (double) t1.getKeyValue()) {
+
+						for (String key : t.getAttributes().keySet()) {
+
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+
+							t1.edit(key, t.getValueOfColumn(key));
+
+							t1.edit("TouchDate", currentdate);
+						}
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+						}
+
+						Write(f);
+					}
+				}
+			}
+
+		} else if (coltype.contentEquals("java.util.Date")) {
+			Date value = new Date(strClusteringKey);
+			ArrayList<String> files = tree.getDeletePage(value);
+			for (String f : files) {
+				page.clear();
+				Read(f);
+				for (Tuple t1 : page) {
+					if (value.equals((Date) t1.getKeyValue())) {
+
+						for (String key : t.getAttributes().keySet()) {
+
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+
+							t1.edit(key, t.getValueOfColumn(key));
+
+							t1.edit("TouchDate", currentdate);
+						}
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+						}
+
+						Write(f);
+					}
+				}
+			}
+		}
+
+		else {
+			String value = strClusteringKey;
+			ArrayList<String> files = tree.getDeletePage(value);
+			for (String f : files) {
+				page.clear();
+				Read(f);
+				for (Tuple t1 : page) {
+					if (value.equals((String) t1.getKeyValue())) {
+
+						for (String key : t.getAttributes().keySet()) {
+
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+
+							t1.edit(key, t.getValueOfColumn(key));
+
+							t1.edit("TouchDate", currentdate);
+						}
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, f);
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, f);
+							}
+						}
+
+						Write(f);
 					}
 				}
 			}
