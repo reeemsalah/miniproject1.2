@@ -671,7 +671,6 @@ public class Table implements Serializable {
 					tableColNames.add(entry[1]);
 					tableColTypes.add(entry[2]);
 				}
-			
 
 			}
 			br.close();
@@ -704,46 +703,75 @@ public class Table implements Serializable {
 				// .out.println("I am here for loop 2");
 				String coltype = temp.get(t1.getKey());
 				Date currentdate = new Date();
+				Set<String> indexedcolns = btrees.keySet();
+				Set<String> spatialIndex = rtrees.keySet();
+				Set<String> allcolns = t.getAttributes().keySet();
+
 				if (coltype.equals("java.lang.Integer")) {
 					if (t1.getKeyValue().compareTo(t.getKeyValue()) == 0) {
-						Set <String> indexedcolns= btrees.keySet();
+
 						for (String key : t.getAttributes().keySet()) {
-							
-							if(indexedcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 
-								t1.edit(key, t.getValueOfColumn(key));
-							
+							t1.edit(key, t.getValueOfColumn(key));
 
 							t1.edit("TouchDate", currentdate);
-							}
-						Set <String> allcolns = t.getAttributes().keySet();
-						for(String key : indexedcolns) {
-							if(!allcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t1.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+						}
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
 							}
 						}
-						
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
+							}
+						}
+
 						Write(file);
 					}
 
 				} else if (coltype.equals("java.lang.Double")) {
 					double value = Double.parseDouble(t.getKey());
 					if (value == (double) t1.getKeyValue()) {
-						Set <String> indexedcolns= btrees.keySet();
 						for (String key : t.getAttributes().keySet()) {
-							if(indexedcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
 							}
+							if (spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
+							}
+
 							t1.edit(key, t.getValueOfColumn(key));
-							
+
 							t1.edit("TouchDate", currentdate);
 						}
-						Set <String> allcolns = t.getAttributes().keySet();
-						for(String key : indexedcolns) {
-							if(!allcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t1.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 						}
 						Write(file);
@@ -753,20 +781,29 @@ public class Table implements Serializable {
 					Date value = new Date((String) t.getKeyValue());
 					if (value == (Date) t1.getKeyValue()) {
 						// .out.println("OMG THEY ARE EQUAL!");
-						Set <String> indexedcolns= btrees.keySet();
 						for (String key : t.getAttributes().keySet()) {
-							if(indexedcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+							if(spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region)t1.getValueOfColumn(key),(Region)t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
 							}
 							t1.edit(key, t.getValueOfColumn(key));
-							
 
 							t1.edit("TouchDate", currentdate);
 						}
-						Set <String> allcolns = t.getAttributes().keySet();
-						for(String key : indexedcolns) {
-							if(!allcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t1.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 						}
 						Write(file);
@@ -777,19 +814,30 @@ public class Table implements Serializable {
 				else if (coltype.contentEquals("Region")) {
 					Polygon value = (Region) t.getKeyValue();
 					if (value == (Region) t1.getKeyValue()) {
-						Set <String> indexedcolns= btrees.keySet();
 						for (String key : t.getAttributes().keySet()) {
-							if(indexedcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+							if(spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region)t1.getValueOfColumn(key),(Region)t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
 							}
 							t1.edit(key, t.getValueOfColumn(key));
-							
+
 							t1.edit("TouchDate", currentdate);
 						}
-						Set <String> allcolns = t.getAttributes().keySet();
-						for(String key : indexedcolns) {
-							if(!allcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t1.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 						}
 						Write(file);
@@ -800,20 +848,29 @@ public class Table implements Serializable {
 					if (value.equals(t1.getKeyValue())) {
 
 						// .out.println("OMG THEY ARE EQUAL!");
-						Set <String> indexedcolns= btrees.keySet();
 						for (String key : t.getAttributes().keySet()) {
-							if(indexedcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+							if (indexedcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+							if(spatialIndex.contains(key)) {
+								rtrees.get(key).update((Region)t1.getValueOfColumn(key),(Region)t.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
 							}
 							t1.edit(key, t.getValueOfColumn(key));
-							
 
 							t1.edit("TouchDate", currentdate);
 						}
-						Set <String> allcolns = t.getAttributes().keySet();
-						for(String key : indexedcolns) {
-							if(!allcolns.contains(key)) {
-								btrees.get(key).update(t1.getValueOfColumn(key),t1.getValueOfColumn(key), (Date)(t1.getValueOfColumn("TouchDate")), currentdate,p.getFileName());
+						for (String key : indexedcolns) {
+							if (!allcolns.contains(key)) {
+								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
+										(Date) (t1.getValueOfColumn("TouchDate")), currentdate, p.getFileName());
+							}
+						}
+						for (String key : spatialIndex) {
+							if (!allcolns.contains(key)) {
+								rtrees.get(key).update((Region) t1.getValueOfColumn(key),
+										(Region) t1.getValueOfColumn(key), (Date) (t1.getValueOfColumn("TouchDate")),
+										currentdate, p.getFileName());
 							}
 						}
 						Write(file);
@@ -861,43 +918,36 @@ public class Table implements Serializable {
 	}
 
 	public void deletePage(String fileName) {
-		
+
 		File file = new File(fileName + ".ser");
-		
-		boolean exists = file.exists(); 
-        if(exists == true) 
-        { 
-        	//deleting content of the file
-        	try {
-        	PrintWriter writer = new PrintWriter(file);
-        	writer.print("");
-        	writer.close();
-        	}
-        	catch(Exception e)
-        	{
-        		e.printStackTrace();
-        	}
-            // printing the permissions associated with the file 
-        	
-            System.out.println(" excutable: " + file.canExecute()); 
-            System.out.println("Readable: " + file.canRead()); 
-            System.out.println("Writable: "+ file.canWrite()); 
-        } 
-        else
-        { 
-            System.out.println("File not found."); 
-        } 
-		System.out.println(file.getName());
-		System.out.println("Is File "+file.getName()+" deleted: "+file.delete()  );
-		System.out.println("Does file exist after deletion: " +file.exists());
-	/*	System.out.println("creating a new file having the same name as the deleted one...........");
-		try {
-		System.out.println(file.createNewFile());
+
+		boolean exists = file.exists();
+		if (exists == true) {
+			// deleting content of the file
+			try {
+				PrintWriter writer = new PrintWriter(file);
+				writer.print("");
+				writer.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// printing the permissions associated with the file
+
+			System.out.println(" excutable: " + file.canExecute());
+			System.out.println("Readable: " + file.canRead());
+			System.out.println("Writable: " + file.canWrite());
+		} else {
+			System.out.println("File not found.");
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}*/
+		System.out.println(file.getName());
+		System.out.println("Is File " + file.getName() + " deleted: " + file.delete());
+		System.out.println("Does file exist after deletion: " + file.exists());
+		/*
+		 * System.out.
+		 * println("creating a new file having the same name as the deleted one..........."
+		 * ); try { System.out.println(file.createNewFile()); } catch(Exception e) {
+		 * e.printStackTrace(); }
+		 */
 		for (int i = 0; i < pages.size(); i++) {
 			if (pages.get(i).equals(fileName))
 				pages.remove(i);
