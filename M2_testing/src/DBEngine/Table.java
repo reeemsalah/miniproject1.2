@@ -715,13 +715,11 @@ public class Table implements Serializable {
 			Read(file);
 
 			for (Tuple t1 : page) {
-				// .out.println("I am here for loop 2");
-				String coltype = temp.get(t1.getKey());
+				String coltype = temp.get(this.clusteredKey);
 				Date currentdate = new Date();
 				Set<String> indexedcolns = btrees.keySet();
 				Set<String> spatialIndex = rtrees.keySet();
 				Set<String> allcolns = t.getAttributes().keySet();
-
 				if (coltype.equals("java.lang.Integer")) {
 					int value = Integer.parseInt(strClusteringKey);
 					if (value == (int) t1.getKeyValue()) {
@@ -740,8 +738,9 @@ public class Table implements Serializable {
 
 							t1.edit(key, t.getValueOfColumn(key));
 
-							t1.edit("TouchDate", currentdate);
 						}
+						t1.edit("TouchDate", currentdate);
+
 						for (String key : indexedcolns) {
 							if (!allcolns.contains(key)) {
 								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
@@ -756,7 +755,6 @@ public class Table implements Serializable {
 							}
 						}
 
-						Write(file);
 					}
 
 				} else if (coltype.equals("java.lang.Double")) {
@@ -775,8 +773,9 @@ public class Table implements Serializable {
 
 							t1.edit(key, t.getValueOfColumn(key));
 
-							t1.edit("TouchDate", currentdate);
 						}
+						t1.edit("TouchDate", currentdate);
+
 						for (String key : indexedcolns) {
 							if (!allcolns.contains(key)) {
 								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
@@ -790,7 +789,6 @@ public class Table implements Serializable {
 										currentdate, p.getFileName());
 							}
 						}
-						Write(file);
 					}
 
 				} else if (coltype.contentEquals("java.util.Date")) {
@@ -809,8 +807,9 @@ public class Table implements Serializable {
 							}
 							t1.edit(key, t.getValueOfColumn(key));
 
-							t1.edit("TouchDate", currentdate);
 						}
+						t1.edit("TouchDate", currentdate);
+
 						for (String key : indexedcolns) {
 							if (!allcolns.contains(key)) {
 								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
@@ -824,7 +823,6 @@ public class Table implements Serializable {
 										currentdate, p.getFileName());
 							}
 						}
-						Write(file);
 
 					}
 				}
@@ -844,8 +842,8 @@ public class Table implements Serializable {
 							}
 							t1.edit(key, t.getValueOfColumn(key));
 
-							t1.edit("TouchDate", currentdate);
 						}
+						t1.edit("TouchDate", currentdate);
 
 						for (String key : indexedcolns) {
 							if (!allcolns.contains(key)) {
@@ -860,7 +858,6 @@ public class Table implements Serializable {
 										currentdate, p.getFileName());
 							}
 						}
-						Write(file);
 
 					}
 				} else {
@@ -880,8 +877,9 @@ public class Table implements Serializable {
 							}
 							t1.edit(key, t.getValueOfColumn(key));
 
-							t1.edit("TouchDate", currentdate);
 						}
+						t1.edit("TouchDate", currentdate);
+
 						for (String key : indexedcolns) {
 							if (!allcolns.contains(key)) {
 								btrees.get(key).update(t1.getValueOfColumn(key), t1.getValueOfColumn(key),
@@ -895,11 +893,11 @@ public class Table implements Serializable {
 										currentdate, p.getFileName());
 							}
 						}
-						Write(file);
 
 					}
 				}
 			}
+			Write(file);
 		}
 	}
 
@@ -978,7 +976,8 @@ public class Table implements Serializable {
 			for (String f : files) {
 				page.clear();
 				Read(f);
-				for (Tuple t1 : page) {
+				for (int i=0;i<page.size();i++) {
+					Tuple t1=page.get(i);
 					if (value == (int) t1.getKeyValue()) {
 
 						for (String key : t.getAttributes().keySet()) {

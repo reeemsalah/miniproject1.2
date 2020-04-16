@@ -20,7 +20,7 @@ public class DBAppTest {
 		htblColNameType.put("id", "java.lang.Integer");
 		htblColNameType.put("name", "java.lang.String");
 		htblColNameType.put("gpa", "java.lang.double");
-		dbApp.createTable(strTableName, "name", htblColNameType);
+		dbApp.createTable(strTableName, "id", htblColNameType);
 
 
 		Hashtable htblColNameValue = new Hashtable();
@@ -66,8 +66,11 @@ public class DBAppTest {
 		htblColNameValue.put("gpa", new Double( 0.88 ) );
 		dbApp.insertIntoTable( strTableName , htblColNameValue );
 		htblColNameValue.clear( );
-
 		
+		//creating index
+		dbApp.createBTreeIndex(strTableName, "id");
+		htblColNameValue.put("gpa", 1.5);
+		dbApp.updateTable(strTableName, "12", htblColNameValue);
 
 /*
 		htblColNameValue.put("id", new Integer(5));
@@ -82,6 +85,7 @@ public class DBAppTest {
 		dbApp.insertIntoTable(strTableName, htblColNameValue);
 		htblColNameValue.clear(); 
 */
+		/*
 		  //DELETING
 		  htblColNameValue.put("name", new String("alyaa Noor" ) ); 
 		  System.out.println("deleting..........................");
@@ -115,8 +119,7 @@ public class DBAppTest {
 		  System.out.println("deleting..........................");
 		  dbApp.deleteFromTable( strTableName , htblColNameValue );
 		  htblColNameValue.clear( );
-		 
-
+		 */
 //		try
 //        { 
 //            Files.deleteIfExists(Paths.get("Student_1.ser")); 
