@@ -1,10 +1,11 @@
 package DBEngine;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 
 public class DBAppTest2 {
 
-	public static void main(String[] args) throws DBAppException {
+	public static void main(String[] args) throws DBAppException, ClassNotFoundException {
 //		int [] xs1 = {0,2,2,0};
 //		int [] ys1 = {2,0,0,2};
 //		Region r1 = new Region(xs1,ys1,4 );
@@ -99,6 +100,38 @@ public class DBAppTest2 {
 		dbApp2.createBTreeIndex(strTableName2, "name");
 		dbApp2.createBTreeIndex(strTableName2, "rating");
 
-				
+		htblColNameValue2.put("place", r7);
+//		htblColNameValue2.put("name", new String("rehab" ) );
+//		htblColNameValue2.put("rating", new Double( 1.5 ) );
+		dbApp2.updateTable( strTableName2 ,"rehab" ,htblColNameValue2 );
+		htblColNameValue2.clear( );	
+		SQLTerm[] arrSQLTerms;
+		arrSQLTerms = new SQLTerm[3];
+		
+		SQLTerm query1 = new SQLTerm();
+		SQLTerm query2 = new SQLTerm();
+		SQLTerm query3 = new SQLTerm();
+		arrSQLTerms[0] = query1;
+		arrSQLTerms[1] = query2;
+		arrSQLTerms[2] = query3;
+		arrSQLTerms[0].strTableName = "Places";
+		arrSQLTerms[0].strColumnName= "name";
+		arrSQLTerms[0].strOperator = "=";
+		arrSQLTerms[0].objValue = "Ahmed Noor";
+		arrSQLTerms[1].strTableName = "Places";
+		arrSQLTerms[1].strColumnName= "place";
+		arrSQLTerms[1].strOperator = ">";
+		arrSQLTerms[1].objValue = r5;
+		arrSQLTerms[2].strTableName = "Places";
+		arrSQLTerms[2].strColumnName= "rating";
+		arrSQLTerms[2].strOperator = "!=";
+		arrSQLTerms[2].objValue = new Double( 1.0 );
+		String[]strarrOperators = new String[2];
+		strarrOperators[0] = "AND";
+		strarrOperators[1] = "OR";
+		Iterator it = dbApp2.selectFromTable(arrSQLTerms , strarrOperators);
+		while(it.hasNext()) {
+			System.out.println(it.next());
+		}
 	}
 }

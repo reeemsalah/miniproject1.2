@@ -574,7 +574,6 @@ public class Table implements Serializable {
 
 			if (page.get(i).helperDelete(htblColNameValue)) {
 
-				page.remove(i);
 				// deleting that object from the BPtrees and RTrees
 				for (String key : htblColNameValue.keySet()) {
 					BPTree tree = btrees.get(key);
@@ -589,6 +588,7 @@ public class Table implements Serializable {
 								(Date) (page.get(i)).getValueOfColumn("TouchDate"));
 
 				}
+				page.remove(i);
 
 			} else {
 				i++;
