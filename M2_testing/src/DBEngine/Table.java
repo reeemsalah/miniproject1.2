@@ -915,7 +915,8 @@ public class Table implements Serializable {
 			for (String f : files) {
 				page.clear();
 				Read(f);
-				for (Tuple t1 : page) {
+				for (int i=0;i<page.size();i++) {
+					Tuple t1=page.get(i);
 					if (value.equals((Region) t1.getKeyValue())) {
 
 						for (String key : t.getAttributes().keySet()) {
