@@ -91,7 +91,19 @@ public class RTree<T extends Comparable<T>> implements Serializable{
 	{
 		return root.searchNotEqual(key);
 	}
-	
+	public ArrayList<Ref> searchgreater(Region key)
+	{
+		return root.searchgreater(key);
+	}
+	public ArrayList<Ref> searchgreaterORequal(Region key)
+	{
+		return root.searchgreaterORequal(key);
+	}
+	public ArrayList<Ref> searchlessORequal(Region key)
+	{
+		return root.searchLessORequal(key);
+	}
+
 	public void updateRef(Region key, String oldPage, String newPage, Date td)
 	{
 		root.updateRef(key,oldPage,newPage, td);

@@ -397,7 +397,7 @@ return results.iterator();
 
 	public void updateTable(String strTableName, String strClusteringKey, Hashtable<String, Object> htblColNameValue)
 			throws DBAppException {
-
+System.out.println("tablenames " + tables.keySet());
 		boolean flag = false;
 		Object[] tableNamesObj = (tables.keySet().toArray());
 		String[] tableNames = new String[tableNamesObj.length];

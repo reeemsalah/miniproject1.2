@@ -113,7 +113,9 @@ public abstract class RTreeNode<T extends Comparable<T>> implements Serializable
 	public abstract ArrayList<Ref> search(Region key);
 	public abstract ArrayList<Ref> searchLess(Region key);
 	public abstract ArrayList<Ref> searchNotEqual(Region key);
-
+	public abstract ArrayList<Ref> searchgreaterORequal(Region key);
+	public abstract ArrayList<Ref> searchgreater(Region key);
+	public abstract ArrayList<Ref> searchLessORequal(Region key);
 
 	public abstract void updateRef(Region key, String oldPage, String newPage, Date td);
 

@@ -375,13 +375,21 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 	
 	public ArrayList<Ref> searchLess(Region key) 
 	{
+
 		System.out.println("searchLess at "+this.index);
 		ArrayList<Ref> res = new ArrayList<Ref>();
-		for (int i=0;i<numberOfKeys;i++) {
+		int i;
+		for (i=0;i<numberOfKeys;++i) {
+			System.out.println(this.index +" i "+i);
 			if (keys[i].compareTo(key)<=0)
 			res.addAll(children[i].searchLess(key));
 		}
+		System.out.println("first child");
 		res.addAll(children[0].searchLess(key));
+		if((keys[numberOfKeys-1]).compareTo(key)<=0)	
+		System.out.println("last child");
+
+				res.addAll(children[numberOfKeys].searchLess(key));
 
 		return res ;
 	}
@@ -398,7 +406,58 @@ public class RTreeInnerNode<T extends Comparable<T>> extends RTreeNode<T>  imple
 
 		return res ;
 	}
+	public ArrayList<Ref> searchgreaterORequal(Region key) 
+	{		System.out.println("searchgreaterORequal at "+this.index);
 
+	ArrayList<Ref> refs = new ArrayList<Ref>();
+	for(int i = 0; i < numberOfKeys; ++i) {
+		System.out.println("i "+i);
+		if(keys[i].compareTo(key) >= 0) {
+			refs.addAll(children[i].searchgreaterORequal(key));
+//			refs.addAll(children[1+i].searchgreaterORequal(key));
+		}
+			}
+	refs.addAll(children[0].searchgreaterORequal(key));
+	refs.addAll(children[numberOfKeys].searchgreaterORequal(key));
+
+	return refs;}
+	
+	
+	public ArrayList<Ref> searchgreater(Region key) 
+	{		System.out.println("searchgreater at "+this.index);
+
+	ArrayList<Ref> refs = new ArrayList<Ref>();
+	for(int i = 0; i < numberOfKeys; ++i) {
+		System.out.println("i "+i);
+		if(keys[i].compareTo(key) >= 0) {
+			refs.addAll(children[i].searchgreater(key));
+//			refs.addAll(children[1+i].searchgreaterORequal(key));
+		}
+			}
+	refs.addAll(children[0].searchgreater(key));
+	refs.addAll(children[numberOfKeys].searchgreater(key));
+
+	return refs;}
+	
+	public ArrayList<Ref> searchLessORequal(Region key) 
+	{
+		System.out.println("searchLessOrEqual at "+this.index);
+		ArrayList<Ref> res = new ArrayList<Ref>();
+		int i;
+		for (i=0;i<numberOfKeys;++i) {
+			System.out.println(this.index +" i "+i);
+			if (keys[i].compareTo(key)<=0)
+			res.addAll(children[i].searchLessORequal(key));
+		}
+		System.out.println("first child");
+		res.addAll(children[0].searchLessORequal(key));
+		if((keys[numberOfKeys-1]).compareTo(key)<=0)	
+		System.out.println("last child");
+
+				res.addAll(children[numberOfKeys].searchLessORequal(key));
+
+		return res ;
+	}
 	
 	@Override
 	public void updateRef(Region key,String oldPage, String newPage, Date td) 

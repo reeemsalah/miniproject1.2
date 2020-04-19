@@ -27,55 +27,55 @@ Date d = new Date();
 		Scanner sc = new Scanner(System.in);
 		while(true) 
 		{
-			tree.insert(5, new Ref("p1",d));
+			tree.insert(5, new Ref("p5",d));
 			System.out.println(tree.toString());
 			
-			tree.insert(0, new Ref("p1",d));
+			tree.insert(0, new Ref("p0",d));
 			System.out.println(tree.toString());
 			
 			tree.insert(1, new Ref("p1",d));
 			System.out.println(tree.toString());
 			
-			tree.insert(2, new Ref("p1",d));
+			tree.insert(2, new Ref("p2",d));
 			System.out.println(tree.toString());
 			
-			tree.insert(10, new Ref("p1",d));
+			tree.insert(10, new Ref("p10",d));
 			System.out.println(tree.toString());
 			
-			tree.insert(7, new Ref("p1",d));
+			tree.insert(7, new Ref("p7",d));
 			System.out.println(tree.toString());
 
-			tree.insert(15, new Ref("p2", d));
+			tree.insert(15, new Ref("p15", d));
 			System.out.println(tree.toString());
 
-			tree.insert(18, new Ref("p3", d));
+			tree.insert(18, new Ref("p18", d));
 			System.out.println(tree.toString());
 
-			tree.insert(18, new Ref("p3", d));
+			tree.insert(18, new Ref("p18", d));
 			System.out.println(tree.toString());
 
-			tree.insert(18, new Ref("p3", d));
+			tree.insert(18, new Ref("p18", d));
 			System.out.println(tree.toString());
 
-			tree.insert(4, new Ref("p1", d));
+			tree.insert(4, new Ref("p4", d));
 			System.out.println(tree.toString());
 
-			tree.insert(23, new Ref("p4", d));
+			tree.insert(23, new Ref("p23", d));
 			System.out.println(tree.toString());
 			
-			tree.insert(25, new Ref("p4", d));
+			tree.insert(25, new Ref("p25", d));
 			System.out.println(tree.toString());
 
-			tree.insert(18, new Ref("p3", d));
+			tree.insert(18, new Ref("p18", d));
 			System.out.println(tree.toString());
 			
-			tree.insert(18, new Ref("p4", d));
+			tree.insert(18, new Ref("p18", d));
 			System.out.println(tree.toString());
 
-			tree.insert(16, new Ref("p2", d));
+			tree.insert(16, new Ref("p16", d));
 			System.out.println(tree.toString());
 
-			tree.insert(9, new Ref("p2", d));
+			tree.insert(9, new Ref("p9", d));
 			
 			
 			System.out.println(tree.toString());
@@ -111,7 +111,7 @@ Date d = new Date();
 			if(x == -1)
 				break;
 //			tree.delete(x);
-			System.out.println(tree.searchNotEqual(x));
+			System.out.println(tree.searchgreater(x));
 		}
 		
 		

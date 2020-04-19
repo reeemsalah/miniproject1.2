@@ -216,9 +216,13 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 		else
 			newNode.insertAt(keyIndex - midIndex, key, recordReference);
 		
+		if(this.next!=null)
+		System.out.println("old next index " + this.next.index);
+
 		//set next pointers
 		newNode.setNext(this.getNext());
 		this.setNext(newNode);
+		if(!this.isRoot()) System.out.println("new next index " + this.next.index);
 		
 		return newNode;
 	}
@@ -297,7 +301,7 @@ public class BPTreeLeafNode<T extends Comparable<T>> extends BPTreeNode<T> imple
 
 		ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i)
-			if(this.getKey(i).compareTo(key) < 0||this.getKey(i).compareTo(key) == 0)
+			if(this.getKey(i).compareTo(key) <= 0)
 				refs.add(this.getRecord(i));
 		return refs;
 	} 

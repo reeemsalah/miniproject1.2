@@ -166,7 +166,7 @@ public class RTreeLeafNode<T extends Comparable<T>> extends RTreeNode<T> impleme
 		while (i < numberOfKeys) {
 			System.out.println("loop "+ i + "   key  " + getKey(i));
 			
-			if(getKey(i).compareTo(key) == 0) {
+			if(getKey(i).equals(key)) {		//adjustment here...plz confirm 
 		pageOptions.add(this.getRecord(i).getPage());
 		System.out.println(this.getRecord(i).getPage());
 		}
@@ -188,7 +188,7 @@ boolean checkNext = false;
 ArrayList<String> pageOptions = new ArrayList<String>();
 int i = 0;
 while (i < numberOfKeys) {
-	if(getKey(index).compareTo(key) == 0) {
+	if(getKey(index).equals(key)) {		//adjustment here...plz confirm 
 pageOptions.add(this.getRecord(i).getPage());
 System.out.println(this.getRecord(i).getPage());
 if (i==numberOfKeys) checkNext=true;}
@@ -259,7 +259,7 @@ return pageOptions;
 	public ArrayList<Ref> search(Region key) 
 	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i)
-			if(this.getKey(i).compareTo(key) == 0)
+			if(this.getKey(i).equals(key))
 				refs.add(this.getRecord(i));
 		return refs;
 	}
@@ -285,12 +285,38 @@ return pageOptions;
 				refs.add(this.getRecord(i));
 		return refs;
 	} 
-	
+	public ArrayList<Ref> searchgreater(Region key) 
+	{		System.out.println("searchgreater at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) > 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	public ArrayList<Ref> searchgreaterORequal(Region key) 
+	{		System.out.println("searchgreaterORequal at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) > 0||this.getKey(i).compareTo(key) == 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
+	public ArrayList<Ref> searchLessORequal(Region key) 
+	{		System.out.println("searchlessORequal at "+this.index);
+
+		ArrayList<Ref> refs = new ArrayList<Ref>();
+		for(int i = 0; i < numberOfKeys; ++i)
+			if(this.getKey(i).compareTo(key) < 0||this.getKey(i).compareTo(key) == 0)
+				refs.add(this.getRecord(i));
+		return refs;
+	} 
 	@Override
 	public void updateRef(Region key, String oldPage, String newPage, Date td) 
 	{ArrayList<Ref> refs = new ArrayList<Ref>();
 		for(int i = 0; i < numberOfKeys; ++i) {
-			if(this.getKey(i).compareTo(key) == 0 && this.getRecord(i).getPage().equals(oldPage))
+			if(this.getKey(i).equals(key)  && this.getRecord(i).getPage().equals(oldPage))
 				records[i]= new Ref(newPage,td);
 		break;}
 	}
@@ -300,8 +326,8 @@ return pageOptions;
 	 */
 	public boolean delete(Region key, RTreeInnerNode<T> parent, int ptr, Date td) 
 	{
-		for(int i = 0; i < numberOfKeys; ++i)
-			if(keys[i].compareTo(key) == 0 && td.compareTo(this.records[i].getIndexInPage())==0)
+		for(int i = 0; i < numberOfKeys; ++i)		//adjustment here...plz confirm 
+			if(keys[i].compareTo(key) == 0 && td.equals(this.records[i].getIndexInPage())) 
 			{
 				this.deleteAt(i);
 				if(i == 0 && ptr > 0)

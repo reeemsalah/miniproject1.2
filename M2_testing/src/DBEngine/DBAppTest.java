@@ -242,47 +242,54 @@ public class DBAppTest {
 		
 
 		String strTableName2 = "Products";
-		DBApp dbApp2 = new DBApp( );
-		dbApp2.init();
+//		DBApp dbApp2 = new DBApp( );
+//		dbApp2.init();
 		
 		
 		Hashtable htblColNameType2 = new Hashtable( );
 		htblColNameType2.put("available", "java.lang.Boolean");
 		htblColNameType2.put("name", "java.lang.String");
 		htblColNameType2.put("rating", "java.lang.Double");
-		dbApp2.createTable( strTableName2, "name", htblColNameType2 );
+		dbApp.createTable( strTableName2, "name", htblColNameType2 );
 		
 		Hashtable htblColNameValue2 = new Hashtable( );
 
 		htblColNameValue2.put("available",  true );
 		htblColNameValue2.put("name", new String("bag item" ) );
 		htblColNameValue2.put("rating", new Double( 1.5 ) );
-		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );
+		dbApp.insertIntoTable( strTableName2 , htblColNameValue2 );
 		htblColNameValue2.clear( );
 		
 		htblColNameValue2.put("available",  false );
 		htblColNameValue2.put("name", new String("pen item" ) );
 		htblColNameValue2.put("rating", new Double( 0.77 ) );
-		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );
+		dbApp.insertIntoTable( strTableName2 , htblColNameValue2 );
 		htblColNameValue2.clear( );
 		
 		htblColNameValue2.put("available",  true );
 		htblColNameValue2.put("name", new String("book item" ) );
 		htblColNameValue2.put("rating", new Double( 0.77 ) );
-		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );
+		dbApp.insertIntoTable( strTableName2 , htblColNameValue2 );
 		htblColNameValue2.clear( );
 		
 		htblColNameValue2.put("available",  true );
 		htblColNameValue2.put("name", new String("tv item" ) );
 		htblColNameValue2.put("rating", new Double( 0.77 ) );
-		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );
+		dbApp.insertIntoTable( strTableName2 , htblColNameValue2 );
 		htblColNameValue2.clear( );
 		
 		htblColNameValue2.put("available",  true );
 		htblColNameValue2.put("name", new String("phone item" ) );
 		htblColNameValue2.put("rating", new Double( 0.77 ) );
-		dbApp2.insertIntoTable( strTableName2 , htblColNameValue2 );
+		dbApp.insertIntoTable( strTableName2 , htblColNameValue2 );
 		htblColNameValue2.clear( );
+		
+//		update (1)
+		htblColNameValue.put("gpa", 1.7);
+		dbApp.updateTable(strTableName, "12", htblColNameValue);
+//		update (1)
+		htblColNameValue.put("rating", 1.7);
+		dbApp.updateTable(strTableName2, "tv item", htblColNameValue);
 		
 		SQLTerm[] arrSQLTerms;
 		arrSQLTerms = new SQLTerm[3];
@@ -299,14 +306,14 @@ public class DBAppTest {
 		arrSQLTerms[0].objValue = "bag item";
 		arrSQLTerms[1].strTableName = "Products";
 		arrSQLTerms[1].strColumnName= "available";
-		arrSQLTerms[1].strOperator = ">";
+		arrSQLTerms[1].strOperator = "=";
 		arrSQLTerms[1].objValue = new Boolean( false );
 		arrSQLTerms[2].strTableName = "Products";
 		arrSQLTerms[2].strColumnName= "rating";
-		arrSQLTerms[2].strOperator = "<=";
+		arrSQLTerms[2].strOperator = ">";
 		arrSQLTerms[2].objValue = new Double( 1.0 );
 		String[]strarrOperators = new String[2];
-		strarrOperators[0] = "XOR";
+		strarrOperators[0] = "AND";
 		strarrOperators[1] = "OR";
 		Iterator it = dbApp.selectFromTable(arrSQLTerms , strarrOperators);
 		while(it.hasNext()) {

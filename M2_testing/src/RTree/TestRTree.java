@@ -14,7 +14,7 @@ public class TestRTree {
 		Region r3 = new Region(new int[] { 0, 7, 0 , 7}, new int[] { 0, 0, 7 , 7}, 4);
 		Region r5 = new Region(new int[] { 0, 15, 0 , 15}, new int[] { 0, 0, 15 , 15}, 4);
 		Region r8 = new Region(new int[] { 0, 18, 0 , 18}, new int[] { 0, 0, 18 , 18}, 4);
-		Region r7 = new Region(new int[] { 0, 18, 0 , 18}, new int[] { 0, 0, 18 , 18}, 4);
+		Region r7 = new Region(new int[] { 1, 19, 1 , 19}, new int[] { 1, 1, 19 , 19}, 4);
 		Region r10 = new Region(new int[] { 0, 20, 0 , 20}, new int[] { 0, 0, 20 , 20}, 4);
 		Region r_test = new Region(new int[] { 0, 17, 0, 17 }, new int[] { 0, 0, 17 , 17}, 4);
 		Region r1 = new Region(new int[] { 0, 4 , 0 , 4 }, new int[] { 0, 0 , 4 , 4 }, 4);
@@ -66,7 +66,7 @@ public class TestRTree {
 				break;
 			Region temp = new Region(new int[] { 0, x, 0, x }, new int[] { 0, 0, x , x}, 4);
 
-			tree.delete(temp, d);
+			System.out.println(tree.searchgreater(temp));
 			System.out.println(tree.toString());
 		}
 		

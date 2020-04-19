@@ -5,9 +5,10 @@ import java.awt.Shape;
 
 public class Region extends Polygon implements Comparable {
 	public Region(int[] xpoints, int[] ypoints, int npoints) {
-		this.xpoints = xpoints;
-		this.ypoints = ypoints;
-		this.npoints = npoints;
+//		this.xpoints = xpoints;
+//		this.ypoints = ypoints;
+//		this.npoints = npoints;
+		super(xpoints, ypoints, npoints);
 	}
 
 	@Override
@@ -18,6 +19,13 @@ public class Region extends Polygon implements Comparable {
 		int area2 = dim2.height * dim2.width;
 		return area1 - area2;
 
+	}
+	
+	public boolean equals(Polygon p) {
+		for (int i=0;i<this.npoints;i++) {
+			if(this.xpoints[i]!=(p.xpoints[i]) || this.ypoints[i]!=(p.ypoints[i])) return false;
+		}
+		return true;
 	}
 
 	public double getArea() {
@@ -68,10 +76,10 @@ public class Region extends Polygon implements Comparable {
 		Region r2 = new Region(new int[] { 0, 0, 0 }, new int[] { 0, 1, -1 }, 3);
 		System.out.println(r1);
 		System.out.println(r2);
-		System.out.println(r2.compareTo(r1));
+		System.out.println(r2.equals(r1));
 		String s = r1.toString();
 		Region r3=StringToRegion(s);
-		System.out.println(r1.compareTo(r3));
+		System.out.println(r1.equals(r3));
 		System.out.println(r3);
 	}
 }
