@@ -1441,7 +1441,7 @@ public class Table implements Serializable {
 //		//.out.println(isBIndexedCol(colName));
 //		//.out.println(colName);
 		if (isBIndexedCol(colName)) {
-
+System.out.println("using B");
 			BPTree Index = getBtreeCol(colName);
 			ArrayList<Ref> references = Index.search(value);
 			ArrayList<String> pageNames = new ArrayList<String>();
@@ -1456,7 +1456,7 @@ public class Table implements Serializable {
 				Read(p.getFileName());
 				for (Tuple t : page) {
 //					//.out.println("comparing  "+t.getAttributes().get(colName) +" to " + (value));
-					if (t.getAttributes().get(colName).compareTo(value) == 0) {
+					if (t.getAttributes().get(colName).compareTo(value) == 0 ) {
 						results.add(t);
 					}
 				}
@@ -1464,6 +1464,7 @@ public class Table implements Serializable {
 
 		} else {
 			if (isRIndexedCol(colName)) {
+				System.out.println("using R");
 
 				RTree Index = getRtreeCol(colName);
 				ArrayList<Ref> references = Index.search((Region) value);
@@ -1476,17 +1477,20 @@ public class Table implements Serializable {
 				for (Page p : toScan) {
 					Read(p.getFileName());
 					for (Tuple t : page) {
-						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0 ) {
 							results.add(t);
 						}
 					}
 				}
 
 			} else {
+				System.out.println("using linear");
+
 				for (Page p : pages) {
+					
 					Read(p.getFileName());
 					for (Tuple t : page) {
-						if (t.getAttributes().get(colName).compareTo(value) == 0) {
+						if (t.getAttributes().get(colName).compareTo(value) == 0 ) {
 							results.add(t);
 						}
 					}
@@ -1503,6 +1507,7 @@ public class Table implements Serializable {
 		}
 
 		// .out.println("searchEqual result: "+ results);
+		 results = removeDuplicates(results);
 
 		return results;
 	}
@@ -1574,6 +1579,7 @@ public class Table implements Serializable {
 			
 		}
 		// .out.println("searchNotEqual result: "+ results);
+		 results = removeDuplicates(results);
 
 		return results;
 
@@ -1647,7 +1653,8 @@ public class Table implements Serializable {
 		}
 		// .out.println("searchLessOrEqual result: "+ results);
 
-		return results;
+		 results = removeDuplicates(results);
+		 return results;
 	}
 
 	public Vector<Tuple> searchGreaterOREqual(String colName, Comparable value) {
@@ -1718,7 +1725,8 @@ public class Table implements Serializable {
 		}
 		// .out.println("searchGreaterOrEqual result: "+ results);
 
-		return results;
+		 results = removeDuplicates(results);
+		 return results;
 	}
 
 	public Vector<Tuple> searchLess(String colName, Comparable value) {
@@ -1788,6 +1796,7 @@ public class Table implements Serializable {
 
 		}
 		// .out.println("searchLess result: "+ results);
+		 results = removeDuplicates(results);
 
 		return results;
 	}
@@ -1814,7 +1823,7 @@ public class Table implements Serializable {
 			for (Page p : toScan) {
 				Read(p.getFileName());
 				for (Tuple t : page) {
-					if (t.getAttributes().get(colName).compareTo(value) > 0) {
+					if (t.getAttributes().get(colName).compareTo(value) > 0 ) {
 						results.add(t);
 					}
 				}
@@ -1835,7 +1844,7 @@ public class Table implements Serializable {
 				for (Page p : toScan) {
 					Read(p.getFileName());
 					for (Tuple t : page) {
-						if (t.getAttributes().get(colName).compareTo(value) > 0) {
+						if (t.getAttributes().get(colName).compareTo(value) > 0 ) {
 							results.add(t);
 						}
 					}
@@ -1845,7 +1854,7 @@ public class Table implements Serializable {
 				for (Page p : pages) {
 					Read(p.getFileName());
 					for (Tuple t : page) {
-						if (t.getAttributes().get(colName).compareTo(value) > 0) {
+						if (t.getAttributes().get(colName).compareTo(value) > 0 ) {
 							results.add(t);
 						}
 					}
@@ -1858,8 +1867,8 @@ public class Table implements Serializable {
 			
 
 		}
-		// .out.println("searchGreater result: "+ results);
-
+		 System.out.println("searchGreater result: "+ results);
+		 results = removeDuplicates(results);
 		return results;
 	}
 
@@ -2038,6 +2047,22 @@ public class Table implements Serializable {
 		// .out.println("Tree for " + strColName + ": " + bt.toString());
 		// TODO write index into a file
 		// should each node be in a file?
+	}
+	
+	public Vector<Tuple> removeDuplicates(Vector<Tuple> listIn){
+		Vector<Tuple> listOut = new Vector<Tuple>();
+		boolean flag =true;
+		for (Tuple t: listIn) {
+			for(int i=0;i<listOut.size();i++) {
+				if(t.equals(listOut.get(i))) {
+					flag=false;
+				}
+			}
+			if(flag)listOut.add(t);
+			flag = true;
+		}
+		return listOut;
+		
 	}
 
 }
