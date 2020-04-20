@@ -793,7 +793,7 @@ public class Table implements Serializable {
 
 				} else if (coltype.contentEquals("java.util.Date")) {
 					Date value = new Date(strClusteringKey);
-					if (value == (Date) t1.getKeyValue()) {
+					if (value.equals((Date) t1.getKeyValue())) {
 						// .out.println("OMG THEY ARE EQUAL!");
 						for (String key : t.getAttributes().keySet()) {
 							if (indexedcolns.contains(key)) {
@@ -829,7 +829,7 @@ public class Table implements Serializable {
 
 				else if (coltype.contentEquals("Region")) {
 					Region value = Region.StringToRegion(strClusteringKey);
-					if (value == (Region) t1.getKeyValue()) {
+					if (value.equals((Region) t1.getKeyValue())) {
 						for (String key : t.getAttributes().keySet()) {
 							if (indexedcolns.contains(key)) {
 								btrees.get(key).update(t1.getValueOfColumn(key), t.getValueOfColumn(key),

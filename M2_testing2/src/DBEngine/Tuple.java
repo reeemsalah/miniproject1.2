@@ -114,7 +114,7 @@ public class Tuple implements Serializable, Comparable {
 	public boolean helperDelete(Hashtable<String, Comparable> htblColNameValue) {
 
 		for (String key : htblColNameValue.keySet()) {
-			if (htblColNameValue.get(key).compareTo(this.getValueOfColumn(key)) != 0)
+			if (!htblColNameValue.get(key).equals(this.getValueOfColumn(key)) )
 				return false;
 		}
 		return true;
